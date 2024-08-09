@@ -6,8 +6,11 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import env from "../Env";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const ModelCreateCategory = ({ handleCreate }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const [data, setData] = useState({
     image: null,
     name: "",
@@ -62,24 +65,20 @@ const ModelCreateCategory = ({ handleCreate }) => {
           },
         }
       );
-      console.log(response.data);
 
       if (response.status === 201) {
-        toast.success("Tạo mới thành công", {
-          autoClose: 3000,
+        enqueueSnackbar(`Create Successfully`, {
+          variant: "success",
         });
         setData({ image: null, name: "", price_type: "" });
         setImageUrl(null); // Xóa URL ảnh sau khi tạo thành công
-        setTimeout(() => {
-          handleCreate();
-        }, 1000);
+        handleCreate();
         const time = response.data.created_at;
         navigate(`?create_at=${time}`);
       } else {
         toast.error("Tạo mới thất bại");
       }
     } catch (e) {
-      console.error(e);
       if (error.response.status === 401) {
         const newToken = await useRefeshToken();
         if (newToken) {
@@ -88,6 +87,7 @@ const ModelCreateCategory = ({ handleCreate }) => {
           navigate("/login");
         }
       } else {
+        console.error(e);
         toast.error("Tạo mới thất bại");
       }
     }

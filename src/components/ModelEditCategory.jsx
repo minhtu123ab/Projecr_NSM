@@ -6,13 +6,11 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import env from "../Env";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
-const ModelEditCategory = ({
-  handleEdit,
-  dataEdit,
-  setOpenEdit,
-  handleEditSuccess,
-}) => {
+const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const [data, setData] = useState({
     image: dataEdit.image,
     name: dataEdit.name,
@@ -69,18 +67,17 @@ const ModelEditCategory = ({
       );
 
       if (response.status === 200 || response.status === 204) {
-        toast.success("Sửa thành công", {
-          autoClose: 3000,
+        enqueueSnackbar(`Update Successfully`, {
+          variant: "success",
         });
         setData({ image: null, name: "", price_type: "" });
+        setOpenEdit(false);
         const time = new Date().getTime();
         navigate(`?updated_at=${time}`);
-        handleEditSuccess();
       } else {
         toast.error("Sửa thất bại");
       }
     } catch (e) {
-      console.error(e);
       if (error.response.status === 401) {
         const newToken = await useRefeshToken();
         if (newToken) {
@@ -90,6 +87,7 @@ const ModelEditCategory = ({
         }
       } else {
         toast.error("Sửa thất bại");
+        console.error(e);
       }
     }
   };

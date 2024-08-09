@@ -5,8 +5,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import env from "../Env";
+import { useSnackbar } from "notistack";
 
 const Login = () => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const url = env.urlServer;
   const navigate = useNavigate();
   const [value, setValue] = useState({
@@ -38,7 +41,9 @@ const Login = () => {
       const result = await axios.post(url + "/cms/auth/login", value);
       console.log("result=", result.data);
       localStorage.setItem("token", JSON.stringify(result.data));
-      toast.success("Đăng nhập thành công");
+      enqueueSnackbar(`Login Successfully`, {
+        variant: "success",
+      });
       setValue({ email: "", password: "" });
       setTouched({ email: false, password: false });
       navigate("/materials/categories");

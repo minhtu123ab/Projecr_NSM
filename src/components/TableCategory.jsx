@@ -13,8 +13,7 @@ import { useLocation } from "react-router-dom";
 import ModelEditCategory from "./ModelEditCategory";
 import { useNavigate } from "react-router-dom";
 import useRefeshToken from "../hook/useRefeshToken";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useSnackbar } from "notistack";
 
 const TableCategory = () => {
   const [checkAll, setCheckAll] = useState(false);
@@ -31,6 +30,8 @@ const TableCategory = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [modalVisibleAll, setModalVisibleAll] = useState(false);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,7 +68,6 @@ const TableCategory = () => {
         setData(response.data.results);
         setTotal(response.data.count);
       } catch (error) {
-        console.error(error);
         if (error.response.status === 401) {
           const newToken = await useRefeshToken();
           if (newToken) {
@@ -75,11 +75,18 @@ const TableCategory = () => {
           } else {
             navigate("/login");
           }
+        } else {
+          console.error(error);
+          navigate("/login");
         }
       }
     };
     getData();
   }, [page, valueSearch, create, upadate, deleteStatus]);
+
+  useEffect(() => {
+    setPage(0);
+  }, [valueSearch]);
 
   const handleEdit = (e, item) => {
     e.stopPropagation();
@@ -140,11 +147,12 @@ const TableCategory = () => {
           },
         }
       );
+      enqueueSnackbar(`Delete Categories ${idDelete.length} Successfully`, {
+        variant: "success",
+      });
       const time = new Date().getTime();
       navigate(`?delete=${time}`);
-      toast.success("Delete Success");
     } catch (e) {
-      console.log(e);
       if (error.response.status === 401) {
         const newToken = await useRefeshToken();
         if (newToken) {
@@ -152,6 +160,8 @@ const TableCategory = () => {
         } else {
           navigate("/login");
         }
+      } else {
+        console.error(e);
       }
     } finally {
       setModalVisibleAll(false);
@@ -172,6 +182,9 @@ const TableCategory = () => {
             },
           }
         );
+        enqueueSnackbar("Delete Categories Successfully", {
+          variant: "success",
+        });
         const time = new Date().getTime();
         navigate(`?delete=${time}`);
         if (idDelete.includes(itemToDelete.id)) {
@@ -180,7 +193,6 @@ const TableCategory = () => {
           );
         }
       } catch (e) {
-        console.log(e);
         if (error.response.status === 401) {
           const newToken = await useRefeshToken();
           if (newToken) {
@@ -188,6 +200,8 @@ const TableCategory = () => {
           } else {
             navigate("/login");
           }
+        } else {
+          console.log(e);
         }
       } finally {
         setModalVisible(false);
@@ -196,20 +210,13 @@ const TableCategory = () => {
     }
   };
 
-  const handleEditSuccess = () => {
-    toast.success("Update categories successfully");
-    setOpenEdit(false);
-  };
-
   return (
     <div>
-      <ToastContainer />
       {openEdit && (
         <ModelEditCategory
           handleEdit={handleEdit}
           dataEdit={dataEdit}
           setOpenEdit={setOpenEdit}
-          handleEditSuccess={handleEditSuccess}
         />
       )}
       <div className="checkbox-all">
@@ -236,68 +243,82 @@ const TableCategory = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
-            <tr
-              style={{
-                cursor: "pointer",
-                backgroundColor: idDelete.includes(item.id)
-                  ? "#D1D5D9"
-                  : "white",
-              }}
-              onClick={() => OnClickSelectDelete(item)}
-              key={item.id}
-            >
-              <td>
-                <Checkbox checked={idDelete.includes(item.id)} />
-              </td>
-              <td>{page * 5 + index + 1}</td>
-              <td>
-                <img className="img-table-category" src={item.image} />
-              </td>
-              <td>{item.name}</td>
-              <td>
-                {item.price_type === "per_metter" ? (
-                  <span
-                    style={{
-                      color: "red",
-                      border: "1px solid red",
-                      padding: "2px 10px",
-                      borderRadius: "10px",
-                    }}
+          {data.length ? (
+            data.map((item, index) => (
+              <tr
+                style={{
+                  cursor: "pointer",
+                  backgroundColor: idDelete.includes(item.id)
+                    ? "#D1D5D9"
+                    : "white",
+                }}
+                onClick={() => OnClickSelectDelete(item)}
+                key={item.id}
+              >
+                <td>
+                  <Checkbox checked={idDelete.includes(item.id)} />
+                </td>
+                <td>{page * 5 + index + 1}</td>
+                <td>
+                  <img className="img-table-category" src={item.image} />
+                </td>
+                <td>{item.name}</td>
+                <td>
+                  {item.price_type === "per_metter" ? (
+                    <span
+                      style={{
+                        color: "#DC2626",
+                        padding: "2px 12px",
+                        borderRadius: "10px",
+                        backgroundColor: "#FEE2E2",
+                      }}
+                    >
+                      Metter
+                    </span>
+                  ) : (
+                    <span
+                      style={{
+                        color: "#16A34A",
+                        padding: "2px 12px",
+                        borderRadius: "10px",
+                        backgroundColor: "#DCFCE7",
+                      }}
+                    >
+                      Quantity
+                    </span>
+                  )}
+                </td>
+                <td>
+                  <Button onClick={(e) => handleEdit(e, item)} type="text">
+                    <EditOutlined />
+                  </Button>
+                  <Button
+                    onClick={(e) => showModal(e, item)}
+                    danger
+                    type="text"
                   >
-                    Metter
-                  </span>
-                ) : (
-                  <span
-                    style={{
-                      color: "green",
-                      border: "1px solid green",
-                      padding: "2px 10px",
-                      borderRadius: "10px",
-                    }}
-                  >
-                    Quantity
-                  </span>
-                )}
-              </td>
-              <td>
-                <Button
-                  onClick={(e) => handleEdit(e, item)}
-                  style={{ marginRight: 5 }}
-                  type="primary"
-                >
-                  <EditOutlined />
-                </Button>
-                <Button
-                  onClick={(e) => showModal(e, item)}
-                  danger
-                  type="primary"
-                >
-                  <DeleteOutlined />
-                </Button>
+                    <DeleteOutlined />
+                  </Button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                style={{
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  fontFamily: "monospace",
+                  fontSize: 30,
+                  textAlign: "center",
+                  color: "#777777",
+                  cursor: "default",
+                }}
+              >
+                Không có bản ghi nào
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
       <div className="back-next-category">
@@ -306,28 +327,37 @@ const TableCategory = () => {
           Back
         </Button>
         <span style={{ fontFamily: " Arial, Helvetica, sans-serif" }}>
-          {page + 1} of {countPage}
+          {countPage ? page + 1 : 0} of {countPage}
         </span>
-        <Button disabled={page === countPage - 1} onClick={onNext}>
-          Next
-          <DoubleRightOutlined />
-        </Button>
+        {data.length ? (
+          <Button disabled={page === countPage - 1} onClick={onNext}>
+            Next
+            <DoubleRightOutlined />
+          </Button>
+        ) : (
+          <Button disabled>
+            Next
+            <DoubleRightOutlined />
+          </Button>
+        )}
       </div>
       <Modal
         title="Xóa Categories"
         open={modalVisible}
         onOk={handleDelete}
         onCancel={() => setModalVisible(false)}
+        okType="danger"
       >
-        <p>Bạn chắc chắn muốn xóa</p>
+        <p>Are you sure you want to delete?</p>
       </Modal>
       <Modal
         title="Xóa Nhiều Categories"
         open={modalVisibleAll}
         onOk={DeleteAll}
         onCancel={() => setModalVisibleAll(false)}
+        okType="danger"
       >
-        <p>Bạn chắc chắn muốn xóa {idDelete.length} categories</p>
+        <p>Are you sure you want to delete {idDelete.length} categories</p>
       </Modal>
     </div>
   );
