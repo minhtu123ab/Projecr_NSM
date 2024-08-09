@@ -6,6 +6,7 @@ import ModelCreateCategory from "./ModelCreateCategory";
 import TableCategory from "./TableCategory";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CurrentUsers from "./CurrentCategories";
 
 const Body = () => {
   const [value, setValue] = useState("");
@@ -40,6 +41,7 @@ const Body = () => {
           gap: 20,
         }}
       >
+        <CurrentUsers />
         <h1 style={{ fontFamily: " Arial, Helvetica, sans-serif" }}>
           Categories
         </h1>

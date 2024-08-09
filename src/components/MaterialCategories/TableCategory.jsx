@@ -8,11 +8,11 @@ import {
 } from "@ant-design/icons";
 import { Button, Modal } from "antd";
 import axios from "axios";
-import env from "../Env";
+import env from "../../Env";
 import { useLocation } from "react-router-dom";
 import ModelEditCategory from "./ModelEditCategory";
 import { useNavigate } from "react-router-dom";
-import useRefeshToken from "../hook/useRefeshToken";
+import useRefeshToken from "../../hook/useRefeshToken";
 import { useSnackbar } from "notistack";
 
 const TableCategory = () => {
