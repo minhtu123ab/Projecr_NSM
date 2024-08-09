@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Body from "./components/Body";
 import Menu from "./components/Menu";
 import CheckLogin from "./CheckLogin";
+import BodyUpdate from "./components/BodyUpdate/BodyUpdate";
 
 const App = () => {
   const location = useLocation();
@@ -28,7 +29,7 @@ const App = () => {
             path="*"
             element={
               <CheckLogin>
-                <Body />
+                <BodyUpdate />
               </CheckLogin>
             }
           />

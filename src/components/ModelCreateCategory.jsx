@@ -7,6 +7,7 @@ import axios from "axios";
 import env from "../Env";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import useRefeshToken from "../hook/useRefeshToken";
 
 const ModelCreateCategory = ({ handleCreate }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -79,7 +80,7 @@ const ModelCreateCategory = ({ handleCreate }) => {
         toast.error("Create Failed");
       }
     } catch (e) {
-      if (error.response.status === 401) {
+      if (e.response.status === 401) {
         const newToken = await useRefeshToken();
         if (newToken) {
           await handleCreateClick();

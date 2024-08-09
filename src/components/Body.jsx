@@ -10,9 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Body = () => {
   const [value, setValue] = useState("");
   const [openCreate, setOpenCreate] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     navigate({ search: "" });

@@ -147,13 +147,13 @@ const TableCategory = () => {
           },
         }
       );
-      enqueueSnackbar(`Delete Categories ${idDelete.length} Successfully`, {
+      enqueueSnackbar(`Delete ${idDelete.length} Categories Successfully`, {
         variant: "success",
       });
       const time = new Date().getTime();
       navigate(`?delete=${time}`);
     } catch (e) {
-      if (error.response.status === 401) {
+      if (e.response.status === 401) {
         const newToken = await useRefeshToken();
         if (newToken) {
           await DeleteAll();
@@ -182,7 +182,7 @@ const TableCategory = () => {
             },
           }
         );
-        enqueueSnackbar("Delete Categories Successfully", {
+        enqueueSnackbar("Delete 1 Categories Successfully", {
           variant: "success",
         });
         const time = new Date().getTime();
@@ -193,7 +193,7 @@ const TableCategory = () => {
           );
         }
       } catch (e) {
-        if (error.response.status === 401) {
+        if (e.response.status === 401) {
           const newToken = await useRefeshToken();
           if (newToken) {
             await handleDelete();
@@ -342,7 +342,7 @@ const TableCategory = () => {
         )}
       </div>
       <Modal
-        title="Xóa Categories"
+        title="Delete Categories"
         open={modalVisible}
         onOk={handleDelete}
         onCancel={() => setModalVisible(false)}
@@ -351,7 +351,7 @@ const TableCategory = () => {
         <p>Are you sure you want to delete?</p>
       </Modal>
       <Modal
-        title="Xóa Nhiều Categories"
+        title="Delete Multiple Categories"
         open={modalVisibleAll}
         onOk={DeleteAll}
         onCancel={() => setModalVisibleAll(false)}
