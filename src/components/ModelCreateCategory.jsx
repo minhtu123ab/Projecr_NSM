@@ -42,11 +42,11 @@ const ModelCreateCategory = ({ handleCreate }) => {
   const handleCreateClick = async () => {
     const token = JSON.parse(localStorage.getItem("token"));
     if (!data.image || !data.name || !data.price_type) {
-      toast.error("Vui lòng nhập đủ thông tin");
+      toast.error("Please enter full information");
       return;
     }
     if (data.name.length > 30) {
-      toast.error("Tên danh mục không quá 30 ký tự");
+      toast.error("Categories name no more than 30 characters");
       return;
     }
     try {
@@ -76,7 +76,7 @@ const ModelCreateCategory = ({ handleCreate }) => {
         const time = response.data.created_at;
         navigate(`?create_at=${time}`);
       } else {
-        toast.error("Tạo mới thất bại");
+        toast.error("Create Failed");
       }
     } catch (e) {
       if (error.response.status === 401) {
@@ -88,7 +88,7 @@ const ModelCreateCategory = ({ handleCreate }) => {
         }
       } else {
         console.error(e);
-        toast.error("Tạo mới thất bại");
+        toast.error("Create Failed");
       }
     }
   };

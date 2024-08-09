@@ -49,7 +49,7 @@ const Login = () => {
       navigate("/materials/categories");
     } catch (e) {
       console.log(e);
-      toast.error("Đăng nhập thất bại");
+      toast.error("Login failed");
       setValue({ email: "", password: "" });
       setTouched({ email: false, password: false });
     }
@@ -59,7 +59,7 @@ const Login = () => {
       <ToastContainer />
       <div className="login">
         <form className="form-login" onSubmit={handleSubmit}>
-          <h1 className="header-login">Đăng Nhập</h1>
+          <h1 className="header-login">Login</h1>
           <div
             style={{
               display: "flex",
@@ -84,7 +84,7 @@ const Login = () => {
               onBlur={onBlur("email")}
             />
           </div>
-          {check("email") && <p className="err-login">Vui lòng nhập email</p>}
+          {check("email") && <p className="err-login">Please enter email</p>}
           <div
             style={{
               display: "flex",
@@ -109,10 +109,10 @@ const Login = () => {
             />
           </div>
           {check("password") && (
-            <p className="err-login">Vui lòng nhập password</p>
+            <p className="err-login">Please enter password</p>
           )}
           <Button htmlType="submit" type="primary" onClick={handleSubmit}>
-            Đăng Nhập
+            Login
           </Button>
         </form>
       </div>

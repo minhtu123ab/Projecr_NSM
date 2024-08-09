@@ -39,11 +39,11 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
   const handleEditClick = async () => {
     const token = JSON.parse(localStorage.getItem("token"));
     if (!data.name || !data.price_type) {
-      toast.error("Vui lòng nhập đủ thông tin");
+      toast.error("Please enter complete information");
       return;
     }
     if (data.name.length > 30) {
-      toast.error("Tên danh mục không quá 30 ký tự");
+      toast.error("Categories name no more than 30 characters");
       return;
     }
     try {
@@ -75,7 +75,7 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
         const time = new Date().getTime();
         navigate(`?updated_at=${time}`);
       } else {
-        toast.error("Sửa thất bại");
+        toast.error("Update failed");
       }
     } catch (e) {
       if (error.response.status === 401) {
@@ -86,7 +86,7 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
           navigate("/login");
         }
       } else {
-        toast.error("Sửa thất bại");
+        toast.error("Update failed");
         console.error(e);
       }
     }
