@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Input, Button, Affix } from "antd";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import env from "../Env";
 import { useSnackbar } from "notistack";
@@ -49,14 +47,15 @@ const Login = () => {
       navigate("/materials/categories");
     } catch (e) {
       console.log(e);
-      toast.error("Login failed");
+      enqueueSnackbar(`Login failed`, {
+        variant: "error",
+      });
       setValue({ email: "", password: "" });
       setTouched({ email: false, password: false });
     }
   };
   return (
     <div className="login-all">
-      <ToastContainer />
       <div className="login">
         <form className="form-login" onSubmit={handleSubmit}>
           <h1 className="header-login">Login</h1>

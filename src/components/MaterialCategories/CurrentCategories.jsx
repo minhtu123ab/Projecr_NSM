@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import { Select } from "antd";
 import icon from "../../assets/icon.png";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import env from "../../Env";
 import useRefeshToken from "../../hook/useRefeshToken";
-import { flexbox } from "@mui/system";
+
+const { Option } = Select;
 
 const CurrentUsers = () => {
   const [count, setCount] = useState(0);
@@ -16,8 +16,8 @@ const CurrentUsers = () => {
 
   const location = useLocation();
 
-  const handleChange = (event) => {
-    setDay(event.target.value);
+  const handleChange = (value) => {
+    setDay(value);
   };
 
   useEffect(() => {
@@ -66,14 +66,13 @@ const CurrentUsers = () => {
         <h2 className="current-user-header">Current Categories</h2>
         <Select
           className="select-current-users"
-          labelId="demo-select-small-label"
-          id="demo-select-small"
           value={day}
           onChange={handleChange}
+          style={{ width: 120 }}
         >
-          <MenuItem value={30}>30 day</MenuItem>
-          <MenuItem value={20}>20 day</MenuItem>
-          <MenuItem value={10}>10 day</MenuItem>
+          <Option value={30}>30 day</Option>
+          <Option value={20}>20 day</Option>
+          <Option value={10}>10 day</Option>
         </Select>
       </div>
       <div

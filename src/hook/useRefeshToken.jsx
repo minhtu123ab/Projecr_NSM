@@ -15,7 +15,8 @@ const useRefeshToken = async () => {
     return response.data.access;
   } catch (err) {
     console.log(err);
-    window.location.href("login");
+    window.location.href = "/login";
+    localStorage.removeItem("token");
     return null;
   }
 };

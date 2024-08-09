@@ -4,8 +4,6 @@ import { SearchOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import ModelCreateCategory from "./ModelCreateCategory";
 import TableCategory from "./TableCategory";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import CurrentUsers from "./CurrentCategories";
 
 const Body = () => {
@@ -42,7 +40,12 @@ const Body = () => {
         }}
       >
         <CurrentUsers />
-        <h1 style={{ fontFamily: " Arial, Helvetica, sans-serif" }}>
+        <h1
+          style={{
+            fontFamily: " Arial, Helvetica, sans-serif",
+            color: "#758398",
+          }}
+        >
           Categories
         </h1>
         <div className="search-create-category">

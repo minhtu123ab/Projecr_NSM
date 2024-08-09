@@ -1,5 +1,5 @@
 import React, { useEffect, useState, memo } from "react";
-import Checkbox from "@mui/material/Checkbox";
+import { Checkbox } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -220,7 +220,15 @@ const TableCategory = () => {
         />
       )}
       <div className="checkbox-all">
-        <Checkbox checked={checkAll} onChange={onClickDeleteAll} />
+        <Checkbox
+          checked={checkAll}
+          onChange={onClickDeleteAll}
+          style={{
+            padding: 8,
+            transform: "scale(1.3)",
+            marginLeft: 17,
+          }}
+        />
         {idDelete.length > 0 && (
           <Button
             className="btn-delete-all"
@@ -256,7 +264,10 @@ const TableCategory = () => {
                 key={item.id}
               >
                 <td>
-                  <Checkbox checked={idDelete.includes(item.id)} />
+                  <Checkbox
+                    checked={idDelete.includes(item.id)}
+                    style={{ transform: "scale(1.3)", marginLeft: 10 }}
+                  />
                 </td>
                 <td>{page * 5 + index + 1}</td>
                 <td>

@@ -1,8 +1,6 @@
 import { Input, Button, Upload, Select, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import env from "../../Env";
 import { useNavigate } from "react-router-dom";
@@ -40,11 +38,15 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
   const handleEditClick = async () => {
     const token = JSON.parse(localStorage.getItem("token"));
     if (!data.name || !data.price_type) {
-      toast.error("Please enter complete information");
+      enqueueSnackbar("Please enter complete information", {
+        variant: "error",
+      });
       return;
     }
     if (data.name.length > 30) {
-      toast.error("Categories name no more than 30 characters");
+      enqueueSnackbar("Categories name no more than 30 characters", {
+        variant: "error",
+      });
       return;
     }
     try {
@@ -76,7 +78,9 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
         const time = new Date().getTime();
         navigate(`?updated_at=${time}`);
       } else {
-        toast.error("Update failed");
+        enqueueSnackbar("Update failed", {
+          variant: "error",
+        });
       }
     } catch (e) {
       if (e.response.status === 401) {
@@ -87,7 +91,9 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
           navigate("/login");
         }
       } else {
-        toast.error("Update failed");
+        enqueueSnackbar("Update failed", {
+          variant: "error",
+        });
         console.error(e);
       }
     }
@@ -95,7 +101,6 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
 
   return (
     <div onClick={handleEdit} className="background-model-create-category">
-      <ToastContainer />
       <div onClick={handleInnerClick} className="model-create-category">
         <h1
           style={{

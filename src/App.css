@@ -243,9 +243,9 @@
 .checkbox-all {
   width: 100%;
   background-color: white;
-  padding-top: 3px;
-  padding-bottom: 3px;
-  padding-left: 24px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 5px;
   display: flex;
 }
 .img-table-category {
@@ -256,7 +256,7 @@
   border-radius: 10px;
 }
 .btn-delete-all {
-  margin-top: 5px;
+  margin-top: 3px;
   margin-left: 10px;
 }
 .back-next-category {

@@ -7,6 +7,7 @@ import Body from "./components/MaterialCategories/Body";
 import Menu from "./components/Menu";
 import CheckLogin from "./CheckLogin";
 import BodyUpdate from "./components/BodyUpdate/BodyUpdate";
+import Main from "./components/MaterialsMain/Main";
 
 const App = () => {
   const location = useLocation();
@@ -22,6 +23,14 @@ const App = () => {
             element={
               <CheckLogin>
                 <Body />
+              </CheckLogin>
+            }
+          />
+          <Route
+            path="/materials/main"
+            element={
+              <CheckLogin>
+                <Main />
               </CheckLogin>
             }
           />

@@ -14,9 +14,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           vertical: "top",
           horizontal: "center",
         }}
-        ContentProps={{
-          className: "custom-snackbar",
-        }}
       >
         <App />
       </SnackbarProvider>

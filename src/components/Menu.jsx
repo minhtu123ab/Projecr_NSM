@@ -43,6 +43,9 @@ const Menu = () => {
           )}
         </div>
         <div className={`menu-child ${isOpenMat ? "open" : ""}`}>
+          <NavLink className="option-menu" to="/materials/main">
+            Main
+          </NavLink>
           <NavLink className="option-menu" to="/materials/categories">
             Categories
           </NavLink>

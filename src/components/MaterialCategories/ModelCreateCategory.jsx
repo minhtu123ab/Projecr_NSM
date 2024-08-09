@@ -1,8 +1,6 @@
 import { Input, Button, Upload, Select, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import env from "../../Env";
 import { useNavigate } from "react-router-dom";
@@ -43,11 +41,15 @@ const ModelCreateCategory = ({ handleCreate }) => {
   const handleCreateClick = async () => {
     const token = JSON.parse(localStorage.getItem("token"));
     if (!data.image || !data.name || !data.price_type) {
-      toast.error("Please enter full information");
+      enqueueSnackbar("Please enter full information", {
+        variant: "error",
+      });
       return;
     }
     if (data.name.length > 30) {
-      toast.error("Categories name no more than 30 characters");
+      enqueueSnackbar("Categories name no more than 30 characters", {
+        variant: "error",
+      });
       return;
     }
     try {
@@ -77,7 +79,9 @@ const ModelCreateCategory = ({ handleCreate }) => {
         const time = response.data.created_at;
         navigate(`?create_at=${time}`);
       } else {
-        toast.error("Create Failed");
+        enqueueSnackbar("Create Failed", {
+          variant: "error",
+        });
       }
     } catch (e) {
       if (e.response.status === 401) {
@@ -89,14 +93,15 @@ const ModelCreateCategory = ({ handleCreate }) => {
         }
       } else {
         console.error(e);
-        toast.error("Create Failed");
+        enqueueSnackbar("Create Failed", {
+          variant: "error",
+        });
       }
     }
   };
 
   return (
     <div onClick={handleCreate} className="background-model-create-category">
-      <ToastContainer />
       <div onClick={handleInnerClick} className="model-create-category">
         <h1
           style={{
