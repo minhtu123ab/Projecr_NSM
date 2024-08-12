@@ -101,17 +101,13 @@ const ModelCreateCategory = ({ handleCreate }) => {
   };
 
   return (
-    <div onClick={handleCreate} className="background-model-create-category">
+    <div
+      onClick={handleCreate}
+      className="w-full h-full bg-[rgba(0,0,0,0.434)] flex justify-center items-center fixed top-0 left-0 z-[3]"
+    >
       <div onClick={handleInnerClick} className="model-create-category">
-        <h1
-          style={{
-            textAlign: "center",
-            fontFamily: "Arial, Helvetica, sans-serif",
-          }}
-        >
-          Create Category
-        </h1>
-        <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
+        <h1 className="text-center font-sans text-[35px]">Create Category</h1>
+        <div className="flex justify-center m-[20px]">
           <Upload
             customRequest={({ file, onSuccess }) => {
               setTimeout(() => {
@@ -121,7 +117,7 @@ const ModelCreateCategory = ({ handleCreate }) => {
             showUploadList={false}
             onChange={handleUploadChange}
           >
-            <Button className="input-create-category">
+            <Button className="w-[300px] h-[200px] border border-dashed border-black text-[30px] rounded-[20px]">
               {!data.image && (
                 <UploadOutlined
                   style={{
@@ -134,26 +130,19 @@ const ModelCreateCategory = ({ handleCreate }) => {
                 <img
                   src={imageUrl}
                   alt="Uploaded"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  className="w-full h-full object-cover"
                 />
               )}
             </Button>
           </Upload>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: 15,
-            alignItems: "center",
-          }}
-        >
+        <div className="flex flex-row gap-[15px] items-center">
           <div>
             <label>Name*: </label>
             <br />
             <Input
               placeholder="name"
-              style={{ width: 300, marginTop: 5 }}
+              className="w-[300px] mt-[5px]"
               name="name"
               value={data.name}
               onChange={handleInputChange}
@@ -164,7 +153,7 @@ const ModelCreateCategory = ({ handleCreate }) => {
             <br />
             <Space wrap>
               <Select
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 options={[
                   { value: "per_quantity", label: "Quantity" },
                   { value: "per_metter", label: "Metter" },
@@ -175,9 +164,9 @@ const ModelCreateCategory = ({ handleCreate }) => {
             </Space>
           </div>
         </div>
-        <div style={{ textAlign: "right", marginTop: 20 }}>
+        <div className="text-right mt-[20px]">
           <Button
-            style={{ marginRight: 20 }}
+            className="mr-[20px]"
             onClick={handleCreate}
             type="primary"
             danger

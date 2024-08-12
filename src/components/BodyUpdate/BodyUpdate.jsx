@@ -2,19 +2,9 @@ import React from "react";
 
 const BodyUpdate = () => {
   return (
-    <div
-      style={{
-        marginLeft: 200,
-      }}
-    >
+    <div className="ml-[200px]">
       <img
-        style={{
-          paddingTop: 30,
-          width: "100%",
-          objectFit: "cover",
-          overflow: "hidden",
-        }}
-        className="img-body-update"
+        className="pt-[30px] w-full object-cover overflow-hidden"
         src="https://www.baovietbank.vn/media/ANH-BANNER/chung/thong-bao-nang-cap-he-thong.jpg"
       />
     </div>

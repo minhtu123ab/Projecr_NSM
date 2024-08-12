@@ -53,12 +53,20 @@ const Login = () => {
   };
 
   return (
-    <div className="login-all">
-      <div className="login">
-        <form className="form-login" onSubmit={handleSubmit(onSubmit)}>
-          <h1 className="header-login">Login</h1>
-          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-            <label style={{ fontWeight: "bold" }} htmlFor="email">
+    <div className="w-full h-screen flex flex-col justify-center bg-gray-300">
+      <div className="flex flex-col items-center justify-center">
+        <form
+          className="w-[350px] flex flex-col gap-[30px] p-[70px_40px] bg-white mb-[100px] rounded-[50px]"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <h1
+            className="font-bold text-center text-[30px]"
+            style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
+          >
+            Login
+          </h1>
+          <div className="flex flex-col gap-[5px]">
+            <label className="font-bold" htmlFor="email">
               Email*
             </label>
             <Controller
@@ -69,10 +77,12 @@ const Login = () => {
               )}
             />
             {errors.email && (
-              <p className="err-login">{errors.email.message}</p>
+              <p className="text-red-500 text-[14px] mb-[-20px]">
+                {errors.email.message}
+              </p>
             )}
           </div>
-          <div style={{ display: "flex", gap: 5, flexDirection: "column" }}>
+          <div className="flex flex-col gap-[5px]">
             <label style={{ fontWeight: "bold" }} htmlFor="password">
               Password*
             </label>
@@ -84,7 +94,9 @@ const Login = () => {
               )}
             />
             {errors.password && (
-              <p className="err-login">{errors.password.message}</p>
+              <p className="text-red-500 text-[14px] mb-[-20px]">
+                {errors.password.message}
+              </p>
             )}
           </div>
           <Button htmlType="submit" type="primary">

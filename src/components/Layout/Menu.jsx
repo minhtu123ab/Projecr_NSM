@@ -12,41 +12,83 @@ const Menu = () => {
   const [isOpenMat, setIsOpenMat] = useState(true);
 
   return (
-    <div className="menu">
-      <div className="menu-dash">
-        <div onClick={() => setIsOpenDash(!isOpenDash)} className="menu-title">
-          <AppstoreOutlined style={{ fontSize: 20 }} />
-          Dashboards
+    <div className="flex flex-col gap-[10px] h-screen w-[230px] fixed top-[55px] left-0 bg-[#f1f5f9] text-[#64748B] p-[20px_10px] font-[Arial, Helvetica, sans-serif]">
+      <div>
+        <div
+          onClick={() => setIsOpenDash(!isOpenDash)}
+          className="p-[15px] flex items-center gap-[5px] hover:bg-[#babfc3] cursor-pointer"
+        >
+          <AppstoreOutlined className="text-[20px]" />
+          <span>Dashboards</span>
           {isOpenDash ? (
-            <CaretUpOutlined style={{ marginLeft: 35 }} />
+            <CaretUpOutlined className="ml-[35px]" />
           ) : (
-            <CaretDownOutlined style={{ marginLeft: 35 }} />
+            <CaretDownOutlined className="ml-[35px]" />
           )}
         </div>
-        <div className={`menu-child ${isOpenDash ? "open" : ""}`}>
-          <NavLink className="option-menu" to="/dashboard/main">
+        <div
+          className={`flex flex-col gap-[0] px-[30px] transition-all duration-300 ease-out ${
+            isOpenDash ? "max-h-[500px] scale-y-100" : "max-h-0 scale-y-0"
+          } overflow-hidden`}
+        >
+          <NavLink
+            className={({ isActive }) =>
+              `block p-[10px] text-[#758398] ${
+                isActive ? "text-[#0EA5E9]" : "hover:bg-[#babfc3]"
+              }`
+            }
+            to="/dashboard/main"
+          >
             Main
           </NavLink>
-          <NavLink className="option-menu" to="/dashboard/user-insights">
+          <NavLink
+            className={({ isActive }) =>
+              `block p-[10px] text-[#758398] ${
+                isActive ? "text-[#0EA5E9]" : "hover:bg-[#babfc3]"
+              }`
+            }
+            to="/dashboard/user-insights"
+          >
             User Insights
           </NavLink>
         </div>
       </div>
-      <div className="menu-res">
-        <div onClick={() => setIsOpenMat(!isOpenMat)} className="menu-title">
-          <InboxOutlined style={{ fontSize: 20 }} />
-          Materials
+      <div className="flex flex-col gap-[10px]">
+        <div
+          onClick={() => setIsOpenMat(!isOpenMat)}
+          className="p-[15px] flex items-center gap-[5px] hover:bg-[#babfc3] cursor-pointer"
+        >
+          <InboxOutlined className="text-[20px]" />
+          <span>Materials</span>
           {isOpenMat ? (
-            <CaretUpOutlined style={{ marginLeft: 35 }} />
+            <CaretUpOutlined className="ml-[35px]" />
           ) : (
-            <CaretDownOutlined style={{ marginLeft: 35 }} />
+            <CaretDownOutlined className="ml-[35px]" />
           )}
         </div>
-        <div className={`menu-child ${isOpenMat ? "open" : ""}`}>
-          <NavLink className="option-menu" to="/materials/main">
+        <div
+          className={`flex flex-col gap-[0] px-[30px] transition-all duration-300 ease-out ${
+            isOpenMat ? "max-h-[500px] scale-y-100" : "max-h-0 scale-y-0"
+          } overflow-hidden`}
+        >
+          <NavLink
+            className={({ isActive }) =>
+              `block p-[10px] text-[#758398] ${
+                isActive ? "text-[#0EA5E9]" : "hover:bg-[#babfc3]"
+              }`
+            }
+            to="/materials/main"
+          >
             Main
           </NavLink>
-          <NavLink className="option-menu" to="/materials/categories">
+          <NavLink
+            className={({ isActive }) =>
+              `block p-[10px] text-[#758398] ${
+                isActive ? "text-[#0EA5E9]" : "hover:bg-[#babfc3]"
+              }`
+            }
+            to="/materials/categories"
+          >
             Categories
           </NavLink>
         </div>

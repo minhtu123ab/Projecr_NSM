@@ -213,13 +213,7 @@ const TableCategory = () => {
   };
 
   return (
-    <div
-      style={{
-        borderRadius: 7,
-        overflow: "hidden",
-        boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.322)",
-      }}
-    >
+    <div className="rounded-[7px] overflow-hidden shadow-[0px_0px_5px_rgba(0,0,0,0.322)]">
       {openEdit && (
         <ModelEditCategory
           handleEdit={handleEdit}
@@ -230,22 +224,18 @@ const TableCategory = () => {
       <div
         className={
           idDelete.length
-            ? "checkbox-all background-true-select-all"
-            : "checkbox-all"
+            ? "w-full bg-white pt-[5px] pb-[5px] pl-[5px] flex bg-[#d1d5d9] flex justify-between pr-[30px]"
+            : "w-full bg-white pt-[5px] pb-[5px] pl-[5px] flex"
         }
       >
         <Checkbox
           checked={checkAll}
           onChange={onClickDeleteAll}
-          style={{
-            padding: 8,
-            transform: "scale(1.3)",
-            marginLeft: 17,
-          }}
+          className="p-[8px] transform scale-[1.3] ml-[17px]"
         />
         {idDelete.length > 0 && (
           <Button
-            className="btn-delete-all"
+            className="mt-[3px] ml-[10px]"
             danger
             type="primary"
             onClick={() => showModalAll(idDelete)}
@@ -281,35 +271,24 @@ const TableCategory = () => {
                 <td>
                   <Checkbox
                     checked={idDelete.includes(item.id)}
-                    style={{ transform: "scale(1.3)", marginLeft: 10 }}
+                    className="transform scale-[1.3] ml-[10px]"
                   />
                 </td>
                 <td>{page * 5 + index + 1}</td>
-                <td>
-                  <img className="img-table-category" src={item.image} />
+                <td className="flex justify-center">
+                  <img
+                    className="w-[180px] h-[100px] object-cover m-[5px] rounded-[10px]"
+                    src={item.image}
+                  />
                 </td>
                 <td>{item.name}</td>
                 <td>
                   {item.price_type === "per_metter" ? (
-                    <span
-                      style={{
-                        color: "#DC2626",
-                        padding: "2px 12px",
-                        borderRadius: "10px",
-                        backgroundColor: "#FEE2E2",
-                      }}
-                    >
+                    <span className="text-[#DC2626] p-[2px_12px] rounded-[10px] bg-[#FEE2E2]">
                       Metter
                     </span>
                   ) : (
-                    <span
-                      style={{
-                        color: "#16A34A",
-                        padding: "2px 12px",
-                        borderRadius: "10px",
-                        backgroundColor: "#DCFCE7",
-                      }}
-                    >
+                    <span className="text-[#16A34A] p-[2px_12px] rounded-[10px] bg-[#DCFCE7]">
                       Quantity
                     </span>
                   )}
@@ -330,29 +309,19 @@ const TableCategory = () => {
             ))
           ) : (
             <tr>
-              <td
-                style={{
-                  paddingTop: 10,
-                  paddingBottom: 10,
-                  fontFamily: "monospace",
-                  fontSize: 30,
-                  textAlign: "center",
-                  color: "#777777",
-                  cursor: "default",
-                }}
-              >
+              <td className="pt-[10px] pb-[10px] font-mono text-[30px] text-center text-[#777777] cursor-default">
                 Không có bản ghi nào
               </td>
             </tr>
           )}
         </tbody>
       </table>
-      <div className="back-next-category">
+      <div className="flex gap-[10px] items-center bg-white justify-between">
         <Button disabled={page === 0} onClick={onBack}>
           <DoubleLeftOutlined />
           Back
         </Button>
-        <span style={{ fontFamily: " Arial, Helvetica, sans-serif" }}>
+        <span className="font-sans">
           {countPage ? page + 1 : 0} of {countPage}
         </span>
         {data.length ? (

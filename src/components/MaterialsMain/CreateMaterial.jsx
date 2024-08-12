@@ -12,6 +12,10 @@ const CreateMaterial = ({ handleCreate }) => {
 
   const [dataCategory, setDataCategory] = useState([]);
   const [dataSupplier, setDataSupplier] = useState([]);
+  const [count, setCount] = useState({
+    category: 0,
+    supplier: 0,
+  });
   const [data, setData] = useState({
     image: null,
     part_number: "",
@@ -28,6 +32,59 @@ const CreateMaterial = ({ handleCreate }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const getCountData = async () => {
+      const token = JSON.parse(localStorage.getItem("token"));
+      try {
+        const responseCategory = await axios.get(
+          env.urlServer + "/cms/material_categories",
+          {
+            headers: {
+              Authorization: `Bearer ${token.access}`,
+              "Content-Type": "application/json",
+            },
+            params: {
+              limit: 1,
+            },
+          }
+        );
+        setCount((prevCount) => ({
+          ...prevCount,
+          category: responseCategory.data.count,
+        }));
+        const responseSupplier = await axios.get(
+          env.urlServer + "/cms/supplier",
+          {
+            headers: {
+              Authorization: `Bearer ${token.access}`,
+              "Content-Type": "application/json",
+            },
+            params: {
+              limit: 1,
+            },
+          }
+        );
+        setCount((prevCount) => ({
+          ...prevCount,
+          supplier: responseSupplier.data.count,
+        }));
+      } catch (e) {
+        if (e.response.status === 401) {
+          const newToken = await useRefeshToken();
+          if (newToken) {
+            await getCountData();
+          } else {
+            navigate("/login");
+          }
+        } else {
+          console.error(error);
+          navigate("/login");
+        }
+      }
+    };
+    getCountData();
+  }, []);
+
+  useEffect(() => {
     const getData = async () => {
       const token = JSON.parse(localStorage.getItem("token"));
       try {
@@ -38,6 +95,9 @@ const CreateMaterial = ({ handleCreate }) => {
               Authorization: `Bearer ${token.access}`,
               "Content-Type": "application/json",
             },
+            params: {
+              limit: count.category,
+            },
           }
         );
         setDataCategory(responseCategory.data.results);
@@ -47,6 +107,9 @@ const CreateMaterial = ({ handleCreate }) => {
             headers: {
               Authorization: `Bearer ${token.access}`,
               "Content-Type": "application/json",
+            },
+            params: {
+              limit: count.supplier,
             },
           }
         );
@@ -66,7 +129,7 @@ const CreateMaterial = ({ handleCreate }) => {
       }
     };
     getData();
-  }, []);
+  }, [count]);
 
   const handleInnerClick = (e) => {
     e.stopPropagation();
@@ -172,21 +235,14 @@ const CreateMaterial = ({ handleCreate }) => {
   return (
     <div
       onClick={handleCreate}
-      className="background-model-create-category background-model-create-material"
+      className="w-full h-full bg-[rgba(0,0,0,0.434)] flex justify-center items-center fixed top-0 left-0 z-[3]"
     >
       <div
         onClick={handleInnerClick}
-        className="model-create-category model-create-material"
+        className="model-create-category h-[80%] overflow-y-scroll"
       >
-        <h1
-          style={{
-            textAlign: "center",
-            fontFamily: "Arial, Helvetica, sans-serif",
-          }}
-        >
-          Create Material
-        </h1>
-        <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
+        <h1 className="text-center font-sans text-[35px]">Create Material</h1>
+        <div className="flex justify-center m-[20px]">
           <Upload
             customRequest={({ file, onSuccess }) => {
               setTimeout(() => {
@@ -196,7 +252,7 @@ const CreateMaterial = ({ handleCreate }) => {
             showUploadList={false}
             onChange={handleUploadChange}
           >
-            <Button className="input-create-category">
+            <Button className="w-[300px] h-[200px] border border-dashed border-black text-[30px] rounded-[20px]">
               {!data.image && (
                 <UploadOutlined
                   style={{
@@ -209,26 +265,20 @@ const CreateMaterial = ({ handleCreate }) => {
                 <img
                   src={imageUrl}
                   alt="Uploaded"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  className="w-full h-full object-cover"
                 />
               )}
             </Button>
           </Upload>
         </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 15,
-          }}
-        >
+        <div className="flex flex-row gap-[15px] items-center">
           <div>
             <div>
               <label>Part_number*: </label>
               <br />
               <Input
                 placeholder="part_number"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="part_number"
                 value={data.part_number}
                 onChange={handleInputChange}
@@ -239,7 +289,7 @@ const CreateMaterial = ({ handleCreate }) => {
               <br />
               <Input
                 placeholder="name"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="name"
                 value={data.name}
                 onChange={handleInputChange}
@@ -251,7 +301,7 @@ const CreateMaterial = ({ handleCreate }) => {
               <Input
                 type="number"
                 placeholder="type"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="type"
                 value={data.type}
                 onChange={handleInputChange}
@@ -262,7 +312,7 @@ const CreateMaterial = ({ handleCreate }) => {
               <br />
               <Input
                 placeholder="large_title"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="large_title"
                 value={data.large_title}
                 onChange={handleInputChange}
@@ -275,7 +325,7 @@ const CreateMaterial = ({ handleCreate }) => {
               <br />
               <Input
                 placeholder="small_title"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="small_title"
                 value={data.small_title}
                 onChange={handleInputChange}
@@ -287,7 +337,7 @@ const CreateMaterial = ({ handleCreate }) => {
               <Input
                 type="number"
                 placeholder="basic_price"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="basic_price"
                 value={data.basic_price}
                 onChange={handleInputChange}
@@ -298,7 +348,7 @@ const CreateMaterial = ({ handleCreate }) => {
               <br />
               <Space wrap>
                 <Select
-                  style={{ width: 300, marginTop: 5 }}
+                  className="w-[300px] mt-[5px]"
                   options={dataCategory.map((item) => ({
                     value: item.id,
                     label: item.name,
@@ -313,7 +363,7 @@ const CreateMaterial = ({ handleCreate }) => {
               <br />
               <Space wrap>
                 <Select
-                  style={{ width: 300, marginTop: 5 }}
+                  className="w-[300px] mt-[5px]"
                   options={dataSupplier.map((item) => ({
                     value: item.id,
                     label: item.name,
@@ -325,9 +375,9 @@ const CreateMaterial = ({ handleCreate }) => {
             </div>
           </div>
         </div>
-        <div style={{ textAlign: "right", marginTop: 20 }}>
+        <div className="text-right mt-[20px]">
           <Button
-            style={{ marginRight: 20 }}
+            className="mr-[20px]"
             onClick={handleCreate}
             type="primary"
             danger

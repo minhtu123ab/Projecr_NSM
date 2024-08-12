@@ -12,6 +12,10 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
 
   const [dataCategory, setDataCategory] = useState([]);
   const [dataSupplier, setDataSupplier] = useState([]);
+  const [count, setCount] = useState({
+    category: 0,
+    supplier: 0,
+  });
   const [data, setData] = useState({
     image: dataEdit.image,
     part_number: dataEdit.part_number,
@@ -27,6 +31,59 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const getCountData = async () => {
+      const token = JSON.parse(localStorage.getItem("token"));
+      try {
+        const responseCategory = await axios.get(
+          env.urlServer + "/cms/material_categories",
+          {
+            headers: {
+              Authorization: `Bearer ${token.access}`,
+              "Content-Type": "application/json",
+            },
+            params: {
+              limit: 1,
+            },
+          }
+        );
+        setCount((prevCount) => ({
+          ...prevCount,
+          category: responseCategory.data.count,
+        }));
+        const responseSupplier = await axios.get(
+          env.urlServer + "/cms/supplier",
+          {
+            headers: {
+              Authorization: `Bearer ${token.access}`,
+              "Content-Type": "application/json",
+            },
+            params: {
+              limit: 1,
+            },
+          }
+        );
+        setCount((prevCount) => ({
+          ...prevCount,
+          supplier: responseSupplier.data.count,
+        }));
+      } catch (e) {
+        if (e.response.status === 401) {
+          const newToken = await useRefeshToken();
+          if (newToken) {
+            await getCountData();
+          } else {
+            navigate("/login");
+          }
+        } else {
+          console.error(error);
+          navigate("/login");
+        }
+      }
+    };
+    getCountData();
+  }, []);
+
+  useEffect(() => {
     const getData = async () => {
       const token = JSON.parse(localStorage.getItem("token"));
       try {
@@ -37,6 +94,9 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
               Authorization: `Bearer ${token.access}`,
               "Content-Type": "application/json",
             },
+            params: {
+              limit: count.category,
+            },
           }
         );
         setDataCategory(responseCategory.data.results);
@@ -46,6 +106,9 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
             headers: {
               Authorization: `Bearer ${token.access}`,
               "Content-Type": "application/json",
+            },
+            params: {
+              limit: count.supplier,
             },
           }
         );
@@ -65,7 +128,7 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
       }
     };
     getData();
-  }, []);
+  }, [count]);
 
   const handleInnerClick = (e) => {
     e.stopPropagation();
@@ -167,20 +230,16 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
     }
   };
   return (
-    <div onClick={handleEdit} className="background-model-create-category">
+    <div
+      onClick={handleEdit}
+      className="w-full h-full bg-[rgba(0,0,0,0.434)] flex justify-center items-center fixed top-0 left-0 z-[3]"
+    >
       <div
         onClick={handleInnerClick}
-        className="model-create-category model-create-material"
+        className="model-create-category h-[80%] overflow-y-scroll"
       >
-        <h1
-          style={{
-            textAlign: "center",
-            fontFamily: "Arial, Helvetica, sans-serif",
-          }}
-        >
-          Update Material
-        </h1>
-        <div style={{ display: "flex", justifyContent: "center", margin: 20 }}>
+        <h1 className="text-center font-sans text-[35px]">Update Material</h1>
+        <div className="flex justify-center m-[20px]">
           <Upload
             customRequest={({ file, onSuccess }) => {
               setTimeout(() => {
@@ -190,7 +249,7 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
             showUploadList={false}
             onChange={handleUploadChange}
           >
-            <Button className="input-create-category">
+            <Button className="w-[300px] h-[200px] border border-dashed border-black text-[30px] rounded-[20px]">
               {!data.image && (
                 <UploadOutlined
                   style={{
@@ -203,26 +262,20 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
                 <img
                   src={imageUrl ? imageUrl : data.image}
                   alt="Uploaded"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  className="w-full h-full object-cover"
                 />
               )}
             </Button>
           </Upload>
         </div>
-        <div
-          style={{
-            display: "flex",
-            gap: 15,
-            alignItems: "center",
-          }}
-        >
+        <div className="flex flex-row gap-[15px] items-center">
           <div>
             <div>
               <label>Part_number*: </label>
               <br />
               <Input
                 placeholder="part_number"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="part_number"
                 value={data.part_number}
                 onChange={handleInputChange}
@@ -233,7 +286,7 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
               <br />
               <Input
                 placeholder="name"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="name"
                 value={data.name}
                 onChange={handleInputChange}
@@ -245,7 +298,7 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
               <Input
                 type="number"
                 placeholder="type"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="type"
                 value={data.type}
                 onChange={handleInputChange}
@@ -256,7 +309,7 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
               <br />
               <Input
                 placeholder="large_title"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="large_title"
                 value={data.large_title}
                 onChange={handleInputChange}
@@ -269,7 +322,7 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
               <br />
               <Input
                 placeholder="small_title"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="small_title"
                 value={data.small_title}
                 onChange={handleInputChange}
@@ -281,7 +334,7 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
               <Input
                 type="number"
                 placeholder="basic_price"
-                style={{ width: 300, marginTop: 5 }}
+                className="w-[300px] mt-[5px]"
                 name="basic_price"
                 value={data.basic_price}
                 onChange={handleInputChange}
@@ -292,7 +345,7 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
               <br />
               <Space wrap>
                 <Select
-                  style={{ width: 300, marginTop: 5 }}
+                  className="w-[300px] mt-[5px]"
                   options={dataCategory.map((item) => ({
                     value: item.id,
                     label: item.name,
@@ -307,7 +360,7 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
               <br />
               <Space wrap>
                 <Select
-                  style={{ width: 300, marginTop: 5 }}
+                  className="w-[300px] mt-[5px]"
                   options={dataSupplier.map((item) => ({
                     value: item.id,
                     label: item.name,
@@ -319,9 +372,9 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
             </div>
           </div>
         </div>
-        <div style={{ textAlign: "right", marginTop: 20 }}>
+        <div className="text-right mt-[20px]">
           <Button
-            style={{ marginRight: 20 }}
+            className="mr-[20px]"
             onClick={handleEdit}
             type="primary"
             danger

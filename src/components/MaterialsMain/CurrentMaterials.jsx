@@ -58,11 +58,18 @@ const CurrentMaterials = () => {
   }, [valueCreate, valueDelete]);
 
   return (
-    <div className="current-users">
-      <div className="current-user-title">
-        <h2 className="current-user-header">Current Categories</h2>
+    <div className="w-[300px] h-[150px] bg-white shadow-[0px_0px_5px_rgba(0,0,0,0.322)] rounded-[10px] p-[15px_20px] flex flex-col gap-[10px]">
+      <div className="flex justify-between items-center">
+        <h2
+          style={{
+            fontFamily: "Arial, Helvetica, sans-serif",
+          }}
+          className="text-[15px] text-[#4b4b4b]"
+        >
+          Current Categories
+        </h2>
         <Select
-          className="select-current-users"
+          className="w-[95px] h-[30px]"
           value={day}
           onChange={handleChange}
           style={{ width: 120 }}
@@ -72,19 +79,11 @@ const CurrentMaterials = () => {
           <Option value={10}>10 day</Option>
         </Select>
       </div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-        }}
-      >
+      <div className="flex items-center gap-[12px]">
         <img src={icon} alt="" />
         <p
+          className="font-bold text-[38px] text-[#8B96A7]"
           style={{
-            fontWeight: "bold",
-            fontSize: 38,
-            color: "#8B96A7",
             fontFamily: "Arial",
           }}
         >

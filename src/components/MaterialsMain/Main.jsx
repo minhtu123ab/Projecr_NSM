@@ -42,22 +42,17 @@ const Main = () => {
   };
 
   return (
-    <div className="body">
+    <div className="p-[30px] bg-[#f1f5f9] h-full min-h-screen">
       {openCreate && <CreateMaterial handleCreate={handleCreate} />}
-      <div className="body-children">
+      <div className="flex flex-col gap-[20px] ml-[210px] mt-[55px]">
         <CurrentMaterials />
-        <h1
-          style={{
-            fontFamily: "Arial, Helvetica, sans-serif",
-            color: "#758398",
-          }}
-        >
+        <h1 className="text-[#758398] font-sans text-[30px] font-semibold">
           Main Material
         </h1>
-        <div className="search-create-category">
-          <form onSubmit={handleSubmit} className="form-search-material">
+        <div className="flex justify-between items-center">
+          <form onSubmit={handleSubmit} className="flex gap-[20px]">
             <Input
-              className="input-navbar"
+              className="w-[250px] h-[28px] py-[4px] px-[8px] rounded-full"
               placeholder="Search name..."
               prefix={
                 <SearchOutlined
@@ -71,7 +66,7 @@ const Main = () => {
               onKeyDown={handleKeyDown}
             />
             <Input
-              className="input-navbar"
+              className="w-[250px] h-[28px] py-[4px] px-[8px] rounded-full"
               placeholder="Search categories..."
               prefix={
                 <SearchOutlined

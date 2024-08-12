@@ -13,7 +13,7 @@ const Body = () => {
 
   useEffect(() => {
     navigate({ search: "" });
-  }, []);
+  }, [navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,33 +27,23 @@ const Body = () => {
   const handleCreate = () => {
     setOpenCreate(!openCreate);
   };
+
   return (
-    <div className="body">
+    <div className="p-[30px] bg-[#f1f5f9] h-full min-h-screen">
       {openCreate && <ModelCreateCategory handleCreate={handleCreate} />}
-      <div className="body-children">
+      <div className="flex flex-col gap-[20px] ml-[210px] mt-[55px]">
         <CurrentUsers />
-        <h1
-          style={{
-            fontFamily: " Arial, Helvetica, sans-serif",
-            color: "#758398",
-          }}
-        >
+        <h1 className="text-[#758398] font-sans text-[30px] font-semibold">
           Categories
         </h1>
-        <div className="search-create-category">
-          <form onSubmit={handleSubmit}>
+        <div className="flex justify-between items-center">
+          <form onSubmit={handleSubmit} className="flex gap-[20px]">
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              className="input-navbar"
+              className="w-[250px] h-[28px] py-[4px] px-[8px] rounded-full"
               placeholder="Search..."
-              prefix={
-                <SearchOutlined
-                  style={{
-                    opacity: 0.5,
-                  }}
-                />
-              }
+              prefix={<SearchOutlined className="opacity-50" />}
             />
           </form>
           <Button onClick={handleCreate} type="primary">
