@@ -15,6 +15,8 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
     name: dataEdit.name,
     price_type: dataEdit.price_type === "per_metter" ? "Metter" : "Quantity",
   });
+  const [imageUrl, setImageUrl] = useState(null);
+
   const navigate = useNavigate();
 
   const handleInnerClick = (e) => {
@@ -31,7 +33,9 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
 
   const handleUploadChange = (info) => {
     if (info.file && info.file.originFileObj) {
-      setData({ ...data, image: info.file.originFileObj });
+      const file = info.file.originFileObj;
+      setData({ ...data, image: file });
+      setImageUrl(URL.createObjectURL(file));
     }
   };
 
@@ -73,6 +77,7 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
         enqueueSnackbar(`Update Successfully`, {
           variant: "success",
         });
+        setImageUrl(null);
         setData({ image: null, name: "", price_type: "" });
         setOpenEdit(false);
         const time = new Date().getTime();
@@ -131,7 +136,7 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
               {!data.image && <p>Upload Image*</p>}
               {data.image && (
                 <img
-                  src={data.image}
+                  src={imageUrl ? imageUrl : data.image}
                   alt="Uploaded"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
@@ -142,8 +147,8 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            gap: 10,
+            flexDirection: "row",
+            gap: 15,
             alignItems: "center",
           }}
         >

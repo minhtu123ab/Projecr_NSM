@@ -143,8 +143,8 @@ const ModelCreateCategory = ({ handleCreate }) => {
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            gap: 10,
+            flexDirection: "row",
+            gap: 15,
             alignItems: "center",
           }}
         >

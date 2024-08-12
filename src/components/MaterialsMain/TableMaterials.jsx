@@ -9,42 +9,48 @@ import {
 import { Button, Modal } from "antd";
 import axios from "axios";
 import env from "../../Env";
-import { useLocation } from "react-router-dom";
-import ModelEditCategory from "./ModelEditCategory";
 import { useNavigate } from "react-router-dom";
 import useRefeshToken from "../../hook/useRefeshToken";
 import { useSnackbar } from "notistack";
+import EditMaterial from "./EditMaterial";
+import { useLocation } from "react-router-dom";
 
-const TableCategory = () => {
-  const [checkAll, setCheckAll] = useState(false);
-  const [total, setTotal] = useState(0);
+const TableMaterials = () => {
+  const [searchMaterial, setSearchMaterial] = useState("");
+  const [searchCategory, setSearchCategory] = useState("");
+  const [create, setCreate] = useState("");
+  const [update, setUpdate] = useState("");
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
-  const [create, setCreate] = useState("");
-  const [upadate, setUpdate] = useState("");
-  const [valueSearch, setValueSearch] = useState("");
-  const [dataEdit, setDataEdit] = useState({});
-  const [openEdit, setOpenEdit] = useState(false);
+  const [checkAll, setCheckAll] = useState(false);
   const [idDelete, setIdDelete] = useState([]);
-  const [deleteStatus, setDeleteStatus] = useState("");
+  const [total, setTotal] = useState(0);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [dataEdit, setDataEdit] = useState({});
+  const [modalVisibleAll, setModalVisibleAll] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [modalVisibleAll, setModalVisibleAll] = useState(false);
+  const [deleteStatus, setDeleteStatus] = useState("");
+
+  const countPage = Math.ceil(total / env.countOfPage);
 
   const { enqueueSnackbar } = useSnackbar();
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  const countPage = Math.ceil(total / env.countOfPage);
-
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
+    setSearchCategory(queryParams.get("category"));
+    setSearchMaterial(queryParams.get("name"));
     setCreate(queryParams.get("create_at") || "");
     setUpdate(queryParams.get("updated_at") || "");
-    setValueSearch(queryParams.get("name") || "");
     setDeleteStatus(queryParams.get("delete") || "");
   }, [location.search]);
+
+  useEffect(() => {
+    setCheckAll(idDelete.length ? true : false);
+  }, [idDelete]);
 
   useEffect(() => {
     const getData = async () => {
@@ -54,22 +60,23 @@ const TableCategory = () => {
           limit: env.countOfPage,
           offset: env.countOfPage * page,
         };
-        if (valueSearch) {
-          params.name = valueSearch;
+        if (searchMaterial) {
+          params.name = searchMaterial;
         }
-        const response = await axios.get(
-          env.urlServer + `/cms/material_categories`,
-          {
-            headers: {
-              Authorization: `Bearer ${token.access}`,
-              "Content-Type": "application/json",
-            },
-            params,
-          }
-        );
+        if (searchCategory) {
+          params.category = searchCategory;
+        }
+        const response = await axios.get(env.urlServer + `/cms/material`, {
+          headers: {
+            Authorization: `Bearer ${token.access}`,
+            "Content-Type": "application/json",
+          },
+          params,
+        });
         setData(response.data.results);
         setTotal(response.data.count);
       } catch (error) {
+        console.log(error);
         if (error.response.status === 401) {
           const newToken = await useRefeshToken();
           if (newToken) {
@@ -84,41 +91,7 @@ const TableCategory = () => {
       }
     };
     getData();
-  }, [page, valueSearch, create, upadate, deleteStatus]);
-
-  useEffect(() => {
-    setPage(0);
-  }, [valueSearch]);
-
-  const handleEdit = (e, item) => {
-    e.stopPropagation();
-    setDataEdit(item);
-    setOpenEdit(!openEdit);
-  };
-
-  useEffect(() => {
-    setCheckAll(idDelete.length ? true : false);
-  }, [idDelete]);
-
-  const onNext = () => {
-    setPage((prevPage) => prevPage + 1);
-    setIdDelete([]);
-  };
-
-  const onBack = () => {
-    setPage((prevPage) => prevPage - 1);
-    setIdDelete([]);
-  };
-
-  const OnClickSelectDelete = (item) => {
-    setIdDelete((prevId) => {
-      const newIdDelete = prevId.includes(item.id)
-        ? prevId.filter((id) => id !== item.id)
-        : [...prevId, item.id];
-      setCheckAll(newIdDelete.length === data.length);
-      return newIdDelete;
-    });
-  };
+  }, [searchMaterial, searchCategory, create, update, page, deleteStatus]);
 
   const onClickDeleteAll = () => {
     const newCheckAll = !checkAll;
@@ -136,19 +109,21 @@ const TableCategory = () => {
     setModalVisibleAll(true);
   };
 
+  const onBack = () => {
+    setPage((prevPage) => prevPage - 1);
+    setIdDelete([]);
+  };
+
   const DeleteAll = async () => {
     const results = idDelete.join(",");
     const token = JSON.parse(localStorage.getItem("token"));
     try {
-      await axios.delete(
-        env.urlServer + `/cms/material_categories/bulk/${results}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token.access}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      await axios.delete(env.urlServer + `/cms/material/bulk/${results}`, {
+        headers: {
+          Authorization: `Bearer ${token.access}`,
+          "Content-Type": "application/json",
+        },
+      });
       enqueueSnackbar(`Delete ${idDelete.length} Categories Successfully`, {
         variant: "success",
       });
@@ -171,20 +146,42 @@ const TableCategory = () => {
     }
   };
 
+  const onNext = () => {
+    setPage((prevPage) => prevPage + 1);
+    setIdDelete([]);
+  };
+
+  const OnClickSelectDelete = (item) => {
+    setIdDelete((prevId) => {
+      const newIdDelete = prevId.includes(item.id)
+        ? prevId.filter((id) => id !== item.id)
+        : [...prevId, item.id];
+      setCheckAll(newIdDelete.length === data.length);
+      return newIdDelete;
+    });
+  };
+
+  const handleEdit = (e, item) => {
+    e.stopPropagation();
+    setDataEdit(item);
+    setOpenEdit(!openEdit);
+  };
+
+  useEffect(() => {
+    setPage(0);
+  }, [searchMaterial, searchCategory]);
+
   const handleDelete = async () => {
     if (itemToDelete) {
       const token = JSON.parse(localStorage.getItem("token"));
       try {
-        await axios.delete(
-          env.urlServer + `/cms/material_categories/${itemToDelete.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token.access}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        enqueueSnackbar("Delete 1 Categories Successfully", {
+        await axios.delete(env.urlServer + `/cms/material/${itemToDelete.id}`, {
+          headers: {
+            Authorization: `Bearer ${token.access}`,
+            "Content-Type": "application/json",
+          },
+        });
+        enqueueSnackbar("Delete 1 Material Successfully", {
           variant: "success",
         });
         const time = new Date().getTime();
@@ -221,7 +218,7 @@ const TableCategory = () => {
       }}
     >
       {openEdit && (
-        <ModelEditCategory
+        <EditMaterial
           handleEdit={handleEdit}
           dataEdit={dataEdit}
           setOpenEdit={setOpenEdit}
@@ -254,99 +251,94 @@ const TableCategory = () => {
           </Button>
         )}
       </div>
-      <table className="table-category">
-        <thead>
-          <tr>
-            <th></th>
-            <th>NO</th>
-            <th>IMAGE</th>
-            <th>NAME</th>
-            <th>PRICE TYPE</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.length ? (
-            data.map((item, index) => (
-              <tr
-                style={{
-                  cursor: "pointer",
-                  backgroundColor: idDelete.includes(item.id)
-                    ? "#D1D5D9"
-                    : "white",
-                }}
-                onClick={() => OnClickSelectDelete(item)}
-                key={item.id}
-              >
-                <td>
-                  <Checkbox
-                    checked={idDelete.includes(item.id)}
-                    style={{ transform: "scale(1.3)", marginLeft: 10 }}
-                  />
-                </td>
-                <td>{page * 5 + index + 1}</td>
-                <td>
-                  <img className="img-table-category" src={item.image} />
-                </td>
-                <td>{item.name}</td>
-                <td>
-                  {item.price_type === "per_metter" ? (
-                    <span
-                      style={{
-                        color: "#DC2626",
-                        padding: "2px 12px",
-                        borderRadius: "10px",
-                        backgroundColor: "#FEE2E2",
-                      }}
+      <div className="custom-table-container">
+        <table className="table-category table-material">
+          <thead>
+            <tr>
+              <th></th>
+              <th>NO</th>
+              <th>IMAGE</th>
+              <th>PART NUMBER</th>
+              <th>NAME</th>
+              <th>TYPE</th>
+              <th>LARGE TITLE</th>
+              <th>SMALL TITLE</th>
+              <th>BASIC PRICE</th>
+              <th>CATEGORY</th>
+              <th>SUPPLIER</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.length ? (
+              data.map((item, index) => (
+                <tr
+                  style={{
+                    cursor: "pointer",
+                    backgroundColor: idDelete.includes(item.id)
+                      ? "#D1D5D9"
+                      : "white",
+                  }}
+                  onClick={() => OnClickSelectDelete(item)}
+                  key={item.id}
+                >
+                  <td>
+                    <Checkbox
+                      checked={idDelete.includes(item.id)}
+                      style={{ transform: "scale(1.3)", marginLeft: 10 }}
+                    />
+                  </td>
+                  <td>{page * 5 + index + 1}</td>
+                  <td>
+                    <img
+                      className="img-table-category img-table-material"
+                      src={item.image}
+                    />
+                  </td>
+                  <td>{item.part_number}</td>
+                  <td>{item.name}</td>
+                  <td>{item.type}</td>
+                  <td>{item.large_title}</td>
+                  <td>{item.small_title}</td>
+                  <td>{item.basic_price}</td>
+                  <td>{item.category.name}</td>
+                  <td>{item.supplier.name}</td>
+
+                  <td>
+                    <Button onClick={(e) => handleEdit(e, item)} type="text">
+                      <EditOutlined />
+                    </Button>
+                    <Button
+                      onClick={(e) => showModal(e, item)}
+                      danger
+                      type="text"
                     >
-                      Metter
-                    </span>
-                  ) : (
-                    <span
-                      style={{
-                        color: "#16A34A",
-                        padding: "2px 12px",
-                        borderRadius: "10px",
-                        backgroundColor: "#DCFCE7",
-                      }}
-                    >
-                      Quantity
-                    </span>
-                  )}
-                </td>
-                <td>
-                  <Button onClick={(e) => handleEdit(e, item)} type="text">
-                    <EditOutlined />
-                  </Button>
-                  <Button
-                    onClick={(e) => showModal(e, item)}
-                    danger
-                    type="text"
-                  >
-                    <DeleteOutlined />
-                  </Button>
+                      <DeleteOutlined />
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  style={{
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    fontFamily: "monospace",
+                    fontSize: 30,
+                    textAlign: "center",
+                    color: "#777777",
+                    cursor: "default",
+                  }}
+                >
+                  Không có bản ghi nào
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td
-                style={{
-                  paddingTop: 10,
-                  paddingBottom: 10,
-                  fontFamily: "monospace",
-                  fontSize: 30,
-                  textAlign: "center",
-                  color: "#777777",
-                  cursor: "default",
-                }}
-              >
-                Không có bản ghi nào
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
+
       <div className="back-next-category">
         <Button disabled={page === 0} onClick={onBack}>
           <DoubleLeftOutlined />
@@ -383,10 +375,10 @@ const TableCategory = () => {
         onCancel={() => setModalVisibleAll(false)}
         okType="danger"
       >
-        <p>Are you sure you want to delete {idDelete.length} categories</p>
+        <p>Are you sure you want to delete {idDelete.length} material</p>
       </Modal>
     </div>
   );
 };
 
-export default memo(TableCategory);
+export default memo(TableMaterials);

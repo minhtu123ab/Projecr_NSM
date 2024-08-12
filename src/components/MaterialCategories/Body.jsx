@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Input, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ModelCreateCategory from "./ModelCreateCategory";
 import TableCategory from "./TableCategory";
 import CurrentUsers from "./CurrentCategories";
@@ -30,15 +30,7 @@ const Body = () => {
   return (
     <div className="body">
       {openCreate && <ModelCreateCategory handleCreate={handleCreate} />}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          marginLeft: 250,
-          marginTop: 55,
-          gap: 20,
-        }}
-      >
+      <div className="body-children">
         <CurrentUsers />
         <h1
           style={{
@@ -65,7 +57,7 @@ const Body = () => {
             />
           </form>
           <Button onClick={handleCreate} type="primary">
-            Create category
+            Create categories
           </Button>
         </div>
         <TableCategory />

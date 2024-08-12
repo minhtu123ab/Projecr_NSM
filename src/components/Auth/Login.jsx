@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Input, Button, Affix } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import env from "../Env";
+import env from "../../Env";
 import { useSnackbar } from "notistack";
 
 const Login = () => {

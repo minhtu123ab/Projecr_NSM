@@ -1,10 +1,10 @@
 import React from "react";
 import "./App.css";
-import Navbar from "./components/Navbar";
-import { useLocation, Routes, Route } from "react-router-dom";
-import Login from "./components/Login";
+import Navbar from "./components/Layout/Navbar";
+import { useLocation, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./components/Auth/Login";
 import Body from "./components/MaterialCategories/Body";
-import Menu from "./components/Menu";
+import Menu from "./components/Layout/Menu";
 import CheckLogin from "./CheckLogin";
 import BodyUpdate from "./components/BodyUpdate/BodyUpdate";
 import Main from "./components/MaterialsMain/Main";
@@ -17,6 +17,7 @@ const App = () => {
       <div>
         {location.pathname !== "/login" && <Menu />}
         <Routes>
+          <Route path="/" element={<Navigate to="/materials/categories" />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/materials/categories"
