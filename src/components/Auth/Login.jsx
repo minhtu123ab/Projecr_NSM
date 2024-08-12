@@ -1,116 +1,93 @@
-import React, { useState } from "react";
-import { Input, Button, Affix } from "antd";
+import React from "react";
+import { Input, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import env from "../../Env";
 import { useSnackbar } from "notistack";
+import { useForm, Controller } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: yup.string().required("Password is required"),
+});
 
 const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
-
-  const url = env.urlServer;
   const navigate = useNavigate();
-  const [value, setValue] = useState({
-    email: "",
-    password: "",
-  });
-  const [touched, setTouched] = useState({
-    email: false,
-    password: false,
-  });
-  const onBlur = (field) => () => {
-    setTouched({ ...touched, [field]: true });
-  };
 
-  const onChangeValue = (field) => (e) => {
-    setValue({ ...value, [field]: e.target.value });
-  };
-  const check = (field) => {
-    if (touched[field]) {
-      if (!value[field]) {
-        return true;
-      }
-    }
-    return false;
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onTouched",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = async (data) => {
     try {
-      const result = await axios.post(url + "/cms/auth/login", value);
-      console.log("result=", result.data);
+      const result = await axios.post(env.urlServer + "/cms/auth/login", data);
       localStorage.setItem("token", JSON.stringify(result.data));
       enqueueSnackbar(`Login Successfully`, {
         variant: "success",
       });
-      setValue({ email: "", password: "" });
-      setTouched({ email: false, password: false });
+      reset();
       navigate("/materials/categories");
     } catch (e) {
       console.log(e);
       enqueueSnackbar(`Login failed`, {
         variant: "error",
       });
-      setValue({ email: "", password: "" });
-      setTouched({ email: false, password: false });
+      reset();
     }
   };
+
   return (
     <div className="login-all">
       <div className="login">
-        <form className="form-login" onSubmit={handleSubmit}>
+        <form className="form-login" onSubmit={handleSubmit(onSubmit)}>
           <h1 className="header-login">Login</h1>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 5,
-            }}
-          >
-            <label
-              style={{
-                fontWeight: "bold",
-              }}
-              htmlFor="email"
-            >
+          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+            <label style={{ fontWeight: "bold" }} htmlFor="email">
               Email*
             </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="email"
-              value={value.email}
-              onChange={onChangeValue("email")}
-              onBlur={onBlur("email")}
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} id="email" type="email" placeholder="email" />
+              )}
             />
+            {errors.email && (
+              <p className="err-login">{errors.email.message}</p>
+            )}
           </div>
-          {check("email") && <p className="err-login">Please enter email</p>}
-          <div
-            style={{
-              display: "flex",
-              gap: 5,
-              flexDirection: "column",
-            }}
-          >
-            <label
-              style={{
-                fontWeight: "bold",
-              }}
-              htmlFor="password"
-            >
+          <div style={{ display: "flex", gap: 5, flexDirection: "column" }}>
+            <label style={{ fontWeight: "bold" }} htmlFor="password">
               Password*
             </label>
-            <Input
-              placeholder="Password"
-              type="password"
-              value={value.password}
-              onChange={onChangeValue("password")}
-              onBlur={onBlur("password")}
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <Input {...field} placeholder="Password" type="password" />
+              )}
             />
+            {errors.password && (
+              <p className="err-login">{errors.password.message}</p>
+            )}
           </div>
-          {check("password") && (
-            <p className="err-login">Please enter password</p>
-          )}
-          <Button htmlType="submit" type="primary" onClick={handleSubmit}>
+          <Button htmlType="submit" type="primary">
             Login
           </Button>
         </form>

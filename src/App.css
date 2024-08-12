@@ -99,9 +99,7 @@
 .err-login {
   color: red;
   font-size: 14px;
-  margin-top: -25px;
   margin-bottom: -20px;
-  margin-left: 10px;
 }
 .menu {
   display: flex;
