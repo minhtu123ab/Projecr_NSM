@@ -65,8 +65,9 @@ const ModelCreateCategory = ({ handleCreate }) => {
         setValue("price_type", "");
         setImageUrl(null); // Xóa URL ảnh sau khi tạo thành công
         handleCreate();
-        const time = response.data.created_at;
-        navigate(`?create_at=${time}`);
+        const currentParams = new URLSearchParams(window.location.search);
+        currentParams.set("create_at", response.data.created_at);
+        navigate(`?${currentParams.toString()}`);
       } else {
         enqueueSnackbar("Create Failed", {
           variant: "error",

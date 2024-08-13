@@ -206,10 +206,13 @@ const CreateMaterial = ({ handleCreate }) => {
         enqueueSnackbar(`Create Successfully`, {
           variant: "success",
         });
-        setImageUrl(null); // Xóa URL ảnh sau khi tạo thành công
+        setImageUrl(null);
         handleCreate();
-        const time = new Date().getTime();
-        navigate(`?create_at=${time}`);
+        // const time = new Date().getTime();
+        // navigate(`?create_at=${time}`);
+        const currentParams = new URLSearchParams(window.location.search);
+        currentParams.set("create_at", response.data.created_at);
+        navigate(`?${currentParams.toString()}`);
       } else {
         enqueueSnackbar("Create Failed", {
           variant: "error",

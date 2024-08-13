@@ -75,7 +75,10 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
           variant: "success",
         });
         setOpenEdit(false);
-        navigate(`?updated_at=${new Date().getTime()}`);
+        // navigate(`?updated_at=${new Date().getTime()}`);
+        const currentParams = new URLSearchParams(window.location.search);
+        currentParams.set("updated_at", new Date().getTime());
+        navigate(`?${currentParams.toString()}`);
       } else {
         enqueueSnackbar("Update failed", {
           variant: "error",

@@ -206,8 +206,11 @@ const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
         });
         setImageUrl(null);
         setOpenEdit(false);
-        const time = new Date().getTime();
-        navigate(`?updated_at=${time}`);
+        // const time = new Date().getTime();
+        // navigate(`?updated_at=${time}`);
+        const currentParams = new URLSearchParams(window.location.search);
+        currentParams.set("updated_at", new Date().getTime());
+        navigate(`?${currentParams.toString()}`);
       } else {
         enqueueSnackbar("Update failed", {
           variant: "error",
