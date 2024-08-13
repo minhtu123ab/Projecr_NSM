@@ -210,7 +210,7 @@ const TableMaterials = () => {
   };
 
   return (
-    <div className="rounded-[7px] overflow-hidden shadow-[0px_0px_5px_rgba(0,0,0,0.322)]">
+    <div className="rounded-[10px] overflow-hidden shadow-[0px_0px_5px_rgba(0,0,0,0.322)]">
       {openEdit && (
         <EditMaterial
           handleEdit={handleEdit}
@@ -221,7 +221,7 @@ const TableMaterials = () => {
       <div
         className={
           idDelete.length
-            ? "w-full bg-white pt-[5px] pb-[5px] pl-[5px] flex bg-[#d1d5d9] flex justify-between pr-[30px]"
+            ? "w-full bg-[#D3D8DC] pt-[5px] pb-[5px] pl-[5px] flex bg-[#d1d5d9] flex justify-between pr-[30px]"
             : "w-full bg-white pt-[5px] pb-[5px] pl-[5px] flex"
         }
       >
@@ -319,10 +319,10 @@ const TableMaterials = () => {
         </table>
       </div>
 
-      <div className="flex gap-[10px] items-center bg-white justify-between">
+      <div className="flex gap-[10px] items-center bg-white justify-between p-[5px]">
         <Button disabled={page === 0} onClick={onBack}>
           <DoubleLeftOutlined />
-          Back
+          Previous
         </Button>
         <span className="font-sans">
           {countPage ? page + 1 : 0} of {countPage}
