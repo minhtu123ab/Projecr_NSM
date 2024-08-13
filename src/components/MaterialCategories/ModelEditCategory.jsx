@@ -1,70 +1,67 @@
 import { Input, Button, Upload, Select, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import env from "../../Env";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import useRefeshToken from "../../hook/useRefeshToken";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Controller, useForm } from "react-hook-form";
+
+const schema = yup.object().shape({
+  name: yup
+    .string()
+    .required("Name is required")
+    .max(30, "Name cannot exceed 30 characters"),
+  price_type: yup.string().required("Price type is required"),
+  image: yup.mixed().required("Image is required"),
+});
 
 const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
   const { enqueueSnackbar } = useSnackbar();
-
-  const [data, setData] = useState({
-    image: dataEdit.image,
-    name: dataEdit.name,
-    price_type: dataEdit.price_type === "per_metter" ? "Metter" : "Quantity",
-  });
-  const [imageUrl, setImageUrl] = useState(null);
-
   const navigate = useNavigate();
+  const [imageUrl, setImageUrl] = useState(dataEdit.image || null);
 
-  const handleInnerClick = (e) => {
-    e.stopPropagation();
-  };
-
-  const handleInputChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
-
-  const handleSelectChange = (value) => {
-    setData({ ...data, price_type: value });
-  };
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: dataEdit.name,
+      price_type: dataEdit.price_type === "per_metter" ? "Metter" : "Quantity",
+      image: dataEdit.image,
+    },
+  });
 
   const handleUploadChange = (info) => {
     if (info.file && info.file.originFileObj) {
       const file = info.file.originFileObj;
-      setData({ ...data, image: file });
+      setValue("image", file);
       setImageUrl(URL.createObjectURL(file));
     }
   };
 
-  const handleEditClick = async () => {
+  const handleEditClick = async (formData) => {
     const token = JSON.parse(localStorage.getItem("token"));
-    if (!data.name || !data.price_type) {
-      enqueueSnackbar("Please enter complete information", {
-        variant: "error",
-      });
-      return;
-    }
-    if (data.name.length > 30) {
-      enqueueSnackbar("Categories name no more than 30 characters", {
-        variant: "error",
-      });
-      return;
-    }
     try {
-      const formData = new FormData();
-      data.image !== dataEdit.image && formData.append("image", data.image);
-      formData.append("name", data.name);
-      formData.append(
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append(
         "price_type",
-        data.price_type === "Metter" ? "per_metter" : "per_quantity"
+        formData.price_type === "Metter" ? "per_metter" : "per_quantity"
       );
+      if (formData.image !== dataEdit.image) {
+        formDataToSend.append("image", formData.image);
+      }
 
       const response = await axios.put(
         env.urlServer + `/cms/material_categories/${dataEdit.id}`,
-        formData,
+        formDataToSend,
         {
           headers: {
             Authorization: `Bearer ${token.access}`,
@@ -77,11 +74,8 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
         enqueueSnackbar(`Update Successfully`, {
           variant: "success",
         });
-        setImageUrl(null);
-        setData({ image: null, name: "", price_type: "" });
         setOpenEdit(false);
-        const time = new Date().getTime();
-        navigate(`?updated_at=${time}`);
+        navigate(`?updated_at=${new Date().getTime()}`);
       } else {
         enqueueSnackbar("Update failed", {
           variant: "error",
@@ -91,7 +85,7 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
       if (e.response.status === 401) {
         const newToken = await useRefeshToken();
         if (newToken) {
-          await handleEditClick();
+          handleEditClick(formData);
         } else {
           navigate("/login");
         }
@@ -104,6 +98,10 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
     }
   };
 
+  const handleInnerClick = (e) => {
+    e.stopPropagation();
+  };
+
   return (
     <div
       onClick={handleEdit}
@@ -111,76 +109,104 @@ const ModelEditCategory = ({ handleEdit, dataEdit, setOpenEdit }) => {
     >
       <div onClick={handleInnerClick} className="model-create-category">
         <h1 className="text-center font-sans text-[35px]">Update Category</h1>
-        <div className="flex justify-center m-[20px]">
-          <Upload
-            customRequest={({ file, onSuccess }) => {
-              setTimeout(() => {
-                onSuccess("ok");
-              }, 0);
-            }}
-            showUploadList={false}
-            onChange={handleUploadChange}
-          >
-            <Button className="w-[300px] h-[200px] border border-dashed border-black text-[30px] rounded-[20px]">
-              {!data.image && (
-                <UploadOutlined
-                  style={{
-                    fontSize: 80,
+        <form onSubmit={handleSubmit(handleEditClick)}>
+          <div className="flex justify-center m-[20px]">
+            <Controller
+              name="image"
+              control={control}
+              render={({ field }) => (
+                <Upload
+                  customRequest={({ file, onSuccess }) => {
+                    setTimeout(() => {
+                      onSuccess("ok");
+                    }, 0);
                   }}
-                />
+                  showUploadList={false}
+                  onChange={handleUploadChange}
+                >
+                  <Button className="w-[300px] h-[200px] border border-dashed border-black text-[30px] rounded-[20px]">
+                    {!field.value && (
+                      <>
+                        <UploadOutlined
+                          style={{
+                            fontSize: 80,
+                          }}
+                        />
+                        <p>Upload Image*</p>
+                      </>
+                    )}
+                    {field.value && (
+                      <img
+                        src={imageUrl ? imageUrl : field.value}
+                        alt="Uploaded"
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                  </Button>
+                </Upload>
               )}
-              {!data.image && <p>Upload Image*</p>}
-              {data.image && (
-                <img
-                  src={imageUrl ? imageUrl : data.image}
-                  alt="Uploaded"
-                  className="w-full h-full object-cover"
-                />
-              )}
-            </Button>
-          </Upload>
-        </div>
-        <div className="flex flex-row gap-[15px] items-center">
-          <div>
-            <label>Name*: </label>
-            <br />
-            <Input
-              placeholder="name"
-              className="w-[300px] mt-[5px]"
-              name="name"
-              value={data.name}
-              onChange={handleInputChange}
             />
+            {errors.image && (
+              <p className="text-red-500">{errors.image.message}</p>
+            )}
           </div>
-          <div>
-            <label>Price_type*: </label>
-            <br />
-            <Space wrap>
-              <Select
-                className="w-[300px] mt-[5px]"
-                options={[
-                  { value: "Quantity", label: "Quantity" },
-                  { value: "Metter", label: "Metter" },
-                ]}
-                value={data.price_type}
-                onChange={handleSelectChange}
+          <div className="flex flex-row gap-[15px] items-center">
+            <div>
+              <label>Name*: </label>
+              <br />
+              <Controller
+                name="name"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    placeholder="name"
+                    className="w-[300px] mt-[5px]"
+                    {...field}
+                  />
+                )}
               />
-            </Space>
+              {errors.name && (
+                <p className="text-red-500">{errors.name.message}</p>
+              )}
+            </div>
+            <div>
+              <label>Price_type*: </label>
+              <br />
+              <Space wrap>
+                <Controller
+                  name="price_type"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      className="w-[300px] mt-[5px]"
+                      options={[
+                        { value: "Quantity", label: "Quantity" },
+                        { value: "Metter", label: "Metter" },
+                      ]}
+                      {...field}
+                    />
+                  )}
+                />
+              </Space>
+              {errors.price_type && (
+                <p className="text-red-500">{errors.price_type.message}</p>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="text-right mt-[20px]">
-          <Button
-            style={{ marginRight: 20 }}
-            onClick={handleEdit}
-            type="primary"
-            danger
-          >
-            Cancel
-          </Button>
-          <Button type="primary" onClick={handleEditClick}>
-            Update
-          </Button>
-        </div>
+          <div className="text-right mt-[20px]">
+            <Button
+              style={{ marginRight: 20 }}
+              onClick={handleEdit}
+              type="primary"
+              danger
+            >
+              Cancel
+            </Button>
+            <Button type="primary" htmlType="submit">
+              Update
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
