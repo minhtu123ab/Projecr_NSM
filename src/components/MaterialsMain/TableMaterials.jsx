@@ -221,7 +221,7 @@ const TableMaterials = () => {
       <div
         className={
           idDelete.length
-            ? "w-full bg-[#D3D8DC] pt-[5px] pb-[5px] pl-[5px] flex bg-[#d1d5d9] flex justify-between pr-[30px]"
+            ? "w-full bg-[#D3D8DC] pt-[5px] pb-[5px] pl-[5px] flex justify-between pr-[30px]"
             : "w-full bg-white pt-[5px] pb-[5px] pl-[5px] flex"
         }
       >
