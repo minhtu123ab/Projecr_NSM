@@ -33,8 +33,10 @@ const Menu = () => {
         >
           <NavLink
             className={({ isActive }) =>
-              `block p-[10px] text-[#758398] ${
-                isActive ? "text-[#0EA5E9]" : "hover:bg-[#babfc3]"
+              `block p-[10px] ${
+                isActive
+                  ? "text-[#0EA5E9]"
+                  : "text-[#758398] hover:bg-[#babfc3] "
               }`
             }
             to="/dashboard/main"
@@ -43,8 +45,10 @@ const Menu = () => {
           </NavLink>
           <NavLink
             className={({ isActive }) =>
-              `block p-[10px] text-[#758398] ${
-                isActive ? "text-[#0EA5E9]" : "hover:bg-[#babfc3]"
+              `block p-[10px] ${
+                isActive
+                  ? "text-[#0EA5E9]"
+                  : "text-[#758398] hover:bg-[#babfc3] "
               }`
             }
             to="/dashboard/user-insights"
@@ -73,8 +77,10 @@ const Menu = () => {
         >
           <NavLink
             className={({ isActive }) =>
-              `block p-[10px] text-[#758398] ${
-                isActive ? "text-[#0EA5E9]" : "hover:bg-[#babfc3]"
+              `block p-[10px] ${
+                isActive
+                  ? "text-[#0EA5E9]"
+                  : "text-[#758398] hover:bg-[#babfc3] "
               }`
             }
             to="/materials/main"
@@ -83,8 +89,10 @@ const Menu = () => {
           </NavLink>
           <NavLink
             className={({ isActive }) =>
-              `block p-[10px] text-[#758398] ${
-                isActive ? "text-[#0EA5E9]" : "hover:bg-[#babfc3]"
+              `block p-[10px] ${
+                isActive
+                  ? "text-[#0EA5E9]"
+                  : "text-[#758398] hover:bg-[#babfc3] "
               }`
             }
             to="/materials/categories"
