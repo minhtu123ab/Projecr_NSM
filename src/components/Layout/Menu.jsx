@@ -8,99 +8,90 @@ import {
 } from "@ant-design/icons";
 
 const Menu = () => {
-  const [isOpenDash, setIsOpenDash] = useState(true);
-  const [isOpenMat, setIsOpenMat] = useState(true);
+  const [menu, setMenu] = useState([
+    {
+      name: "DashBoards",
+      isOpen: true,
+      icon: <AppstoreOutlined className="text-xl" />,
+      items: [
+        {
+          name: "Main",
+          link: "/",
+        },
+        {
+          name: "User Insights",
+          link: "/user",
+        },
+      ],
+    },
+    {
+      name: "Materials",
+      isOpen: true,
+      icon: <InboxOutlined className="text-xl" />,
+      items: [
+        {
+          name: "Main",
+          link: "/materials/main",
+        },
+        {
+          name: "Categories",
+          link: "/materials/categories",
+        },
+        {
+          name: "Suppliers",
+          link: "/materials/suppliers",
+        },
+      ],
+    },
+  ]);
+
+  const toggleMenu = (index) => {
+    setMenu((prevMenu) =>
+      prevMenu.map((item, i) =>
+        i === index ? { ...item, isOpen: !item.isOpen } : item
+      )
+    );
+  };
 
   return (
-    <div className="flex flex-col gap-[10px] h-screen w-[230px] fixed top-[55px] left-0 bg-[#f1f5f9] text-[#64748B] p-[20px_10px] font-[Arial, Helvetica, sans-serif]">
-      <div>
-        <div
-          onClick={() => setIsOpenDash(!isOpenDash)}
-          className="p-[15px] flex items-center gap-[5px] hover:bg-[#babfc3] cursor-pointer"
-        >
-          <AppstoreOutlined className="text-[20px]" />
-          <span>Dashboards</span>
-          {isOpenDash ? (
-            <CaretUpOutlined className="ml-[35px]" />
-          ) : (
-            <CaretDownOutlined className="ml-[35px]" />
-          )}
-        </div>
-        <div
-          className={`flex flex-col gap-[0] px-[30px] transition-all duration-300 ease-out ${
-            isOpenDash ? "max-h-[500px] scale-y-100" : "max-h-0 scale-y-0"
-          } overflow-hidden`}
-        >
-          <NavLink
-            className={({ isActive }) =>
-              `block p-[10px] ${
-                isActive
-                  ? "text-[#0EA5E9]"
-                  : "text-[#758398] hover:bg-[#babfc3] "
-              }`
-            }
-            to="/dashboard/main"
+    <div className="flex flex-col gap-2 h-screen w-56 fixed top-14 left-0 bg-[#f1f5f9] text-[#64748B] px-2 py-5 font-[Arial, Helvetica, sans-serif]">
+      {menu.map((menuItem, index) => (
+        <div key={index}>
+          <div
+            onClick={() => toggleMenu(index)}
+            className="p-4 flex items-center gap-1 hover:bg-[#babfc3] cursor-pointer"
           >
-            Main
-          </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              `block p-[10px] ${
-                isActive
-                  ? "text-[#0EA5E9]"
-                  : "text-[#758398] hover:bg-[#babfc3] "
-              }`
-            }
-            to="/dashboard/user-insights"
+            {menuItem.icon}
+            <span>{menuItem.name}</span>
+            {menuItem.isOpen ? (
+              <CaretUpOutlined className="ml-9" />
+            ) : (
+              <CaretDownOutlined className="ml-9" />
+            )}
+          </div>
+          <div
+            className={`flex flex-col px-8 transition-all duration-300 ease-out ${
+              menuItem.isOpen ? "max-h-96 scale-y-100" : "max-h-0 scale-y-0"
+            } overflow-hidden`}
           >
-            User Insights
-          </NavLink>
+            {menuItem.items.map((subItem, subIndex) => (
+              <NavLink
+                key={subIndex}
+                className={({ isActive }) =>
+                  `block p-2 ${
+                    isActive
+                      ? "text-[#0EA5E9]"
+                      : "text-[#758398] hover:bg-[#babfc3] "
+                  }`
+                }
+                to={subItem.link}
+              >
+                {subItem.name}
+              </NavLink>
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-[10px]">
-        <div
-          onClick={() => setIsOpenMat(!isOpenMat)}
-          className="p-[15px] flex items-center gap-[5px] hover:bg-[#babfc3] cursor-pointer"
-        >
-          <InboxOutlined className="text-[20px]" />
-          <span>Materials</span>
-          {isOpenMat ? (
-            <CaretUpOutlined className="ml-[35px]" />
-          ) : (
-            <CaretDownOutlined className="ml-[35px]" />
-          )}
-        </div>
-        <div
-          className={`flex flex-col gap-[0] px-[30px] transition-all duration-300 ease-out ${
-            isOpenMat ? "max-h-[500px] scale-y-100" : "max-h-0 scale-y-0"
-          } overflow-hidden`}
-        >
-          <NavLink
-            className={({ isActive }) =>
-              `block p-[10px] ${
-                isActive
-                  ? "text-[#0EA5E9]"
-                  : "text-[#758398] hover:bg-[#babfc3] "
-              }`
-            }
-            to="/materials/main"
-          >
-            Main
-          </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              `block p-[10px] ${
-                isActive
-                  ? "text-[#0EA5E9]"
-                  : "text-[#758398] hover:bg-[#babfc3] "
-              }`
-            }
-            to="/materials/categories"
-          >
-            Categories
-          </NavLink>
-        </div>
-      </div>
+      ))}
     </div>
   );
 };

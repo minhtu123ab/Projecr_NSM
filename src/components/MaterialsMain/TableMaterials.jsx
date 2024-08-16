@@ -10,7 +10,7 @@ import { Button, Modal } from "antd";
 import axios from "axios";
 import env from "../../Env";
 import { useNavigate } from "react-router-dom";
-import useRefeshToken from "../../hook/useRefeshToken";
+import refeshToken from "../../services/refeshToken";
 import { useSnackbar } from "notistack";
 import EditMaterial from "./EditMaterial";
 import { useLocation } from "react-router-dom";
@@ -78,7 +78,7 @@ const TableMaterials = () => {
       } catch (error) {
         console.log(error);
         if (error.response.status === 401) {
-          const newToken = await useRefeshToken();
+          const newToken = await refeshToken();
           if (newToken) {
             await getData();
           } else {
@@ -131,7 +131,7 @@ const TableMaterials = () => {
       navigate(`?delete=${time}`);
     } catch (e) {
       if (e.response.status === 401) {
-        const newToken = await useRefeshToken();
+        const newToken = await refeshToken();
         if (newToken) {
           await DeleteAll();
         } else {
@@ -193,7 +193,7 @@ const TableMaterials = () => {
         }
       } catch (e) {
         if (e.response.status === 401) {
-          const newToken = await useRefeshToken();
+          const newToken = await refeshToken();
           if (newToken) {
             await handleDelete();
           } else {

@@ -56,16 +56,16 @@ const Login = () => {
     <div className="w-full h-screen flex flex-col justify-center bg-gray-300">
       <div className="flex flex-col items-center justify-center">
         <form
-          className="w-[350px] flex flex-col gap-[30px] p-[70px_40px] bg-white mb-[100px] rounded-[50px]"
+          className="w-80 flex flex-col gap-7 py-14 px-7 bg-white mb-24 rounded-3xl"
           onSubmit={handleSubmit(onSubmit)}
         >
           <h1
-            className="font-bold text-center text-[30px]"
+            className="font-bold text-center text-4xl"
             style={{ fontFamily: "Arial, Helvetica, sans-serif" }}
           >
             Login
           </h1>
-          <div className="flex flex-col gap-[5px]">
+          <div className="flex flex-col gap-1">
             <label className="font-bold" htmlFor="email">
               Email*
             </label>
@@ -77,12 +77,12 @@ const Login = () => {
               )}
             />
             {errors.email && (
-              <p className="text-red-500 text-[14px] mb-[-20px]">
+              <p className="text-red-500 text-sm mb-[-20px]">
                 {errors.email.message}
               </p>
             )}
           </div>
-          <div className="flex flex-col gap-[5px]">
+          <div className="flex flex-col gap-1">
             <label style={{ fontWeight: "bold" }} htmlFor="password">
               Password*
             </label>
@@ -94,7 +94,7 @@ const Login = () => {
               )}
             />
             {errors.password && (
-              <p className="text-red-500 text-[14px] mb-[-20px]">
+              <p className="text-red-500 text-sm mb-[-20px]">
                 {errors.password.message}
               </p>
             )}

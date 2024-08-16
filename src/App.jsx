@@ -10,12 +10,9 @@ import BodyUpdate from "./components/BodyUpdate/BodyUpdate";
 import Main from "./components/MaterialsMain/Main";
 
 const App = () => {
-  const location = useLocation();
   return (
     <div className="app">
-      {location.pathname !== "/login" && <Navbar />}
       <div>
-        {location.pathname !== "/login" && <Menu />}
         <Routes>
           <Route path="/" element={<Navigate to="/materials/categories" />} />
           <Route path="/login" element={<Login />} />

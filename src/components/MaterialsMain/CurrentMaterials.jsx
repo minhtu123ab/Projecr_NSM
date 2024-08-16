@@ -4,7 +4,7 @@ import icon from "../../assets/icon.png";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import env from "../../Env";
-import useRefeshToken from "../../hook/useRefeshToken";
+import refeshToken from "../../services/refeshToken";
 
 const { Option } = Select;
 
@@ -42,7 +42,7 @@ const CurrentMaterials = () => {
         setCount(response.data.count);
       } catch (e) {
         if (e.response.status === 401) {
-          const newToken = await useRefeshToken();
+          const newToken = await refeshToken();
           if (newToken) {
             await getCountData();
           } else {

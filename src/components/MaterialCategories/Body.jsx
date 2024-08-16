@@ -1,56 +1,69 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Input, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import ModelCreateCategory from "./ModelCreateCategory";
+import { useNavigate, useLocation } from "react-router-dom";
 import TableCategory from "./TableCategory";
 import CurrentUsers from "./CurrentCategories";
+import Navbar from "../Layout/Navbar";
+import Menu from "../Layout/Menu";
+import ModalCategories from "./modal/ModalCategories";
 
 const Body = () => {
-  const [value, setValue] = useState("");
-  const [openCreate, setOpenCreate] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const nameParam = queryParams.get("name") || "";
 
-  useEffect(() => {
-    navigate({ search: "" });
-  }, [navigate]);
+  const [value, setValue] = useState(nameParam);
+
+  const modalOpenCreateRef = useRef();
+  const tableCategoryRef = useRef();
+
+  const handleOpenModalCreate = () => {
+    modalOpenCreateRef.current.openModal();
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const queryParams = new URLSearchParams();
+    const newQueryParams = new URLSearchParams(location.search);
     if (value) {
-      queryParams.set("name", value);
+      newQueryParams.set("name", value);
+    } else {
+      newQueryParams.delete("name");
     }
-    navigate({ search: queryParams.toString() });
-  };
+    newQueryParams.set("page", "0");
+    navigate({ search: newQueryParams.toString() });
 
-  const handleCreate = () => {
-    setOpenCreate(!openCreate);
+    if (tableCategoryRef.current) {
+      tableCategoryRef.current.resetSelection();
+    }
   };
 
   return (
-    <div className="p-[30px] bg-[#f1f5f9] h-full min-h-screen">
-      {openCreate && <ModelCreateCategory handleCreate={handleCreate} />}
-      <div className="flex flex-col gap-[20px] ml-[210px] mt-[55px]">
+    <div className="p-7 bg-[#f1f5f9] h-full min-h-screen">
+      <Navbar />
+      <Menu />
+      <ModalCategories ref={modalOpenCreateRef} />
+      <div className="flex flex-col gap-5 ml-52 mt-14">
         <CurrentUsers />
-        <h1 className="text-[#758398] font-sans text-[30px] font-semibold">
+        <h1 className="text-[#758398] font-sans text-3xl font-semibold">
           Categories
         </h1>
         <div className="flex justify-between items-center">
-          <form onSubmit={handleSubmit} className="flex gap-[20px]">
+          <form onSubmit={handleSubmit} className="flex gap-5">
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              className="w-[250px] h-[28px] py-[4px] px-[8px] rounded-full"
+              className="w-64 h-7 py-1 px-2 rounded-full"
               placeholder="Search..."
               prefix={<SearchOutlined className="opacity-50" />}
             />
           </form>
-          <Button onClick={handleCreate} type="primary">
+          <Button onClick={handleOpenModalCreate} type="primary">
             Create categories
           </Button>
         </div>
-        <TableCategory />
+        <TableCategory ref={tableCategoryRef} /> {/* Thêm ref */}
       </div>
     </div>
   );

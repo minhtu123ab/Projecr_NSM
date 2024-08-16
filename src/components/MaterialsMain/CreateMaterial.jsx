@@ -5,7 +5,7 @@ import axios from "axios";
 import env from "../../Env";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import useRefeshToken from "../../hook/useRefeshToken";
+import refeshToken from "../../services/refeshToken";
 
 const CreateMaterial = ({ handleCreate }) => {
   const { enqueueSnackbar } = useSnackbar();
@@ -69,7 +69,7 @@ const CreateMaterial = ({ handleCreate }) => {
         }));
       } catch (e) {
         if (e.response.status === 401) {
-          const newToken = await useRefeshToken();
+          const newToken = await refeshToken();
           if (newToken) {
             await getCountData();
           } else {
@@ -116,7 +116,7 @@ const CreateMaterial = ({ handleCreate }) => {
         setDataSupplier(responseSupplier.data.results);
       } catch (e) {
         if (e.response.status === 401) {
-          const newToken = await useRefeshToken();
+          const newToken = await refeshToken();
           if (newToken) {
             await getData();
           } else {
@@ -220,7 +220,7 @@ const CreateMaterial = ({ handleCreate }) => {
       }
     } catch (e) {
       if (e.response.status === 401) {
-        const newToken = await useRefeshToken();
+        const newToken = await refeshToken();
         if (newToken) {
           await handleCreateClick();
         } else {
