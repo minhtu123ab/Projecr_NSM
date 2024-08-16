@@ -2,7 +2,7 @@ import React, { useState, memo } from "react";
 import { DoubleRightOutlined, DoubleLeftOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "antd";
-import env from "../../Env";
+import env from "@/Env";
 
 const Pager = ({ total, setIdDelete, setCheckAll }) => {
   const location = useLocation();

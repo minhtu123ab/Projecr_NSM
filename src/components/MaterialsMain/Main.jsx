@@ -5,8 +5,6 @@ import { Input, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import TableMaterials from "./TableMaterials";
 import CreateMaterial from "./CreateMaterial";
-import Navbar from "../Layout/Navbar";
-import Menu from "../Layout/Menu";
 
 const Main = () => {
   const [valueCategory, setValueCategory] = useState("");
@@ -45,8 +43,6 @@ const Main = () => {
 
   return (
     <div className="p-[30px] bg-[#f1f5f9] h-full min-h-screen">
-      <Navbar />
-      <Menu />
       {openCreate && <CreateMaterial handleCreate={handleCreate} />}
       <div className="flex flex-col gap-[20px] ml-[210px] mt-[55px]">
         <CurrentMaterials />

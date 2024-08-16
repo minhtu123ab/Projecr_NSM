@@ -2,10 +2,10 @@ import { Input, Button, Upload, Select, Space } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import env from "../../Env";
+import env from "@/Env";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import refeshToken from "../../services/refeshToken";
+import refeshToken from "@/services/refeshToken";
 
 const EditMaterial = ({ handleEdit, dataEdit, setOpenEdit }) => {
   const { enqueueSnackbar } = useSnackbar();

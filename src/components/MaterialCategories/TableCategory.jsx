@@ -8,14 +8,14 @@ import React, {
 } from "react";
 import { Checkbox, Button } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import env from "../../Env";
+import env from "@/Env";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import useQueryParams from "../../hook/useQueryParams.jsx";
+import useQueryParams from "@/hook/useQueryParams.jsx";
 import Pager from "./Pager.jsx";
 import ModalDelete from "./modal/ModalDelete.jsx";
-import useDeleteHandlers from "../../hook/useDeleteHandlers";
-import requestApi from "../../axios/axiosInstance.js";
+import useDeleteHandlers from "@/hook/useDeleteHandlers";
+import requestApi from "@/axios/axiosInstance.js";
 import ModalCategoriesAntd from "./modal/ModalCategories.jsx";
 
 const TableCategory = forwardRef((props, ref) => {
@@ -98,8 +98,6 @@ const TableCategory = forwardRef((props, ref) => {
     setCheckAll(newCheckAll);
     setIdDelete(newCheckAll ? data.map((item) => item.id) : []);
   };
-
-  console.log(checkAll);
 
   return (
     <div className="rounded-xl overflow-hidden shadow-md">

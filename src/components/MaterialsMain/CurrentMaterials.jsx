@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "antd";
-import icon from "../../assets/icon.png";
+import icon from "@/assets/icon.png";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import env from "../../Env";
-import refeshToken from "../../services/refeshToken";
+import env from "@/Env";
+import refeshToken from "@/services/refeshToken";
 
 const { Option } = Select;
 

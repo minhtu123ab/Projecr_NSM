@@ -1,13 +1,12 @@
 import React from "react";
-import "./App.css";
-import Navbar from "./components/Layout/Navbar";
-import { useLocation, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./components/Auth/Login";
-import Body from "./components/MaterialCategories/Body";
-import Menu from "./components/Layout/Menu";
-import CheckLogin from "./CheckLogin";
-import BodyUpdate from "./components/BodyUpdate/BodyUpdate";
-import Main from "./components/MaterialsMain/Main";
+import "@/App.css";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "@/components/Auth/Login";
+import CategoryMain from "@/components/MaterialCategories/CategoriesMain";
+import CheckLogin from "@/CheckLogin";
+import BodyUpdate from "@/components/BodyUpdate/BodyUpdate";
+import Main from "@/components/MaterialsMain/Main";
+import Body from "@/components/Layout/Body";
 
 const App = () => {
   return (
@@ -17,29 +16,17 @@ const App = () => {
           <Route path="/" element={<Navigate to="/materials/categories" />} />
           <Route path="/login" element={<Login />} />
           <Route
-            path="/materials/categories"
+            path="/materials"
             element={
               <CheckLogin>
                 <Body />
               </CheckLogin>
             }
-          />
-          <Route
-            path="/materials/main"
-            element={
-              <CheckLogin>
-                <Main />
-              </CheckLogin>
-            }
-          />
-          <Route
-            path="*"
-            element={
-              <CheckLogin>
-                <BodyUpdate />
-              </CheckLogin>
-            }
-          />
+          >
+            <Route path="categories" element={<CategoryMain />} />
+            <Route path="main" element={<Main />} />
+            <Route path="*" element={<BodyUpdate />} />
+          </Route>
         </Routes>
       </div>
     </div>

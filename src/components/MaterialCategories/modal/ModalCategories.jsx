@@ -7,7 +7,7 @@ import React, {
   useEffect,
 } from "react";
 import { Controller, useForm } from "react-hook-form";
-import requestApi from "../../../axios/axiosInstance";
+import requestApi from "@/axios/axiosInstance";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import { UploadOutlined } from "@ant-design/icons";
@@ -105,6 +105,7 @@ const ModalCategories = forwardRef(({ dataEdit }, ref) => {
           currentParams.set("create_at", new Date().getTime());
           navigate(`?${currentParams.toString()}`);
         }
+        reset({ name: "", image: null, price_type: "" });
       }
     } catch (e) {
       console.error(e);

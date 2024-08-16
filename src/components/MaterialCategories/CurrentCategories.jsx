@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "antd";
-import icon from "../../assets/icon.png";
-import requestApi from "../../axios/axiosInstance.js";
-import useQueryParams from "../../hook/useQueryParams.jsx";
+import icon from "@/assets/icon.png";
+import requestApi from "@/axios/axiosInstance.js";
+import useQueryParams from "@/hook/useQueryParams.jsx";
 
 const { Option } = Select;
 

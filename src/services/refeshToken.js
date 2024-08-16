@@ -1,5 +1,5 @@
 import axios from "axios";
-import env from "../Env";
+import env from "@/Env";
 
 const useRefeshToken = async () => {
   const token = JSON.parse(localStorage.getItem("token"));

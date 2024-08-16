@@ -8,9 +8,9 @@ import {
 } from "@ant-design/icons";
 import { Button, Modal } from "antd";
 import axios from "axios";
-import env from "../../Env";
+import env from "@/Env";
 import { useNavigate } from "react-router-dom";
-import refeshToken from "../../services/refeshToken";
+import refeshToken from "@/services/refeshToken";
 import { useSnackbar } from "notistack";
 import EditMaterial from "./EditMaterial";
 import { useLocation } from "react-router-dom";

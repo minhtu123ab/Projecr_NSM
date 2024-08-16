@@ -1,15 +1,13 @@
 import React, { useRef, useState } from "react";
 import { Input, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import TableCategory from "./TableCategory";
 import CurrentUsers from "./CurrentCategories";
-import Navbar from "../Layout/Navbar";
-import Menu from "../Layout/Menu";
 import ModalCategories from "./modal/ModalCategories";
-import useHandleSearch from "../../hook/useHandleSearch";
+import useHandleSearch from "@/hook/useHandleSearch";
 
-const Body = () => {
+const CategoryMain = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const nameParam = queryParams.get("name") || "";
@@ -27,8 +25,6 @@ const Body = () => {
 
   return (
     <div className="p-7 bg-[#f1f5f9] h-full min-h-screen">
-      <Navbar />
-      <Menu />
       <ModalCategories ref={modalOpenCreateRef} />
       <div className="flex flex-col gap-5 ml-52 mt-14">
         <CurrentUsers />
@@ -52,10 +48,10 @@ const Body = () => {
             Create categories
           </Button>
         </div>
-        <TableCategory ref={tableCategoryRef} /> {/* Thêm ref */}
+        <TableCategory ref={tableCategoryRef} />
       </div>
     </div>
   );
 };
 
-export default Body;
+export default CategoryMain;

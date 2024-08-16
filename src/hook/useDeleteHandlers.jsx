@@ -1,6 +1,6 @@
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
-import requestApi from "../axios/axiosInstance.js";
+import requestApi from "@/axios/axiosInstance.js";
 
 const useDeleteHandlers = () => {
   const { enqueueSnackbar } = useSnackbar();

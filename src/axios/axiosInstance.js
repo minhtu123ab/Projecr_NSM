@@ -1,6 +1,6 @@
 import axios from "axios";
-import env from "../Env";
-import useRefeshToken from "../services/refeshToken";
+import env from "@/Env";
+import useRefeshToken from "@/services/refeshToken";
 
 const requestApi = (endpoint, method, body, params) => {
   const headers =

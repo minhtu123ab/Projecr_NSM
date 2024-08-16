@@ -2,7 +2,7 @@ import React from "react";
 import { Input, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import env from "../../Env";
+import env from "@/Env";
 import { useSnackbar } from "notistack";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
