@@ -4,6 +4,7 @@ import React, {
   memo,
   forwardRef,
   useImperativeHandle,
+  useEffect,
 } from "react";
 import { Checkbox, Button } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -58,7 +59,7 @@ const TableCategory = forwardRef((props, ref) => {
   const navigate = useNavigate();
   const queryParams = useQueryParams();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const params = {

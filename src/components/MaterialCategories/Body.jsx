@@ -7,10 +7,10 @@ import CurrentUsers from "./CurrentCategories";
 import Navbar from "../Layout/Navbar";
 import Menu from "../Layout/Menu";
 import ModalCategories from "./modal/ModalCategories";
+import useHandleSearch from "../../hook/useHandleSearch";
 
 const Body = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const nameParam = queryParams.get("name") || "";
 
@@ -19,24 +19,10 @@ const Body = () => {
   const modalOpenCreateRef = useRef();
   const tableCategoryRef = useRef();
 
+  const { handleSubmit } = useHandleSearch();
+
   const handleOpenModalCreate = () => {
     modalOpenCreateRef.current.openModal();
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newQueryParams = new URLSearchParams(location.search);
-    if (value) {
-      newQueryParams.set("name", value);
-    } else {
-      newQueryParams.delete("name");
-    }
-    newQueryParams.set("page", "0");
-    navigate({ search: newQueryParams.toString() });
-
-    if (tableCategoryRef.current) {
-      tableCategoryRef.current.resetSelection();
-    }
   };
 
   return (
@@ -50,7 +36,10 @@ const Body = () => {
           Categories
         </h1>
         <div className="flex justify-between items-center">
-          <form onSubmit={handleSubmit} className="flex gap-5">
+          <form
+            onSubmit={(e) => handleSubmit(e, value, tableCategoryRef)}
+            className="flex gap-5"
+          >
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
