@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "./Navbar";
-import Menu from "./Menu";
+import Navbar from "@/components/Layout/Navbar";
+import Menu from "@/components/Layout/Menu";
 import { Outlet } from "react-router-dom";
 
 const Body = () => {

@@ -12,7 +12,7 @@ import env from "@/Env";
 import { useNavigate } from "react-router-dom";
 import refeshToken from "@/services/refeshToken";
 import { useSnackbar } from "notistack";
-import EditMaterial from "./EditMaterial";
+import EditMaterial from "@/components/MaterialsMain/EditMaterial";
 import { useLocation } from "react-router-dom";
 
 const TableMaterials = () => {

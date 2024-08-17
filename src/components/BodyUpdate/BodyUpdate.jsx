@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "../Layout/Navbar";
-import Menu from "../Layout/Menu";
+import Navbar from "@/components/Layout/Navbar";
+import Menu from "@/components/Layout/Menu";
 
 const BodyUpdate = () => {
   return (

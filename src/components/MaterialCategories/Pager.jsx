@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useEffect } from "react";
 import { DoubleRightOutlined, DoubleLeftOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "antd";
@@ -13,12 +13,23 @@ const Pager = ({ total, setIdDelete, setCheckAll }) => {
   const currentParams = new URLSearchParams(location.search);
   const initialPage = Number(currentParams.get("page")) || 0;
   const [page, setPage] = useState(initialPage);
+  const newParams = new URLSearchParams(location.search);
 
   const updateURL = (newPage) => {
-    const newParams = new URLSearchParams(location.search);
     newParams.set("page", newPage);
     navigate(`?${newParams.toString()}`);
   };
+
+  useEffect(() => {
+    const checkPage = () => {
+      if (isNaN(page) || page < 0 || page >= countPage) {
+        newParams.set("page", 0);
+        navigate(`?${newParams.toString()}`);
+        setPage(0);
+      }
+    };
+    checkPage();
+  }, [page]);
 
   const onNext = () => {
     if (page < countPage - 1) {
@@ -50,7 +61,7 @@ const Pager = ({ total, setIdDelete, setCheckAll }) => {
   handleURLChange();
 
   return (
-    <div className="w-full bg-white pt-2 pb-2 pl-2 pr-2 flex justify-between">
+    <div className="w-full bg-white p-2 flex justify-between">
       <Button
         icon={<DoubleLeftOutlined />}
         onClick={onBack}

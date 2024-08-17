@@ -2,9 +2,9 @@ import React, { useRef, useState } from "react";
 import { Input, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { useLocation } from "react-router-dom";
-import TableCategory from "./TableCategory";
-import CurrentUsers from "./CurrentCategories";
-import ModalCategories from "./modal/ModalCategories";
+import TableCategory from "@/components/MaterialCategories/TableCategory";
+import CurrentUsers from "@/components/MaterialCategories/CurrentCategories";
+import ModalCategories from "@/components/MaterialCategories/modal/ModalCategories";
 import useHandleSearch from "@/hook/useHandleSearch";
 
 const CategoryMain = () => {

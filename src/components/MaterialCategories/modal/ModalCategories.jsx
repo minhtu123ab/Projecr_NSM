@@ -28,6 +28,8 @@ const ModalCategories = forwardRef(({ dataEdit }, ref) => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [urlImage, setUrlImage] = useState(null);
+  const [onClick, setOnClick] = useState(false);
+  const [formData, setFormData] = useState({});
 
   const openModal = () => {
     setModalVisible(true);
@@ -66,6 +68,11 @@ const ModalCategories = forwardRef(({ dataEdit }, ref) => {
       setUrlImage(dataEdit.image || null);
     }
   }, [dataEdit, reset]);
+
+  const onClickSubmit = (data) => {
+    setOnClick(true);
+    setFormData(data);
+  };
 
   const onSubmit = async (dataSubmit) => {
     try {
@@ -116,8 +123,16 @@ const ModalCategories = forwardRef(({ dataEdit }, ref) => {
         : enqueueSnackbar("Create Failed", {
             variant: "error",
           });
+    } finally {
+      setOnClick(false);
     }
   };
+
+  useEffect(() => {
+    if (onClick) {
+      onSubmit(formData);
+    }
+  }, [onClick]);
 
   const handleChangeImage = (info) => {
     if (info.file && info.file.originFileObj) {
@@ -130,7 +145,7 @@ const ModalCategories = forwardRef(({ dataEdit }, ref) => {
   return (
     <Modal
       title={dataEdit ? "Update Categories" : "Create Categories"}
-      onOk={handleSubmit(onSubmit)}
+      onOk={handleSubmit(onClickSubmit)}
       onCancel={closeModal}
       open={modalVisible}
       okType="primary"

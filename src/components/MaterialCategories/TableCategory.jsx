@@ -12,11 +12,11 @@ import env from "@/Env";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import useQueryParams from "@/hook/useQueryParams.jsx";
-import Pager from "./Pager.jsx";
-import ModalDelete from "./modal/ModalDelete.jsx";
+import Pager from "@/components/MaterialCategories/Pager";
+import ModalDelete from "@/components/MaterialCategories/modal/ModalDelete";
 import useDeleteHandlers from "@/hook/useDeleteHandlers";
 import requestApi from "@/axios/axiosInstance.js";
-import ModalCategoriesAntd from "./modal/ModalCategories.jsx";
+import ModalCategoriesAntd from "@/components/MaterialCategories/modal/ModalCategories";
 
 const TableCategory = forwardRef((props, ref) => {
   const [checkAll, setCheckAll] = useState(false);

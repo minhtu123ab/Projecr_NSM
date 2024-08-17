@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import CurrentMaterials from "./CurrentMaterials";
+import CurrentMaterials from "@/components/MaterialsMain/CurrentMaterials";
 import { SearchOutlined } from "@ant-design/icons";
 import { Input, Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import TableMaterials from "./TableMaterials";
-import CreateMaterial from "./CreateMaterial";
+import TableMaterials from "@/components/MaterialsMain/TableMaterials";
+import CreateMaterial from "@/components/MaterialsMain/CreateMaterial";
 
 const Main = () => {
   const [valueCategory, setValueCategory] = useState("");
