@@ -22,6 +22,17 @@ const schema = yup.object().shape({
   price_type: yup.string().required("Price is required"),
 });
 
+const dataPriceType = [
+  {
+    id: "per_quantity",
+    name: "Quantity",
+  },
+  {
+    id: "per_metter",
+    name: "Metter",
+  },
+];
+
 const ModalCategories = forwardRef(({ dataEdit }, ref) => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -170,10 +181,10 @@ const ModalCategories = forwardRef(({ dataEdit }, ref) => {
             render={({ field }) => (
               <Select
                 className="w-full"
-                options={[
-                  { value: "per_quantity", label: "Quantity" },
-                  { value: "per_metter", label: "Meter" },
-                ]}
+                options={dataPriceType.map((item) => ({
+                  value: item.id,
+                  label: item.name,
+                }))}
                 {...field}
               />
             )}
