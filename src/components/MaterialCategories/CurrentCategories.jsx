@@ -3,10 +3,12 @@ import { Select } from "antd";
 import icon from "@/assets/icon.png";
 import requestApi from "@/axios/axiosInstance.js";
 import useQueryParams from "@/hook/useQueryParams.jsx";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
 const CurrentUsers = () => {
+  const navigate = useNavigate();
   const [count, setCount] = useState(0);
   const [day, setDay] = useState(30);
 

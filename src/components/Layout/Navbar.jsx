@@ -7,12 +7,17 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
+import { useSnackbar } from "notistack";
 
 const Navbar = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const onClickLogOut = () => {
     localStorage.removeItem("token");
     navigate("/login");
+    enqueueSnackbar("Logout successfully", {
+      variant: "success",
+    });
   };
   return (
     <nav className="flex fixed top-0 left-0 w-full p-3 pt-4 gap-24 bg-white z-10 shadow-md">

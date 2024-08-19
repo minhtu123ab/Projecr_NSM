@@ -10,7 +10,7 @@ import Body from "@/components/Layout/Body";
 
 const App = () => {
   return (
-    <div className="app">
+    <div>
       <div>
         <Routes>
           <Route path="/" element={<Navigate to="/materials/categories" />} />

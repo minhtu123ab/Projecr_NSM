@@ -246,16 +246,16 @@ const TableMaterials = () => {
           <thead>
             <tr>
               <th></th>
-              <th>NO</th>
-              <th>IMAGE</th>
-              <th>PART NUMBER</th>
-              <th>NAME</th>
-              <th>TYPE</th>
-              <th>LARGE TITLE</th>
-              <th>SMALL TITLE</th>
-              <th>BASIC PRICE</th>
-              <th>CATEGORY</th>
-              <th>SUPPLIER</th>
+              <th>No</th>
+              <th>Image</th>
+              <th>Part Number</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Large Title</th>
+              <th>Small Title</th>
+              <th>Basic Price</th>
+              <th>Category</th>
+              <th>Supplier</th>
               <th></th>
             </tr>
           </thead>

@@ -105,7 +105,7 @@ const TableCategory = forwardRef((props, ref) => {
       <div
         className={
           idDelete.length
-            ? "w-full bg-[#D3D8DC] pt-1 pb-1 pl-1 flex justify-between pr-5"
+            ? "w-full bg-[#F5F5F5] pt-1 pb-1 pl-1 flex justify-between pr-5"
             : "w-full bg-white pt-1 pb-1 pl-1 flex"
         }
       >
@@ -129,10 +129,10 @@ const TableCategory = forwardRef((props, ref) => {
         <thead>
           <tr>
             <th></th>
-            <th>NO</th>
-            <th>IMAGE</th>
-            <th>NAME</th>
-            <th>PRICE TYPE</th>
+            <th>No</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price Type</th>
             <th></th>
           </tr>
         </thead>
@@ -140,12 +140,9 @@ const TableCategory = forwardRef((props, ref) => {
           {data.length ? (
             data.map((item, index) => (
               <tr
-                style={{
-                  cursor: "pointer",
-                  backgroundColor: idDelete.includes(item.id)
-                    ? "#D1D5D9"
-                    : "white",
-                }}
+                className={`cursor-pointer ${
+                  idDelete.includes(item.id) ? "bg-[#F5F5F5]" : "white"
+                }`}
                 onClick={() => onClickSelectDelete(item)}
                 key={item.id}
               >
