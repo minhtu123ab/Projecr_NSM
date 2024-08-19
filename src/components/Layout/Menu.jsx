@@ -20,7 +20,7 @@ const Menu = () => {
         },
         {
           name: "User Insights",
-          link: "/user",
+          link: "/materials/user",
         },
       ],
     },
