@@ -73,6 +73,11 @@ const TableCategory = forwardRef((props, ref) => {
           null,
           params
         );
+        const idDataInPage = response.data.results.map((item) => item.id);
+        const idDeleteInPage = idDelete.filter((item) =>
+          idDataInPage.includes(item)
+        );
+        setIdDelete(idDeleteInPage);
         setData(response.data.results);
         setTotal(response.data.count);
       } catch (error) {
