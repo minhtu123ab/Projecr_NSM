@@ -1,4 +1,6 @@
-import React, { useState, useImperativeHandle, forwardRef } from "react";
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react/prop-types */
+import { useState, useImperativeHandle, forwardRef } from "react";
 import { Modal } from "antd";
 
 const ModalDelete = forwardRef(({ idDelete, onDelete, itemToDelete }, ref) => {
@@ -37,5 +39,8 @@ const ModalDelete = forwardRef(({ idDelete, onDelete, itemToDelete }, ref) => {
     </Modal>
   );
 });
+
+// Thêm displayName cho component
+ModalDelete.displayName = "ModalDelete";
 
 export default ModalDelete;

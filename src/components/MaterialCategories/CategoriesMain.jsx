@@ -1,10 +1,9 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Input, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import TableCategory from "@/components/MaterialCategories/TableCategory";
 import CurrentUsers from "@/components/MaterialCategories/CurrentCategories";
-import ModalCategories from "@/components/MaterialCategories/modal/ModalCategories";
 import useHandleSearch from "@/hook/useHandleSearch";
 
 const CategoryMain = () => {
@@ -12,20 +11,16 @@ const CategoryMain = () => {
   const queryParams = new URLSearchParams(location.search);
   const nameParam = queryParams.get("name") || "";
 
+  const navigate = useNavigate();
+
   const [value, setValue] = useState(nameParam);
 
-  const modalOpenCreateRef = useRef();
   const tableCategoryRef = useRef();
 
   const { handleSubmit } = useHandleSearch();
 
-  const handleOpenModalCreate = () => {
-    modalOpenCreateRef.current.openModal();
-  };
-
   return (
     <div className="p-7 bg-[#f1f5f9] h-full min-h-screen">
-      <ModalCategories ref={modalOpenCreateRef} />
       <div className="flex flex-col gap-5 ml-52 mt-14">
         <CurrentUsers />
         <h1 className="text-[#758398] font-sans text-3xl font-semibold">
@@ -44,7 +39,10 @@ const CategoryMain = () => {
               prefix={<SearchOutlined className="opacity-50" />}
             />
           </form>
-          <Button onClick={handleOpenModalCreate} type="primary">
+          <Button
+            onClick={() => navigate("/materials/categories/created")}
+            type="primary"
+          >
             Create categories
           </Button>
         </div>

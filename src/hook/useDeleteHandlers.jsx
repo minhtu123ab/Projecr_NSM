@@ -10,14 +10,12 @@ const useDeleteHandlers = () => {
     itemToDelete,
     idDelete,
     setIdDelete,
-    modalDeleteRef
+    modalDeleteRef,
+    endpoint
   ) => {
     if (itemToDelete) {
       try {
-        await requestApi(
-          `/cms/material_categories/${itemToDelete.id}`,
-          "delete"
-        );
+        await requestApi(`${endpoint}/${itemToDelete.id}`, "delete");
         enqueueSnackbar("Delete 1 Category Successfully", {
           variant: "success",
         });
@@ -43,11 +41,12 @@ const useDeleteHandlers = () => {
     navigate,
     modalDeleteAllRef,
     enqueueSnackbar,
-    setIdDelete
+    setIdDelete,
+    endpoint
   ) => {
     const results = idDelete.join(",");
     try {
-      await requestApi(`/cms/material_categories/bulk/${results}`, "delete");
+      await requestApi(`${endpoint}/${results}`, "delete");
       enqueueSnackbar(`Delete ${idDelete.length} Categories Successfully`, {
         variant: "success",
       });

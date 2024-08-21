@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Select } from "antd";
 import icon from "@/assets/icon.png";
 import requestApi from "@/axios/axiosInstance.js";
@@ -32,7 +32,7 @@ const CurrentUsers = () => {
         );
         setCount(response.data.count);
       } catch (e) {
-        console.error(error);
+        console.error(e);
         navigate("/login");
       }
     };

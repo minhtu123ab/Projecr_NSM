@@ -1,4 +1,3 @@
-import React from "react";
 import "@/App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "@/components/Auth/Login";
@@ -7,6 +6,8 @@ import CheckLogin from "@/CheckLogin";
 import BodyUpdate from "@/components/BodyUpdate/BodyUpdate";
 import Main from "@/components/MaterialsMain/Main";
 import Body from "@/components/Layout/Body";
+import ModalCreateCategories from "@/components/MaterialCategories/modal/ModalCreateCatrgories";
+import ModalUpdateCategories from "./components/MaterialCategories/modal/ModalUpdateCategories";
 
 const App = () => {
   return (
@@ -24,6 +25,11 @@ const App = () => {
             }
           >
             <Route path="categories" element={<CategoryMain />} />
+            <Route
+              path="categories/created"
+              element={<ModalCreateCategories />}
+            />
+            <Route path="categories/:id" element={<ModalUpdateCategories />} />
             <Route path="main" element={<Main />} />
             <Route path="*" element={<BodyUpdate />} />
           </Route>

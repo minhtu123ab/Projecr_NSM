@@ -7,9 +7,8 @@ const useQueryParams = () => {
   return useMemo(() => {
     const queryParams = new URLSearchParams(location.search);
     return {
-      create: queryParams.get("create_at") || "",
-      update: queryParams.get("updated_at") || "",
       name: queryParams.get("name") || "",
+      category: queryParams.get("category") || "",
       delete: queryParams.get("delete") || "",
       page: queryParams.get("page") || "",
     };

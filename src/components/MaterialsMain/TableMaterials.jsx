@@ -1,52 +1,65 @@
-import React, { useEffect, useState, memo } from "react";
+import React, {
+  useEffect,
+  useState,
+  memo,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from "react";
+import useQueryParams from "@/hook/useQueryParams.jsx";
 import { Checkbox } from "antd";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  DoubleRightOutlined,
-  DoubleLeftOutlined,
-} from "@ant-design/icons";
-import { Button, Modal } from "antd";
-import axios from "axios";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import Pager from "@/components/MaterialCategories/Pager";
+import { Button } from "antd";
 import env from "@/Env";
 import { useNavigate } from "react-router-dom";
-import refeshToken from "@/services/refeshToken";
 import { useSnackbar } from "notistack";
-import EditMaterial from "@/components/MaterialsMain/EditMaterial";
-import { useLocation } from "react-router-dom";
+import useDeleteHandlers from "@/hook/useDeleteHandlers";
+import ModalDelete from "@/components/MaterialCategories/modal/ModalDelete";
+import requestApi from "@/axios/axiosInstance.js";
+import ModalMaterial from "./modal/ModalMaterial";
 
-const TableMaterials = () => {
-  const [searchMaterial, setSearchMaterial] = useState("");
-  const [searchCategory, setSearchCategory] = useState("");
-  const [create, setCreate] = useState("");
-  const [update, setUpdate] = useState("");
+const TableMaterials = forwardRef((props, ref) => {
   const [data, setData] = useState([]);
-  const [page, setPage] = useState(0);
   const [checkAll, setCheckAll] = useState(false);
   const [idDelete, setIdDelete] = useState([]);
   const [total, setTotal] = useState(0);
-  const [openEdit, setOpenEdit] = useState(false);
   const [dataEdit, setDataEdit] = useState({});
-  const [modalVisibleAll, setModalVisibleAll] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [deleteStatus, setDeleteStatus] = useState("");
-
-  const countPage = Math.ceil(total / env.countOfPage);
 
   const { enqueueSnackbar } = useSnackbar();
+  const queryParams = useQueryParams();
+
+  const { handleDelete, deleteAll } = useDeleteHandlers();
 
   const navigate = useNavigate();
-  const location = useLocation();
 
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    setSearchCategory(queryParams.get("category"));
-    setSearchMaterial(queryParams.get("name"));
-    setCreate(queryParams.get("create_at") || "");
-    setUpdate(queryParams.get("updated_at") || "");
-    setDeleteStatus(queryParams.get("delete") || "");
-  }, [location.search]);
+  const modalDeleteRef = useRef();
+  const modalDeleteAllRef = useRef();
+  const modalOpenUpdateRef = useRef();
+
+  const handleOpenModalUpdate = (e, item) => {
+    e.stopPropagation();
+    setDataEdit(item);
+    modalOpenUpdateRef.current.openModal();
+  };
+
+  useImperativeHandle(ref, () => ({
+    resetSelection: () => {
+      setCheckAll(false);
+      setIdDelete([]);
+    },
+  }));
+
+  const handleOpenModalDeleteAll = () => {
+    modalDeleteAllRef.current.openModal();
+  };
+
+  const handleOpenModalDelete = (e, item) => {
+    e.stopPropagation();
+    setItemToDelete(item);
+    modalDeleteRef.current.openModal();
+  };
 
   useEffect(() => {
     setCheckAll(idDelete.length ? true : false);
@@ -54,44 +67,27 @@ const TableMaterials = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const token = JSON.parse(localStorage.getItem("token"));
       try {
         const params = {
           limit: env.countOfPage,
-          offset: env.countOfPage * page,
+          offset: env.countOfPage * queryParams.page,
+          name: queryParams.name,
+          category: queryParams.category,
         };
-        if (searchMaterial) {
-          params.name = searchMaterial;
-        }
-        if (searchCategory) {
-          params.category = searchCategory;
-        }
-        const response = await axios.get(env.urlServer + `/cms/material`, {
-          headers: {
-            Authorization: `Bearer ${token.access}`,
-            "Content-Type": "application/json",
-          },
-          params,
-        });
+        const response = await requestApi("/cms/material", "get", null, params);
+        const idDataInPage = response.data.results.map((item) => item.id);
+        const idDeleteInPage = idDelete.filter((item) =>
+          idDataInPage.includes(item)
+        );
+        setIdDelete(idDeleteInPage);
         setData(response.data.results);
         setTotal(response.data.count);
       } catch (error) {
-        console.log(error);
-        if (error.response.status === 401) {
-          const newToken = await refeshToken();
-          if (newToken) {
-            await getData();
-          } else {
-            navigate("/login");
-          }
-        } else {
-          console.error(error);
-          navigate("/login");
-        }
+        console.error(error);
       }
     };
     getData();
-  }, [searchMaterial, searchCategory, create, update, page, deleteStatus]);
+  }, [queryParams, navigate]);
 
   const onClickDeleteAll = () => {
     const newCheckAll = !checkAll;
@@ -99,125 +95,19 @@ const TableMaterials = () => {
     setIdDelete(newCheckAll ? data.map((item) => item.id) : []);
   };
 
-  const showModal = (e, item) => {
-    e.stopPropagation();
-    setItemToDelete(item);
-    setModalVisible(true);
-  };
-
-  const showModalAll = () => {
-    setModalVisibleAll(true);
-  };
-
-  const onBack = () => {
-    setPage((prevPage) => prevPage - 1);
-    setIdDelete([]);
-  };
-
-  const DeleteAll = async () => {
-    const results = idDelete.join(",");
-    const token = JSON.parse(localStorage.getItem("token"));
-    try {
-      await axios.delete(env.urlServer + `/cms/material/bulk/${results}`, {
-        headers: {
-          Authorization: `Bearer ${token.access}`,
-          "Content-Type": "application/json",
-        },
-      });
-      enqueueSnackbar(`Delete ${idDelete.length} Categories Successfully`, {
-        variant: "success",
-      });
-      const time = new Date().getTime();
-      navigate(`?delete=${time}`);
-    } catch (e) {
-      if (e.response.status === 401) {
-        const newToken = await refeshToken();
-        if (newToken) {
-          await DeleteAll();
-        } else {
-          navigate("/login");
-        }
-      } else {
-        console.error(e);
-      }
-    } finally {
-      setModalVisibleAll(false);
-      setIdDelete([]);
-    }
-  };
-
-  const onNext = () => {
-    setPage((prevPage) => prevPage + 1);
-    setIdDelete([]);
-  };
-
   const OnClickSelectDelete = (item) => {
     setIdDelete((prevId) => {
       const newIdDelete = prevId.includes(item.id)
         ? prevId.filter((id) => id !== item.id)
         : [...prevId, item.id];
-      setCheckAll(newIdDelete.length === data.length);
+      setCheckAll(newIdDelete.length > 0);
       return newIdDelete;
     });
   };
 
-  const handleEdit = (e, item) => {
-    e.stopPropagation();
-    setDataEdit(item);
-    setOpenEdit(!openEdit);
-  };
-
-  useEffect(() => {
-    setPage(0);
-  }, [searchMaterial, searchCategory]);
-
-  const handleDelete = async () => {
-    if (itemToDelete) {
-      const token = JSON.parse(localStorage.getItem("token"));
-      try {
-        await axios.delete(env.urlServer + `/cms/material/${itemToDelete.id}`, {
-          headers: {
-            Authorization: `Bearer ${token.access}`,
-            "Content-Type": "application/json",
-          },
-        });
-        enqueueSnackbar("Delete 1 Material Successfully", {
-          variant: "success",
-        });
-        const time = new Date().getTime();
-        navigate(`?delete=${time}`);
-        if (idDelete.includes(itemToDelete.id)) {
-          setIdDelete((prevId) =>
-            prevId.filter((id) => id !== itemToDelete.id)
-          );
-        }
-      } catch (e) {
-        if (e.response.status === 401) {
-          const newToken = await refeshToken();
-          if (newToken) {
-            await handleDelete();
-          } else {
-            navigate("/login");
-          }
-        } else {
-          console.log(e);
-        }
-      } finally {
-        setModalVisible(false);
-        setItemToDelete(null);
-      }
-    }
-  };
-
   return (
     <div className="rounded-[10px] overflow-hidden shadow-[0px_0px_5px_rgba(0,0,0,0.322)]">
-      {openEdit && (
-        <EditMaterial
-          handleEdit={handleEdit}
-          dataEdit={dataEdit}
-          setOpenEdit={setOpenEdit}
-        />
-      )}
+      <ModalMaterial dataEdit={dataEdit} ref={modalOpenUpdateRef} />
       <div
         className={
           idDelete.length
@@ -235,7 +125,7 @@ const TableMaterials = () => {
             className="mt-[3px] ml-[10px]"
             danger
             type="primary"
-            onClick={() => showModalAll(idDelete)}
+            onClick={handleOpenModalDeleteAll}
           >
             Delete {idDelete.length} categories
           </Button>
@@ -278,7 +168,7 @@ const TableMaterials = () => {
                       className="transform scale-[1.3] ml-[10px]"
                     />
                   </td>
-                  <td>{page * 5 + index + 1}</td>
+                  <td>{queryParams.page * env.countOfPage + index + 1}</td>
                   <td className="flex justify-center">
                     <img
                       className="w-[130px] h-[70px] object-cover m-[5px] rounded-[10px]"
@@ -295,11 +185,14 @@ const TableMaterials = () => {
                   <td>{item.supplier.name}</td>
 
                   <td>
-                    <Button onClick={(e) => handleEdit(e, item)} type="text">
+                    <Button
+                      onClick={(e) => handleOpenModalUpdate(e, item)}
+                      type="text"
+                    >
                       <EditOutlined />
                     </Button>
                     <Button
-                      onClick={(e) => showModal(e, item)}
+                      onClick={(e) => handleOpenModalDelete(e, item)}
                       danger
                       type="text"
                     >
@@ -318,47 +211,41 @@ const TableMaterials = () => {
           </tbody>
         </table>
       </div>
-
-      <div className="flex gap-[10px] items-center bg-white justify-between p-[5px]">
-        <Button disabled={page === 0} onClick={onBack}>
-          <DoubleLeftOutlined />
-          Previous
-        </Button>
-        <span className="font-sans">
-          {countPage ? page + 1 : 0} of {countPage}
-        </span>
-        {data.length ? (
-          <Button disabled={page === countPage - 1} onClick={onNext}>
-            Next
-            <DoubleRightOutlined />
-          </Button>
-        ) : (
-          <Button disabled>
-            Next
-            <DoubleRightOutlined />
-          </Button>
-        )}
-      </div>
-      <Modal
-        title="Delete Categories"
-        open={modalVisible}
-        onOk={handleDelete}
-        onCancel={() => setModalVisible(false)}
-        okType="danger"
-      >
-        <p>Are you sure you want to delete?</p>
-      </Modal>
-      <Modal
-        title="Delete Multiple Categories"
-        open={modalVisibleAll}
-        onOk={DeleteAll}
-        onCancel={() => setModalVisibleAll(false)}
-        okType="danger"
-      >
-        <p>Are you sure you want to delete {idDelete.length} material</p>
-      </Modal>
+      <Pager
+        total={total}
+        setIdDelete={setIdDelete}
+        setCheckAll={setCheckAll}
+      />
+      <ModalDelete
+        ref={modalDeleteRef}
+        itemToDelete={itemToDelete}
+        onDelete={() =>
+          handleDelete(
+            itemToDelete,
+            idDelete,
+            setIdDelete,
+            modalDeleteRef,
+            "/cms/material"
+          )
+        }
+      />
+      <ModalDelete
+        ref={modalDeleteAllRef}
+        idDelete={idDelete}
+        onDelete={() =>
+          deleteAll(
+            idDelete,
+            data,
+            navigate,
+            modalDeleteAllRef,
+            enqueueSnackbar,
+            setIdDelete,
+            "/cms/material/bulk"
+          )
+        }
+      />
     </div>
   );
-};
+});
 
 export default memo(TableMaterials);

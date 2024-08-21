@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "@/components/Layout/Navbar";
 import Menu from "@/components/Layout/Menu";
 

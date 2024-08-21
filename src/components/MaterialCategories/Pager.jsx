@@ -1,4 +1,5 @@
-import React, { useState, memo, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import { useState, memo } from "react";
 import { DoubleRightOutlined, DoubleLeftOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "antd";
@@ -20,16 +21,16 @@ const Pager = ({ total, setIdDelete, setCheckAll }) => {
     navigate(`?${newParams.toString()}`);
   };
 
-  useEffect(() => {
-    const checkPage = () => {
-      if (isNaN(page) || page < 0 || page >= countPage) {
-        newParams.set("page", 0);
-        navigate(`?${newParams.toString()}`);
-        setPage(0);
-      }
-    };
-    checkPage();
-  }, [page]);
+  // useEffect(() => {
+  //   const checkPage = () => {
+  //     if (isNaN(page) || page < 0 || page >= countPage) {
+  //       newParams.set("page", 0);
+  //       navigate(`?${newParams.toString()}`);
+  //       setPage(0);
+  //     }
+  //   };
+  //   checkPage();
+  // }, [page]);
 
   const onNext = () => {
     if (page < countPage - 1) {

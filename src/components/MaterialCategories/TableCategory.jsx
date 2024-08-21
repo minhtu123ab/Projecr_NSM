@@ -1,4 +1,4 @@
-import React, {
+import {
   useState,
   useRef,
   memo,
@@ -16,19 +16,16 @@ import Pager from "@/components/MaterialCategories/Pager";
 import ModalDelete from "@/components/MaterialCategories/modal/ModalDelete";
 import useDeleteHandlers from "@/hook/useDeleteHandlers";
 import requestApi from "@/axios/axiosInstance.js";
-import ModalCategoriesAntd from "@/components/MaterialCategories/modal/ModalCategories";
 
 const TableCategory = forwardRef((props, ref) => {
   const [checkAll, setCheckAll] = useState(false);
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]);
-  const [dataEdit, setDataEdit] = useState({});
   const [idDelete, setIdDelete] = useState([]);
   const [itemToDelete, setItemToDelete] = useState(null);
 
   const modalDeleteRef = useRef();
   const modalDeleteAllRef = useRef();
-  const modalOpenUpdateRef = useRef();
 
   useImperativeHandle(ref, () => ({
     resetSelection: () => {
@@ -36,12 +33,6 @@ const TableCategory = forwardRef((props, ref) => {
       setIdDelete([]);
     },
   }));
-
-  const handleOpenModalUpdate = (e, item) => {
-    e.stopPropagation();
-    setDataEdit(item);
-    modalOpenUpdateRef.current.openModal();
-  };
 
   const { handleDelete, deleteAll } = useDeleteHandlers();
 
@@ -73,11 +64,6 @@ const TableCategory = forwardRef((props, ref) => {
           null,
           params
         );
-        const idDataInPage = response.data.results.map((item) => item.id);
-        const idDeleteInPage = idDelete.filter((item) =>
-          idDataInPage.includes(item)
-        );
-        setIdDelete(idDeleteInPage);
         setData(response.data.results);
         setTotal(response.data.count);
       } catch (error) {
@@ -93,10 +79,13 @@ const TableCategory = forwardRef((props, ref) => {
       const newIdDelete = prevId.includes(item.id)
         ? prevId.filter((id) => id !== item.id)
         : [...prevId, item.id];
-      setCheckAll(newIdDelete.length > 0);
       return newIdDelete;
     });
   };
+
+  useEffect(() => {
+    setCheckAll(idDelete.length > 0);
+  }, [idDelete.length]);
 
   const onClickDeleteAll = () => {
     const newCheckAll = !checkAll;
@@ -106,7 +95,6 @@ const TableCategory = forwardRef((props, ref) => {
 
   return (
     <div className="rounded-xl overflow-hidden shadow-md">
-      <ModalCategoriesAntd dataEdit={dataEdit} ref={modalOpenUpdateRef} />
       <div
         className={
           idDelete.length
@@ -178,7 +166,7 @@ const TableCategory = forwardRef((props, ref) => {
                 </td>
                 <td>
                   <Button
-                    onClick={(e) => handleOpenModalUpdate(e, item)}
+                    onClick={() => navigate(`/materials/categories/${item.id}`)}
                     type="text"
                   >
                     <EditOutlined />
@@ -211,7 +199,13 @@ const TableCategory = forwardRef((props, ref) => {
         ref={modalDeleteRef}
         itemToDelete={itemToDelete}
         onDelete={() =>
-          handleDelete(itemToDelete, idDelete, setIdDelete, modalDeleteRef)
+          handleDelete(
+            itemToDelete,
+            idDelete,
+            setIdDelete,
+            modalDeleteRef,
+            "/cms/material_categories"
+          )
         }
       />
       <ModalDelete
@@ -224,12 +218,15 @@ const TableCategory = forwardRef((props, ref) => {
             navigate,
             modalDeleteAllRef,
             enqueueSnackbar,
-            setIdDelete
+            setIdDelete,
+            "/cms/material_categories/bulk"
           )
         }
       />
     </div>
   );
 });
+
+TableCategory.displayName = "TableCategory";
 
 export default memo(TableCategory);
