@@ -1,21 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
-import * as yup from "yup";
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ModalCategory from "./ModalCategory";
 import requestApi from "@/axios/axiosInstance";
-
-const schema = yup.object().shape({
-  image: yup.mixed().required("Image is required"),
-  name: yup
-    .string()
-    .required("Name is required")
-    .max(30, "Category name cannot be more than 30 characters"),
-  price_type: yup.string().required("Price is required"),
-});
+import schema from "./schemaYup/schemaYupCategory";
 
 const ModalCreateCategories = () => {
   const { enqueueSnackbar } = useSnackbar();

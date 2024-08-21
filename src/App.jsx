@@ -6,8 +6,8 @@ import CheckLogin from "@/CheckLogin";
 import BodyUpdate from "@/components/BodyUpdate/BodyUpdate";
 import Main from "@/components/MaterialsMain/Main";
 import Body from "@/components/Layout/Body";
-import ModalCreateCategories from "@/components/MaterialCategories/modal/ModalCreateCatrgories";
-import ModalUpdateCategories from "./components/MaterialCategories/modal/ModalUpdateCategories";
+import ModalCreateCategories from "@/components/MaterialCategories/modal/categories/ModalCreateCatrgories";
+import ModalUpdateCategories from "@/components/MaterialCategories/modal/categories/ModalUpdateCategories";
 
 const App = () => {
   return (
