@@ -31,7 +31,11 @@ const requestApi = (endpoint, method, body, params) => {
     },
     async (error) => {
       const orinalRequest = error.config;
-      if (error.response.status === 401 && !orinalRequest._retry) {
+      if (
+        error.response.status === 401 &&
+        !orinalRequest._retry &&
+        error.response.data.messages[0].token_type === "access"
+      ) {
         orinalRequest._retry = true;
         const newToken = await useRefeshToken();
         if (newToken) {
