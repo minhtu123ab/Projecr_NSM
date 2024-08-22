@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, memo } from "react";
+import { memo } from "react";
 import { DoubleRightOutlined, DoubleLeftOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "antd";
@@ -12,30 +12,17 @@ const Pager = ({ total, setIdDelete, setCheckAll }) => {
   const countPage = Math.ceil(total / env.countOfPage);
 
   const currentParams = new URLSearchParams(location.search);
-  const initialPage = Number(currentParams.get("page")) || 0;
-  const [page, setPage] = useState(initialPage);
-  const newParams = new URLSearchParams(location.search);
+  const urlPage = currentParams.get("page") || 0;
+  let initialPage = Number(urlPage);
 
   const updateURL = (newPage) => {
-    newParams.set("page", newPage);
-    navigate(`?${newParams.toString()}`);
+    currentParams.set("page", newPage);
+    navigate(`?${currentParams.toString()}`);
   };
 
-  // useEffect(() => {
-  //   const checkPage = () => {
-  //     if (isNaN(page) || page < 0 || page >= countPage) {
-  //       newParams.set("page", 0);
-  //       navigate(`?${newParams.toString()}`);
-  //       setPage(0);
-  //     }
-  //   };
-  //   checkPage();
-  // }, [page]);
-
   const onNext = () => {
-    if (page < countPage - 1) {
-      const newPage = page + 1;
-      setPage(newPage);
+    if (initialPage < countPage - 1) {
+      const newPage = initialPage + 1;
       setIdDelete([]);
       updateURL(newPage);
       setCheckAll(false);
@@ -43,40 +30,39 @@ const Pager = ({ total, setIdDelete, setCheckAll }) => {
   };
 
   const onBack = () => {
-    if (page > 0) {
-      const newPage = page - 1;
-      setPage(newPage);
+    if (initialPage > 0) {
+      const newPage = initialPage - 1;
       setIdDelete([]);
       updateURL(newPage);
       setCheckAll(false);
     }
   };
 
-  const handleURLChange = () => {
-    const newPage = Number(currentParams.get("page")) || 0;
-    if (newPage !== page) {
-      setPage(newPage);
+  const checkPage = () => {
+    if (isNaN(initialPage) || initialPage < 0 || initialPage >= countPage) {
+      initialPage = 0;
+      updateURL(initialPage);
     }
   };
 
-  handleURLChange();
+  checkPage();
 
   return (
     <div className="w-full bg-white p-2 flex justify-between">
       <Button
         icon={<DoubleLeftOutlined />}
         onClick={onBack}
-        disabled={page === 0}
+        disabled={initialPage === 0}
       >
         Previous
       </Button>
       <span className="font-sans">
-        {countPage ? page + 1 : 0} of {countPage}
+        {countPage ? initialPage + 1 : 0} of {countPage}
       </span>
       <Button
         icon={<DoubleRightOutlined />}
         onClick={onNext}
-        disabled={page >= countPage - 1}
+        disabled={initialPage >= countPage - 1}
       >
         Next
       </Button>

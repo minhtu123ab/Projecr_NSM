@@ -19,6 +19,8 @@ const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
+  const urlSave = localStorage.getItem("urlSave");
+
   const {
     control,
     handleSubmit,
@@ -41,7 +43,7 @@ const Login = () => {
         variant: "success",
       });
       reset();
-      navigate("/materials/categories");
+      navigate(urlSave ? urlSave : "/materials/categories");
     } catch (e) {
       console.log(e);
       enqueueSnackbar(`Login failed`, {

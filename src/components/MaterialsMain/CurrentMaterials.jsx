@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Select } from "antd";
 import icon from "@/assets/icon.png";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import env from "@/Env";
 import refeshToken from "@/services/refeshToken";
@@ -19,6 +19,8 @@ const CurrentMaterials = () => {
   const handleChange = (value) => {
     setDay(value);
   };
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -49,27 +51,20 @@ const CurrentMaterials = () => {
             navigate("/login");
           }
         } else {
-          console.error(error);
+          console.error(e);
           navigate("/login");
         }
       }
     };
     getCountData();
-  }, [valueCreate, valueDelete]);
+  }, [navigate, valueCreate, valueDelete]);
 
   return (
-    <div className="w-[300px] h-[150px] bg-white shadow-[0px_0px_5px_rgba(0,0,0,0.322)] rounded-[10px] p-[15px_20px] flex flex-col gap-[10px]">
+    <div className="w-72 h-36 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2.5">
       <div className="flex justify-between items-center">
-        <h2
-          style={{
-            fontFamily: "Arial, Helvetica, sans-serif",
-          }}
-          className="text-[15px] text-[#4b4b4b]"
-        >
-          Current Categories
-        </h2>
+        <h2 className="text-sm text-gray-700">Current Categories</h2>
         <Select
-          className="w-[95px] h-[30px]"
+          className="w-24 h-8"
           value={day}
           onChange={handleChange}
           style={{ width: 120 }}
@@ -79,10 +74,10 @@ const CurrentMaterials = () => {
           <Option value={10}>10 day</Option>
         </Select>
       </div>
-      <div className="flex items-center gap-[12px]">
+      <div className="flex items-center gap-3">
         <img src={icon} alt="" />
         <p
-          className="font-bold text-[38px] text-[#8B96A7]"
+          className="font-bold text-4xl text-[#8B96A7] font-sans"
           style={{
             fontFamily: "Arial",
           }}

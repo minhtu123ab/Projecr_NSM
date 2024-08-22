@@ -16,7 +16,7 @@ const useDeleteHandlers = () => {
     if (itemToDelete) {
       try {
         await requestApi(`${endpoint}/${itemToDelete.id}`, "delete");
-        enqueueSnackbar("Delete 1 Category Successfully", {
+        enqueueSnackbar(`Delete ${itemToDelete.name} Successfully`, {
           variant: "success",
         });
         const newParams = new URLSearchParams(location.search);
@@ -47,7 +47,7 @@ const useDeleteHandlers = () => {
     const results = idDelete.join(",");
     try {
       await requestApi(`${endpoint}/${results}`, "delete");
-      enqueueSnackbar(`Delete ${idDelete.length} Categories Successfully`, {
+      enqueueSnackbar(`Delete All Successfully`, {
         variant: "success",
       });
       const newParams = new URLSearchParams(location.search);

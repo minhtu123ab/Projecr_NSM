@@ -27,7 +27,7 @@ const ModalCategory = ({
   const { id } = useParams();
 
   return (
-    <div className="p-7 bg-white h-full min-h-screen">
+    <div className="p-7 bg-[#F1F5F9] h-full min-h-screen">
       <div className="pl-36 pt-20">
         {id ? (
           <h1 className="text-center text-4xl pb-10">Update Categories</h1>

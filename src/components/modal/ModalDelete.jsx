@@ -3,7 +3,7 @@
 import { useState, useImperativeHandle, forwardRef } from "react";
 import { Modal } from "antd";
 
-const ModalDelete = forwardRef(({ idDelete, onDelete, itemToDelete }, ref) => {
+const ModalDelete = forwardRef(({ onDelete, itemToDelete }, ref) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
@@ -21,7 +21,7 @@ const ModalDelete = forwardRef(({ idDelete, onDelete, itemToDelete }, ref) => {
 
   return (
     <Modal
-      title={itemToDelete ? "Delete Category" : "Delete Categories"}
+      title={itemToDelete ? `Delete ${itemToDelete.name}` : "Delete All"}
       open={modalVisible}
       onOk={onDelete}
       onCancel={closeModal}
@@ -34,7 +34,7 @@ const ModalDelete = forwardRef(({ idDelete, onDelete, itemToDelete }, ref) => {
           <span className="font-medium">{itemToDelete.name}</span>"?
         </p>
       ) : (
-        <p>Are you sure you want to delete {idDelete?.length} categories?</p>
+        <p>Are you sure you want to delete All</p>
       )}
     </Modal>
   );

@@ -37,7 +37,7 @@ const CurrentUsers = () => {
       }
     };
     getCountData();
-  }, [queryParams.create, queryParams.delete]);
+  }, [navigate, queryParams.create, queryParams.delete]);
 
   return (
     <div className="w-72 h-36 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2.5">

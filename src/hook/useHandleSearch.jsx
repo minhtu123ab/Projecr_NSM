@@ -19,7 +19,34 @@ const useHandleSearch = () => {
       tableCategoryRef.current.resetSelection();
     }
   };
-  return { handleSubmit };
+  const handleSubmitMaterial = (
+    e,
+    valueMaterial,
+    valueCategory,
+    tableMaterialRef
+  ) => {
+    e.preventDefault();
+    const newQueryParams = new URLSearchParams(location.search);
+    if (valueMaterial && valueCategory) {
+      newQueryParams.set("name", valueMaterial);
+      newQueryParams.set("category", valueCategory);
+    } else if (valueMaterial && !valueCategory) {
+      newQueryParams.set("name", valueMaterial);
+      newQueryParams.delete("category");
+    } else if (valueCategory && !valueMaterial) {
+      newQueryParams.set("category", valueCategory);
+      newQueryParams.delete("name");
+    } else {
+      newQueryParams.delete("category");
+      newQueryParams.delete("name");
+    }
+    newQueryParams.set("page", "0");
+    navigate({ search: newQueryParams.toString() });
+    if (tableMaterialRef.current) {
+      tableMaterialRef.current.resetSelection();
+    }
+  };
+  return { handleSubmit, handleSubmitMaterial };
 };
 
 export default useHandleSearch;

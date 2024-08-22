@@ -6,26 +6,35 @@ import {
   useImperativeHandle,
   useEffect,
 } from "react";
-import { Checkbox, Button } from "antd";
+import { Checkbox, Button, Empty } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import env from "@/Env";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import useQueryParams from "@/hook/useQueryParams.jsx";
 import Pager from "@/components/MaterialCategories/Pager";
-import ModalDelete from "@/components/MaterialCategories/modal/ModalDelete";
+import ModalDelete from "@/components/modal/ModalDelete";
 import useDeleteHandlers from "@/hook/useDeleteHandlers";
 import requestApi from "@/axios/axiosInstance.js";
 
 const TableCategory = forwardRef((props, ref) => {
+  const [state, setState] = useState({
+    loading: true,
+    data: [],
+    total: 0,
+  });
   const [checkAll, setCheckAll] = useState(false);
-  const [total, setTotal] = useState(0);
-  const [data, setData] = useState([]);
   const [idDelete, setIdDelete] = useState([]);
   const [itemToDelete, setItemToDelete] = useState(null);
 
   const modalDeleteRef = useRef();
   const modalDeleteAllRef = useRef();
+
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  const queryParams = useQueryParams();
+
+  const { handleDelete, deleteAll } = useDeleteHandlers();
 
   useImperativeHandle(ref, () => ({
     resetSelection: () => {
@@ -33,22 +42,6 @@ const TableCategory = forwardRef((props, ref) => {
       setIdDelete([]);
     },
   }));
-
-  const { handleDelete, deleteAll } = useDeleteHandlers();
-
-  const handleOpenModalDeleteAll = () => {
-    modalDeleteAllRef.current.openModal();
-  };
-
-  const handleOpenModalDelete = (e, item) => {
-    e.stopPropagation();
-    setItemToDelete(item);
-    modalDeleteRef.current.openModal();
-  };
-
-  const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
-  const queryParams = useQueryParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,15 +57,28 @@ const TableCategory = forwardRef((props, ref) => {
           null,
           params
         );
-        setData(response.data.results);
-        setTotal(response.data.count);
+        setState({
+          loading: false,
+          data: response.data.results,
+          total: response.data.count,
+        });
       } catch (error) {
         console.error(error);
-        navigate("/login");
+        // navigate("/login");
       }
     };
     fetchData();
   }, [queryParams, navigate]);
+
+  const handleOpenModalDeleteAll = () => {
+    modalDeleteAllRef.current.openModal();
+  };
+
+  const handleOpenModalDelete = (e, item) => {
+    e.stopPropagation();
+    setItemToDelete(item);
+    modalDeleteRef.current.openModal();
+  };
 
   const onClickSelectDelete = (item) => {
     setIdDelete((prevId) => {
@@ -90,7 +96,7 @@ const TableCategory = forwardRef((props, ref) => {
   const onClickDeleteAll = () => {
     const newCheckAll = !checkAll;
     setCheckAll(newCheckAll);
-    setIdDelete(newCheckAll ? data.map((item) => item.id) : []);
+    setIdDelete(newCheckAll ? state.data.map((item) => item.id) : []);
   };
 
   return (
@@ -130,8 +136,36 @@ const TableCategory = forwardRef((props, ref) => {
           </tr>
         </thead>
         <tbody>
-          {data.length ? (
-            data.map((item, index) => (
+          {state.loading ? (
+            Array.from({ length: env.countOfPage }).map((_, index) => (
+              <tr key={index} className="animate-pulse bg-gray-200">
+                <td>
+                  <Checkbox className="transform scale-[1.3] ml-2" disabled />
+                </td>
+                <td className="p-4">
+                  <div className="w-8 h-4 bg-gray-300 rounded"></div>
+                </td>
+                <td className="flex justify-center">
+                  <div className="w-44 h-24 bg-gray-300 rounded-lg mt-2 mb-2"></div>
+                </td>
+                <td>
+                  <div className="w-32 h-4 bg-gray-300 rounded"></div>
+                </td>
+                <td>
+                  <div className="w-24 h-4 bg-gray-300 rounded"></div>
+                </td>
+                <td>
+                  <Button type="text" disabled>
+                    <EditOutlined />
+                  </Button>
+                  <Button type="text" danger disabled>
+                    <DeleteOutlined />
+                  </Button>
+                </td>
+              </tr>
+            ))
+          ) : state.data.length ? (
+            state.data.map((item, index) => (
               <tr
                 className={`cursor-pointer ${
                   idDelete.includes(item.id) ? "bg-[#F5F5F5]" : "white"
@@ -183,15 +217,15 @@ const TableCategory = forwardRef((props, ref) => {
             ))
           ) : (
             <tr>
-              <td className="pt-2 pb-2 font-mono text-4xl text-center text-[#777777] cursor-default">
-                Không có bản ghi nào
+              <td colSpan="6" className="pt-2 pb-2">
+                <Empty description="Không có bản ghi nào" />
               </td>
             </tr>
           )}
         </tbody>
       </table>
       <Pager
-        total={total}
+        total={state.total}
         setIdDelete={setIdDelete}
         setCheckAll={setCheckAll}
       />
@@ -214,7 +248,7 @@ const TableCategory = forwardRef((props, ref) => {
         onDelete={() =>
           deleteAll(
             idDelete,
-            data,
+            state.data,
             navigate,
             modalDeleteAllRef,
             enqueueSnackbar,

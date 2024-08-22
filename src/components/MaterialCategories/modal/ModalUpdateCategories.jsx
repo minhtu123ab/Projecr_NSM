@@ -89,7 +89,7 @@ const ModalUpdateCategories = () => {
       reset({ name: "", image: null, price_type: "" });
     } catch (e) {
       console.error(e);
-      enqueueSnackbar("Create Failed", {
+      enqueueSnackbar("Update Failed", {
         variant: "error",
       });
     } finally {
