@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import { DoubleRightOutlined, DoubleLeftOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "antd";
@@ -13,7 +14,7 @@ const Pager = ({ total, setIdDelete, setCheckAll }) => {
 
   const currentParams = new URLSearchParams(location.search);
   const urlPage = currentParams.get("page") || 0;
-  let initialPage = Number(urlPage);
+  let initialPage = parseInt(urlPage);
 
   const updateURL = (newPage) => {
     currentParams.set("page", newPage);
@@ -38,14 +39,16 @@ const Pager = ({ total, setIdDelete, setCheckAll }) => {
     }
   };
 
-  const checkPage = () => {
-    if (isNaN(initialPage) || initialPage < 0 || initialPage >= countPage) {
+  useEffect(() => {
+    if (
+      isNaN(initialPage) ||
+      initialPage < 0 ||
+      (countPage && initialPage > countPage)
+    ) {
       initialPage = 0;
       updateURL(initialPage);
     }
-  };
-
-  checkPage();
+  }, [navigate, initialPage, countPage]);
 
   return (
     <div className="w-full bg-white p-2 flex justify-between">

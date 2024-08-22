@@ -43,7 +43,7 @@ const Login = () => {
         variant: "success",
       });
       reset();
-      navigate(urlSave ? urlSave : "/materials/categories");
+      navigate(urlSave ? urlSave : "/materials/main");
     } catch (e) {
       console.log(e);
       enqueueSnackbar(`Login failed`, {

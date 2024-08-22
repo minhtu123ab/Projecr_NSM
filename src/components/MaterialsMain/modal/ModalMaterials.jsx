@@ -2,9 +2,11 @@
 /* eslint-disable react/prop-types */
 import { Input, Image, Button, Upload, Select } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Controller } from "react-hook-form";
 import withDataFetching from "../../HOC/withDataFetching"; // Import HOC
+
+const urls = ["/cms/material_categories", "/cms/supplier"];
 
 const ModalMaterials = ({
   control,
@@ -17,6 +19,8 @@ const ModalMaterials = ({
 }) => {
   const { id } = useParams();
   const { data, loading, error } = state;
+
+  const navigate = useNavigate();
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -240,15 +244,16 @@ const ModalMaterials = ({
                   </div>
                 </div>
               </div>
-
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="w-full bg-blue-600"
-                onClick={handleSubmit(onClickSubmit)}
-              >
-                {id ? "Update" : "Create"}
-              </Button>
+              <div className="flex justify-end gap-4">
+                <Button onClick={() => navigate(-1)}>Cancel</Button>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={handleSubmit(onClickSubmit)}
+                >
+                  {id ? "Update" : "Create"}
+                </Button>
+              </div>
             </div>
           </div>
         </form>
@@ -256,7 +261,5 @@ const ModalMaterials = ({
     </div>
   );
 };
-
-const urls = ["/cms/material_categories", "/cms/supplier"];
 
 export default withDataFetching(ModalMaterials, urls);
