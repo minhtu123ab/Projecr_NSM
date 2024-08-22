@@ -12,7 +12,7 @@ import env from "@/Env";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import useQueryParams from "@/hook/useQueryParams.jsx";
-import Pager from "@/components/MaterialCategories/Pager";
+import Pager from "@/components/paginator/Pager";
 import ModalDelete from "@/components/modal/ModalDelete";
 import useDeleteHandlers from "@/hook/useDeleteHandlers";
 import requestApi from "@/axios/axiosInstance.js";

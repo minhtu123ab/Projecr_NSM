@@ -8,7 +8,7 @@ import {
 } from "react";
 import { Checkbox, Button, Empty } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import Pager from "@/components/MaterialCategories/Pager";
+import Pager from "@/components/paginator/Pager";
 import env from "@/Env";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
