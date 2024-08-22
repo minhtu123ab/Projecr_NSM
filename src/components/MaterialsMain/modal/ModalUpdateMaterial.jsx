@@ -41,17 +41,15 @@ const ModalUpdateMaterial = () => {
     resolver: yupResolver(schema),
   });
 
-  console.log(dataEdit);
-
   useEffect(() => {
     if (dataEdit) {
       reset({
         name: dataEdit.name || "",
         part_number: dataEdit.part_number || "",
         image: dataEdit.image || null,
-        type: dataEdit.type || "",
+        type: dataEdit.type || 0,
         large_title: dataEdit.large_title || "",
-        basic_price: dataEdit.basic_price || "",
+        basic_price: dataEdit.basic_price || null,
         small_title: dataEdit.small_title || "",
         category: dataEdit.category || "",
         supplier: dataEdit.supplier || "",
@@ -65,8 +63,8 @@ const ModalUpdateMaterial = () => {
       const formData = new FormData();
       dataEdit.image != data.image && formData.append("image", data.image);
       formData.append("part_number", data.part_number);
-      formData.append("name", data.name);
-      formData.append("type", data.type);
+      data.name && formData.append("name", data.name);
+      data.type && formData.append("type", data.type);
       formData.append("basic_price", data.basic_price);
       formData.append("large_title", data.large_title);
       formData.append("small_title", data.small_title);

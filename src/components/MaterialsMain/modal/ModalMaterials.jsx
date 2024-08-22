@@ -1,10 +1,10 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 import { Input, Image, Button, Upload, Select } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import requestApi from "@/axios/axiosInstance";
+import { useParams } from "react-router-dom";
 import { Controller } from "react-hook-form";
+import withDataFetching from "../../HOC/withDataFetching"; // Import HOC
 
 const ModalMaterials = ({
   control,
@@ -13,80 +13,16 @@ const ModalMaterials = ({
   urlImage,
   onClickSubmit,
   handleChangeImage,
+  state,
 }) => {
   const { id } = useParams();
+  const { data, loading, error } = state;
 
-  const navigate = useNavigate();
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
-  const [count, setCount] = useState({
-    category: 0,
-    supplier: 0,
-  });
-  const [dataCategory, setDataCategory] = useState([]);
-  const [dataSupplier, setDataSupplier] = useState([]);
-
-  useEffect(() => {
-    const getCountData = async () => {
-      try {
-        const params = {
-          limit: 1,
-        };
-        const responseCategory = await requestApi(
-          "/cms/material_categories",
-          "get",
-          null,
-          params
-        );
-        setCount((prevCount) => ({
-          ...prevCount,
-          category: responseCategory.data.count,
-        }));
-        const responseSupplier = await requestApi(
-          "/cms/supplier",
-          "get",
-          null,
-          params
-        );
-        setCount((prevCount) => ({
-          ...prevCount,
-          supplier: responseSupplier.data.count,
-        }));
-      } catch (e) {
-        console.error(e);
-        navigate("/login");
-      }
-    };
-    getCountData();
-  }, [navigate]);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const responseCategory = await requestApi(
-          "/cms/material_categories",
-          "get",
-          null,
-          {
-            limit: count.category,
-          }
-        );
-        setDataCategory(responseCategory.data.results);
-        const responseSupplier = await requestApi(
-          "/cms/supplier",
-          "get",
-          null,
-          {
-            limit: count.supplier,
-          }
-        );
-        setDataSupplier(responseSupplier.data.results);
-      } catch (e) {
-        console.error(e);
-        navigate("/login");
-      }
-    };
-    getData();
-  }, [count, navigate]);
+  const dataCategory = data["/cms/material_categories"] || [];
+  const dataSupplier = data["/cms/supplier"] || [];
 
   return (
     <div className="p-7 bg-[#F1F5F9] h-full min-h-screen">
@@ -170,9 +106,7 @@ const ModalMaterials = ({
                   </div>
 
                   <div>
-                    <label htmlFor="name">
-                      Name<span className="text-red-600">*</span>
-                    </label>
+                    <label htmlFor="name">Name</label>
                     <Controller
                       control={control}
                       name="name"
@@ -186,9 +120,7 @@ const ModalMaterials = ({
                   </div>
 
                   <div>
-                    <label htmlFor="type">
-                      Type<span className="text-red-600">*</span>
-                    </label>
+                    <label htmlFor="type">Type</label>
                     <Controller
                       control={control}
                       name="type"
@@ -308,19 +240,15 @@ const ModalMaterials = ({
                   </div>
                 </div>
               </div>
-              <div className="flex justify-end gap-4">
-                <Button onClick={() => navigate(-1)}>Cancel</Button>
 
-                {id ? (
-                  <Button type="primary" onClick={handleSubmit(onClickSubmit)}>
-                    Update
-                  </Button>
-                ) : (
-                  <Button type="primary" onClick={handleSubmit(onClickSubmit)}>
-                    Create
-                  </Button>
-                )}
-              </div>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="w-full bg-blue-600"
+                onClick={handleSubmit(onClickSubmit)}
+              >
+                {id ? "Update" : "Create"}
+              </Button>
             </div>
           </div>
         </form>
@@ -329,4 +257,6 @@ const ModalMaterials = ({
   );
 };
 
-export default ModalMaterials;
+const urls = ["/cms/material_categories", "/cms/supplier"];
+
+export default withDataFetching(ModalMaterials, urls);

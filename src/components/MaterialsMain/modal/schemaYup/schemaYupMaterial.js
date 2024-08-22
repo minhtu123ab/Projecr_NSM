@@ -2,12 +2,9 @@ import * as yup from "yup";
 
 const schema = yup.object().shape({
   image: yup.mixed().required("Image is required"),
-  name: yup
-    .string()
-    .required("Name is required")
-    .max(30, "Category name cannot be more than 30 characters"),
+  name: yup.string().max(30, "Category name cannot be more than 30 characters"),
   part_number: yup.string().required("Price is required"),
-  type: yup.number("type is number").required("Type is required"),
+  type: yup.number("type is number"),
   large_title: yup.string().required("Large title is required"),
   small_title: yup.string().required("Small title is required"),
   basic_price: yup

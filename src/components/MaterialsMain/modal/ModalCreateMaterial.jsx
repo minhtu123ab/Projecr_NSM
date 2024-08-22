@@ -35,8 +35,8 @@ const ModalCreateMaterial = () => {
       const formData = new FormData();
       formData.append("image", data.image);
       formData.append("part_number", data.part_number);
-      formData.append("name", data.name);
-      formData.append("type", data.type);
+      data.name && formData.append("name", data.name);
+      data.type && formData.append("type", data.type);
       formData.append("basic_price", data.basic_price);
       formData.append("large_title", data.large_title);
       formData.append("small_title", data.small_title);
