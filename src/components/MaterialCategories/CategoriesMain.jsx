@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Button } from "antd";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import TableCategory from "@/components/MaterialCategories/TableCategory";
 import CurrentUsers from "@/components/MaterialCategories/CurrentCategories";
 import SearchCategory from "./SearchCategory";
@@ -10,6 +10,8 @@ const CategoryMain = () => {
   const navigate = useNavigate();
 
   const tableCategoryRef = useRef();
+
+  const location = useLocation();
 
   return (
     <div className="p-7 bg-[#f1f5f9] h-full min-h-screen">
@@ -21,7 +23,9 @@ const CategoryMain = () => {
         <div className="flex justify-between items-center">
           <SearchCategory tableCategoryRef={tableCategoryRef} />
           <Button
-            onClick={() => navigate("/materials/categories/created")}
+            onClick={() =>
+              navigate(`/materials/categories/created${location.search}`)
+            }
             type="primary"
           >
             Create categories

@@ -2,7 +2,7 @@
 import { Input, Image, Button, Upload, Select } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { Controller } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const dataPriceType = [
   {
@@ -25,6 +25,8 @@ const ModalCategory = ({
 }) => {
   const navigate = useNavigate();
   const { id } = useParams();
+
+  const location = useLocation();
 
   return (
     <div className="p-7 bg-[#F1F5F9] h-full min-h-screen">
@@ -130,7 +132,13 @@ const ModalCategory = ({
                 </div>
               </div>
               <div className="flex justify-end gap-4">
-                <Button onClick={() => navigate(-1)}>Cancel</Button>
+                <Button
+                  onClick={() =>
+                    navigate(`/materials/categories${location.search}`)
+                  }
+                >
+                  Cancel
+                </Button>
                 {id ? (
                   <Button type="primary" onClick={handleSubmit(onClickSubmit)}>
                     Update

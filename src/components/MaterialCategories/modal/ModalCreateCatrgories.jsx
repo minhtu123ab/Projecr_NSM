@@ -51,7 +51,7 @@ const ModalCreateCategories = () => {
         enqueueSnackbar("Create successfully", {
           variant: "success",
         });
-        navigate(-1);
+        navigate("/materials/categories");
       } else {
         enqueueSnackbar("Create Failed", {
           variant: "error",

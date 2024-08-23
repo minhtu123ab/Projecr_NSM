@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import schema from "./schemaYup/schemaYupMaterial";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,8 @@ const ModalUpdateMaterial = () => {
   const [onClick, setOnClick] = useState(false);
   const [formData, setFormData] = useState({});
   const [dataEdit, setDataEdit] = useState({});
+
+  const location = useLocation();
 
   useEffect(() => {
     const fetchDataItem = async () => {
@@ -75,7 +77,7 @@ const ModalUpdateMaterial = () => {
         enqueueSnackbar("Update successfully", {
           variant: "success",
         });
-        navigate(-1);
+        navigate(`/materials/main${location.search}`);
       } else {
         enqueueSnackbar("Update failed", { variant: "error" });
       }

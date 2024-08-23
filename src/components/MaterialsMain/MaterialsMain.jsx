@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import CurrentMaterials from "@/components/MaterialsMain/CurrentMaterials";
 import { Button } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import TableMaterials from "@/components/MaterialsMain/TableMaterials";
 import SearchMaterial from "./SearchMaterial";
 
@@ -9,6 +9,8 @@ const MaterialMain = () => {
   const navigate = useNavigate();
 
   const tableMaterialRef = useRef();
+
+  const location = useLocation();
 
   return (
     <div className="p-7 bg-[#f1f5f9] h-full min-h-screen">
@@ -20,7 +22,9 @@ const MaterialMain = () => {
         <div className="flex justify-between items-center">
           <SearchMaterial tableMaterialRef={tableMaterialRef} />
           <Button
-            onClick={() => navigate("/materials/main/created")}
+            onClick={() =>
+              navigate(`/materials/main/created${location.search}`)
+            }
             type="primary"
           >
             Create material

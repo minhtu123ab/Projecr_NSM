@@ -10,7 +10,7 @@ import { Checkbox, Button, Empty } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Pager from "@/components/paginator/Pager";
 import env from "@/Env";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import useDeleteHandlers from "@/hook/useDeleteHandlers";
 import ModalDelete from "@/components/modal/ModalDelete";
@@ -34,6 +34,8 @@ const TableMaterials = forwardRef((props, ref) => {
   const { handleDelete, deleteAll } = useDeleteHandlers();
   const modalDeleteRef = useRef();
   const modalDeleteAllRef = useRef();
+
+  const location = useLocation();
 
   useImperativeHandle(ref, () => ({
     resetSelection: () => {
@@ -219,7 +221,9 @@ const TableMaterials = forwardRef((props, ref) => {
                   <td>{item.supplier.name}</td>
                   <td>
                     <Button
-                      onClick={() => navigate(`/materials/main/${item.id}`)}
+                      onClick={() =>
+                        navigate(`/materials/main/${item.id}${location.search}`)
+                      }
                       type="text"
                     >
                       <EditOutlined />

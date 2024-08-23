@@ -1,8 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { Input, Image, Button, Upload, Select } from "antd";
+import { Input, Image, Button, Upload, Select, Spin } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Controller } from "react-hook-form";
 import withDataFetching from "../../HOC/withDataFetching"; // Import HOC
 
@@ -22,7 +22,14 @@ const ModalMaterials = ({
 
   const navigate = useNavigate();
 
-  if (loading) return <p>Loading...</p>;
+  const location = useLocation();
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spin size="large" />
+      </div>
+    );
   if (error) return <p>Error: {error.message}</p>;
 
   const dataCategory = data["/cms/material_categories"] || [];
@@ -245,7 +252,11 @@ const ModalMaterials = ({
                 </div>
               </div>
               <div className="flex justify-end gap-4">
-                <Button onClick={() => navigate(-1)}>Cancel</Button>
+                <Button
+                  onClick={() => navigate(`/materials/main${location.search}`)}
+                >
+                  Cancel
+                </Button>
                 <Button
                   type="primary"
                   htmlType="submit"

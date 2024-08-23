@@ -9,7 +9,7 @@ import {
 import { Checkbox, Button, Empty } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import env from "@/Env";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import useQueryParams from "@/hook/useQueryParams.jsx";
 import Pager from "@/components/paginator/Pager";
@@ -33,6 +33,8 @@ const TableCategory = forwardRef((props, ref) => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const queryParams = useQueryParams();
+
+  const location = useLocation();
 
   const { handleDelete, deleteAll } = useDeleteHandlers();
 
@@ -200,7 +202,11 @@ const TableCategory = forwardRef((props, ref) => {
                 </td>
                 <td>
                   <Button
-                    onClick={() => navigate(`/materials/categories/${item.id}`)}
+                    onClick={() =>
+                      navigate(
+                        `/materials/categories/${item.id}${location.search}`
+                      )
+                    }
                     type="text"
                   >
                     <EditOutlined />

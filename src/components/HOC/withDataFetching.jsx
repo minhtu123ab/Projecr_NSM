@@ -40,7 +40,7 @@ const withDataFetching = (WrappedComponent, urls) => {
         } catch (e) {
           console.error(e);
           setState({ data: {}, loading: false, error: e });
-          navigate("/login");
+          // navigate("/login");
         }
       };
 

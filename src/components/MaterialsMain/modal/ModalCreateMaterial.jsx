@@ -47,7 +47,7 @@ const ModalCreateMaterial = () => {
         enqueueSnackbar("Create successfully", {
           variant: "success",
         });
-        navigate(-1);
+        navigate("/materials/main");
       } else {
         enqueueSnackbar("Create failed", { variant: "error" });
       }

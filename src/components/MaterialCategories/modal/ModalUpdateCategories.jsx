@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ModalCategory from "./ModalCategory";
 import requestApi from "@/axios/axiosInstance";
@@ -17,6 +17,8 @@ const ModalUpdateCategories = () => {
   const [onClick, setOnClick] = useState(false);
   const [formData, setFormData] = useState({});
   const [dataEdit, setDataEdit] = useState({});
+
+  const location = useLocation();
 
   const onClickSubmit = (data) => {
     setOnClick(true);
@@ -80,7 +82,7 @@ const ModalUpdateCategories = () => {
         enqueueSnackbar("Update Successfully", {
           variant: "success",
         });
-        navigate(-1);
+        navigate(`/materials/categories${location.search}`);
       } else {
         enqueueSnackbar("Update failed", {
           variant: "error",

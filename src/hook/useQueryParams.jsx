@@ -9,7 +9,6 @@ const useQueryParams = () => {
     return {
       name: queryParams.get("name") || "",
       category: queryParams.get("category") || "",
-      delete: queryParams.get("delete") || "",
       page: queryParams.get("page") || "",
     };
   }, [location.search]);
