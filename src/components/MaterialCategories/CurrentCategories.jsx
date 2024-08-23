@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Select } from "antd";
+import { Select, Spin } from "antd";
 import icon from "@/assets/icon.png";
 import requestApi from "@/axios/axiosInstance.js";
 import useQueryParams from "@/hook/useQueryParams.jsx";
@@ -9,8 +9,10 @@ const { Option } = Select;
 
 const CurrentUsers = () => {
   const navigate = useNavigate();
+
   const [count, setCount] = useState(0);
   const [day, setDay] = useState(30);
+  const [loading, setLoading] = useState(false);
 
   const queryParams = useQueryParams();
 
@@ -20,6 +22,7 @@ const CurrentUsers = () => {
 
   useEffect(() => {
     const getCountData = async () => {
+      setLoading(true);
       try {
         const params = {
           limit: 1,
@@ -31,9 +34,10 @@ const CurrentUsers = () => {
           params
         );
         setCount(response.data.count);
+        setLoading(false);
       } catch (e) {
         console.error(e);
-        navigate("/login");
+        // navigate("/login");
       }
     };
     getCountData();
@@ -56,7 +60,18 @@ const CurrentUsers = () => {
       </div>
       <div className="flex items-center gap-3">
         <img src={icon} alt="Icon" />
-        <p className="font-bold text-4xl text-[#8B96A7] font-sans">{count}</p>
+        {loading ? (
+          <Spin className="ml-2" />
+        ) : (
+          <p
+            className="font-bold text-4xl text-[#8B96A7] font-sans"
+            style={{
+              fontFamily: "Arial",
+            }}
+          >
+            {count}
+          </p>
+        )}
       </div>
     </div>
   );

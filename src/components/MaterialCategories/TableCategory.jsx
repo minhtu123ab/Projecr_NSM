@@ -19,7 +19,7 @@ import requestApi from "@/axios/axiosInstance.js";
 
 const TableCategory = forwardRef((props, ref) => {
   const [state, setState] = useState({
-    loading: true,
+    loading: false,
     data: [],
     total: 0,
   });
@@ -47,6 +47,7 @@ const TableCategory = forwardRef((props, ref) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setState({ ...state, loading: true });
       try {
         const params = {
           limit: env.countOfPage,

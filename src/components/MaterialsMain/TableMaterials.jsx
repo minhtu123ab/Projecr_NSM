@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   useEffect,
   useState,
@@ -19,7 +20,7 @@ import useQueryParams from "@/hook/useQueryParams.jsx";
 
 const TableMaterials = forwardRef((props, ref) => {
   const [state, setState] = useState({
-    loading: true,
+    loading: false,
     data: [],
     total: 0,
   });
@@ -46,6 +47,7 @@ const TableMaterials = forwardRef((props, ref) => {
 
   useEffect(() => {
     const getData = async () => {
+      setState({ ...state, loading: true });
       try {
         const params = {
           limit: env.countOfPage,
