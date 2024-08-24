@@ -4,7 +4,7 @@ import { Input, Image, Button, Upload, Select, Spin } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Controller } from "react-hook-form";
-import withDataFetching from "../../HOC/withDataFetching"; // Import HOC
+import withDataFetching from "@/HOC/withDataFetching";
 
 const urls = ["/cms/material_categories", "/cms/supplier"];
 
@@ -16,6 +16,7 @@ const ModalMaterials = ({
   onClickSubmit,
   handleChangeImage,
   state,
+  onClick,
 }) => {
   const { id } = useParams();
   const { data, loading, error } = state;
@@ -261,6 +262,7 @@ const ModalMaterials = ({
                   type="primary"
                   htmlType="submit"
                   onClick={handleSubmit(onClickSubmit)}
+                  loading={onClick}
                 >
                   {id ? "Update" : "Create"}
                 </Button>

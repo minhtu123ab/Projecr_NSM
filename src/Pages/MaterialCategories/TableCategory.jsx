@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   useState,
   useRef,
@@ -19,7 +20,7 @@ import requestApi from "@/axios/axiosInstance.js";
 
 const TableCategory = forwardRef((props, ref) => {
   const [state, setState] = useState({
-    loading: false,
+    loading: true,
     data: [],
     total: 0,
   });

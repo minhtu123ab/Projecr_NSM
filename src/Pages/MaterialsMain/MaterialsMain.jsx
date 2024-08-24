@@ -1,40 +1,39 @@
 import { useRef } from "react";
 import { Button } from "antd";
-
 import { useLocation, useNavigate } from "react-router-dom";
-import TableCategory from "@/components/MaterialCategories/TableCategory";
-import CurrentUsers from "@/components/MaterialCategories/CurrentCategories";
-import SearchCategory from "./SearchCategory";
+import TableMaterials from "@/Pages/MaterialsMain/TableMaterials";
+import SearchMaterial from "./SearchMaterial";
+import Current from "@/components/Current/Current";
 
-const CategoryMain = () => {
+const MaterialMain = () => {
   const navigate = useNavigate();
 
-  const tableCategoryRef = useRef();
+  const tableMaterialRef = useRef();
 
   const location = useLocation();
 
   return (
     <div className="p-7 bg-[#f1f5f9] h-full min-h-screen">
       <div className="flex flex-col gap-5 ml-52 mt-14">
-        <CurrentUsers />
+        <Current url="/cms/material" name="Material" />
         <h1 className="text-[#758398] font-sans text-3xl font-semibold">
-          Categories
+          Main Material
         </h1>
         <div className="flex justify-between items-center">
-          <SearchCategory tableCategoryRef={tableCategoryRef} />
+          <SearchMaterial tableMaterialRef={tableMaterialRef} />
           <Button
             onClick={() =>
-              navigate(`/materials/categories/created${location.search}`)
+              navigate(`/materials/main/created${location.search}`)
             }
             type="primary"
           >
-            Create categories
+            Create material
           </Button>
         </div>
-        <TableCategory ref={tableCategoryRef} />
+        <TableMaterials ref={tableMaterialRef} />
       </div>
     </div>
   );
 };
 
-export default CategoryMain;
+export default MaterialMain;

@@ -6,6 +6,7 @@ import { useSnackbar } from "notistack";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
 
 const schema = yup.object().shape({
   email: yup
@@ -18,6 +19,7 @@ const schema = yup.object().shape({
 const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const urlSave = localStorage.getItem("urlSave");
 
@@ -37,6 +39,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
+      setLoading(true);
       const result = await axios.post(env.urlServer + "/cms/auth/login", data);
       localStorage.setItem("token", JSON.stringify(result.data));
       enqueueSnackbar(`Login Successfully`, {
@@ -50,6 +53,8 @@ const Login = () => {
         variant: "error",
       });
       reset();
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,7 +105,7 @@ const Login = () => {
               </p>
             )}
           </div>
-          <Button htmlType="submit" type="primary">
+          <Button htmlType="submit" type="primary" loading={loading}>
             Login
           </Button>
         </form>

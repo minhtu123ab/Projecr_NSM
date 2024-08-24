@@ -1,11 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 import { useLocation } from "react-router-dom";
-import useHandleSearch from "../../hook/useHandleSearch";
+import useHandleSearch from "@/hook/useHandleSearch";
 import { Input, AutoComplete } from "antd";
 import { CloseCircleFilled, SearchOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import withDataFetching from "../HOC/withDataFetching";
+import withDataFetching from "@/HOC/withDataFetching";
 
 const url = ["/cms/material_categories"];
 

@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
-import { useSnackbar } from "notistack";
-import { useForm } from "react-hook-form";
+import schema from "./schemaYup/schemaYupMaterial";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ModalCategory from "./ModalCategory";
+import { useForm } from "react-hook-form";
 import requestApi from "@/axios/axiosInstance";
-import schema from "./schemaYup/schemaYupCategory";
+import ModalMaterials from "./ModalMaterials";
+import { useState, useEffect } from "react";
 
-const ModalUpdateCategories = () => {
+const ModalUpdateMaterial = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -20,18 +20,10 @@ const ModalUpdateCategories = () => {
 
   const location = useLocation();
 
-  const onClickSubmit = (data) => {
-    setOnClick(true);
-    setFormData(data);
-  };
-
   useEffect(() => {
     const fetchDataItem = async () => {
       try {
-        const responst = await requestApi(
-          `/cms/material_categories/${id}`,
-          "get"
-        );
+        const responst = await requestApi(`/cms/material/${id}`, "get");
         setDataEdit(responst.data);
       } catch (e) {
         console.log(e);
@@ -49,19 +41,20 @@ const ModalUpdateCategories = () => {
     reset,
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: {
-      name: dataEdit.name,
-      image: dataEdit.image,
-      price_type: dataEdit.price_type,
-    },
   });
 
   useEffect(() => {
     if (dataEdit) {
       reset({
         name: dataEdit.name || "",
+        part_number: dataEdit.part_number || "",
         image: dataEdit.image || null,
-        price_type: dataEdit.price_type || "",
+        type: dataEdit.type || 0,
+        large_title: dataEdit.large_title || "",
+        basic_price: dataEdit.basic_price || null,
+        small_title: dataEdit.small_title || "",
+        category: dataEdit.category || "",
+        supplier: dataEdit.supplier || "",
       });
       setUrlImage(dataEdit.image || null);
     }
@@ -70,25 +63,25 @@ const ModalUpdateCategories = () => {
   const onSubmit = async (data) => {
     try {
       const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("price_type", data.price_type);
-      data.image != dataEdit.image && formData.append("image", data.image);
-      const response = await requestApi(
-        `/cms/material_categories/${id}`,
-        "put",
-        formData
-      );
+      dataEdit.image != data.image && formData.append("image", data.image);
+      formData.append("part_number", data.part_number);
+      data.name && formData.append("name", data.name);
+      data.type && formData.append("type", data.type);
+      formData.append("basic_price", data.basic_price);
+      formData.append("large_title", data.large_title);
+      formData.append("small_title", data.small_title);
+      formData.append("category", data.category);
+      formData.append("supplier", data.supplier);
+      const response = await requestApi(`/cms/material/${id}`, "put", formData);
       if (response.status === 200 || response.status === 204) {
-        enqueueSnackbar("Update Successfully", {
+        enqueueSnackbar("Update successfully", {
           variant: "success",
         });
-        navigate(`/materials/categories${location.search}`);
+        navigate(`/materials/main${location.search}`);
       } else {
-        enqueueSnackbar("Update failed", {
-          variant: "error",
-        });
+        enqueueSnackbar("Update failed", { variant: "error" });
       }
-      reset({ name: "", image: null, price_type: "" });
+      console.log("first");
     } catch (e) {
       console.error(e);
       enqueueSnackbar("Update Failed", {
@@ -97,6 +90,11 @@ const ModalUpdateCategories = () => {
     } finally {
       setOnClick(false);
     }
+  };
+
+  const onClickSubmit = (data) => {
+    setOnClick(true);
+    setFormData(data);
   };
 
   const handleChangeImage = (info) => {
@@ -115,16 +113,17 @@ const ModalUpdateCategories = () => {
 
   return (
     <div>
-      <ModalCategory
+      <ModalMaterials
         handleSubmit={handleSubmit}
         onClickSubmit={onClickSubmit}
         handleChangeImage={handleChangeImage}
         urlImage={urlImage}
         control={control}
         errors={errors}
+        onClick={onClick}
       />
     </div>
   );
 };
 
-export default ModalUpdateCategories;
+export default ModalUpdateMaterial;

@@ -90,6 +90,7 @@ const ModalCreateCategories = () => {
       urlImage={urlImage}
       control={control}
       errors={errors}
+      onClick={onClick}
     />
   );
 };

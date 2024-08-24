@@ -83,6 +83,7 @@ const ModalCreateMaterial = () => {
       urlImage={urlImage}
       onClickSubmit={onClickSubmit}
       handleChangeImage={handleChangeImage}
+      onClick={onClick}
     />
   );
 };

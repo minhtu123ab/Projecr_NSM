@@ -22,6 +22,7 @@ const ModalCategory = ({
   urlImage,
   control,
   errors,
+  onClick,
 }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -140,11 +141,19 @@ const ModalCategory = ({
                   Cancel
                 </Button>
                 {id ? (
-                  <Button type="primary" onClick={handleSubmit(onClickSubmit)}>
+                  <Button
+                    loading={onClick}
+                    type="primary"
+                    onClick={handleSubmit(onClickSubmit)}
+                  >
                     Update
                   </Button>
                 ) : (
-                  <Button type="primary" onClick={handleSubmit(onClickSubmit)}>
+                  <Button
+                    loading={onClick}
+                    type="primary"
+                    onClick={handleSubmit(onClickSubmit)}
+                  >
                     Create
                   </Button>
                 )}

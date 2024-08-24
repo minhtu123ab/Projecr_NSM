@@ -20,7 +20,7 @@ import useQueryParams from "@/hook/useQueryParams.jsx";
 
 const TableMaterials = forwardRef((props, ref) => {
   const [state, setState] = useState({
-    loading: false,
+    loading: true,
     data: [],
     total: 0,
   });
