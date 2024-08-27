@@ -1,133 +1,53 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  useState,
-  useRef,
-  memo,
-  forwardRef,
-  useImperativeHandle,
-  useEffect,
-} from "react";
+import { memo, forwardRef } from "react";
 import { Checkbox, Button, Empty } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import env from "@/Env";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack";
 import useQueryParams from "@/hook/useQueryParams.jsx";
-import Pager from "@/components/paginator/Pager";
-import ModalDelete from "@/components/modal/ModalDelete";
+import Pager from "@/components/Pager";
+import ModalDelete from "@/components/ModalDelete";
 import useDeleteHandlers from "@/hook/useDeleteHandlers";
-import requestApi from "@/axios/axiosInstance.js";
+import HeaderTable from "@/components/HeaderTable";
+import useFetchData from "@/hook/useFetchData";
+import useSelectDelete from "@/hook/useSelectDelete";
+import useHandleModalDelete from "@/hook/useHandleModalDelete";
+import LoadingTableCategory from "./LoadingTableCategory";
 
 const TableCategory = forwardRef((props, ref) => {
-  const [state, setState] = useState({
-    loading: true,
-    data: [],
-    total: 0,
-  });
-  const [checkAll, setCheckAll] = useState(false);
-  const [idDelete, setIdDelete] = useState([]);
-  const [itemToDelete, setItemToDelete] = useState(null);
-
-  const modalDeleteRef = useRef();
-  const modalDeleteAllRef = useRef();
-
-  const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
-  const queryParams = useQueryParams();
-
-  const location = useLocation();
-
+  const { state } = useFetchData("/cms/material_categories");
   const { handleDelete, deleteAll } = useDeleteHandlers();
 
-  useImperativeHandle(ref, () => ({
-    resetSelection: () => {
-      setCheckAll(false);
-      setIdDelete([]);
-    },
-  }));
+  const {
+    checkAll,
+    idDelete,
+    setCheckAll,
+    setIdDelete,
+    onClickDeleteAll,
+    onClickSelectDelete,
+  } = useSelectDelete(state.data, ref);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setState({ ...state, loading: true });
-      try {
-        const params = {
-          limit: env.countOfPage,
-          offset: env.countOfPage * queryParams.page,
-          name: queryParams.name,
-        };
-        const response = await requestApi(
-          "/cms/material_categories",
-          "get",
-          null,
-          params
-        );
-        setState({
-          loading: false,
-          data: response.data.results,
-          total: response.data.count,
-        });
-      } catch (error) {
-        console.error(error);
-        // navigate("/login");
-      }
-    };
-    fetchData();
-  }, [queryParams, navigate]);
+  const {
+    itemToDelete,
+    handleOpenModalDelete,
+    handleOpenModalDeleteAll,
+    modalDeleteRef,
+    modalDeleteAllRef,
+  } = useHandleModalDelete();
 
-  const handleOpenModalDeleteAll = () => {
-    modalDeleteAllRef.current.openModal();
-  };
-
-  const handleOpenModalDelete = (e, item) => {
-    e.stopPropagation();
-    setItemToDelete(item);
-    modalDeleteRef.current.openModal();
-  };
-
-  const onClickSelectDelete = (item) => {
-    setIdDelete((prevId) => {
-      const newIdDelete = prevId.includes(item.id)
-        ? prevId.filter((id) => id !== item.id)
-        : [...prevId, item.id];
-      return newIdDelete;
-    });
-  };
-
-  useEffect(() => {
-    setCheckAll(idDelete.length > 0);
-  }, [idDelete.length]);
-
-  const onClickDeleteAll = () => {
-    const newCheckAll = !checkAll;
-    setCheckAll(newCheckAll);
-    setIdDelete(newCheckAll ? state.data.map((item) => item.id) : []);
-  };
+  const navigate = useNavigate();
+  const queryParams = useQueryParams();
+  const location = useLocation();
 
   return (
     <div className="rounded-xl overflow-hidden shadow-md">
-      <div
-        className={
-          idDelete.length
-            ? "w-full bg-[#F5F5F5] pt-1 pb-1 pl-1 flex justify-between pr-5"
-            : "w-full bg-white pt-1 pb-1 pl-1 flex"
-        }
-      >
-        <Checkbox
-          checked={checkAll}
-          onChange={onClickDeleteAll}
-          className="p-2 transform scale-125 ml-3"
-        />
-        {idDelete.length > 0 && (
-          <Button
-            className="mt-1 ml-2"
-            danger
-            type="primary"
-            onClick={handleOpenModalDeleteAll}
-          >
-            Delete {idDelete.length} categories
-          </Button>
-        )}
-      </div>
+      <HeaderTable
+        idDelete={idDelete}
+        checkAll={checkAll}
+        onClickDeleteAll={onClickDeleteAll}
+        handleOpenModalDeleteAll={handleOpenModalDeleteAll}
+        name="Categories"
+      />
       <table className="table-category">
         <thead>
           <tr>
@@ -142,31 +62,7 @@ const TableCategory = forwardRef((props, ref) => {
         <tbody>
           {state.loading ? (
             Array.from({ length: env.countOfPage }).map((_, index) => (
-              <tr key={index} className="animate-pulse bg-gray-200">
-                <td>
-                  <Checkbox className="transform scale-[1.3] ml-2" disabled />
-                </td>
-                <td className="p-4">
-                  <div className="w-8 h-4 bg-gray-300 rounded"></div>
-                </td>
-                <td className="flex justify-center">
-                  <div className="w-44 h-24 bg-gray-300 rounded-lg mt-2 mb-2"></div>
-                </td>
-                <td>
-                  <div className="w-32 h-4 bg-gray-300 rounded"></div>
-                </td>
-                <td>
-                  <div className="w-24 h-4 bg-gray-300 rounded"></div>
-                </td>
-                <td>
-                  <Button type="text" disabled>
-                    <EditOutlined />
-                  </Button>
-                  <Button type="text" danger disabled>
-                    <DeleteOutlined />
-                  </Button>
-                </td>
-              </tr>
+              <LoadingTableCategory key={index} />
             ))
           ) : state.data.length ? (
             state.data.map((item, index) => (
@@ -190,14 +86,14 @@ const TableCategory = forwardRef((props, ref) => {
                     src={item.image}
                   />
                 </td>
-                <td>{item.name}</td>
+                <td className="max-w-20 truncate">{item.name}</td>
                 <td>
                   {item.price_type === "per_metter" ? (
-                    <span className="text-[#DC2626] px-3 py-0.5 rounded-lg bg-[#FEE2E2]">
+                    <span className="text-red-800 px-3 py-1 rounded-full bg-red-300">
                       Metter
                     </span>
                   ) : (
-                    <span className="text-[#16A34A] px-3 py-0.5 rounded-lg bg-[#DCFCE7]">
+                    <span className="text-green-800 px-3 py-1 rounded-full bg-green-300">
                       Quantity
                     </span>
                   )}
@@ -244,6 +140,7 @@ const TableCategory = forwardRef((props, ref) => {
           handleDelete(
             itemToDelete,
             idDelete,
+            state.data,
             setIdDelete,
             modalDeleteRef,
             "/cms/material_categories"
@@ -257,9 +154,7 @@ const TableCategory = forwardRef((props, ref) => {
           deleteAll(
             idDelete,
             state.data,
-            navigate,
             modalDeleteAllRef,
-            enqueueSnackbar,
             setIdDelete,
             "/cms/material_categories/bulk"
           )

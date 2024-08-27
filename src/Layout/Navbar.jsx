@@ -34,7 +34,7 @@ const Navbar = () => {
           <div className="flex items-center gap-2">
             <img
               className="w-6 h-6 rounded-full"
-              src="https://s3-alpha-sig.figma.com/img/53ce/8bf2/35d0a957df4101b2d9d0aa8b319caac3?Expires=1724025600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=IOsz0k~H65yLuqEoO0l1oHWw7mEKCnChztcLDpqGNSKCIMiqOvdQSy23npP~-KVzriaPvmP4YoBwnlHXQwHKOS9hZIIYJlN6zIpABKOuoXzIled8tLFTFKPh3JAuRbpL98C1mcJlDPk~x2bB1yo~o0RBrDDEwjYrgb7W0TJXI7nHl9100QPb-zPWGbSVNChMjA7TY-wzT3mPoBsODmqJv2KsqzzFJN7Pi1f6QyPMXNNdq7AWzei2p8~HvLCiGgYDnextKzCLsirqrvXuvjWktLqWAFaiH0JdmTJdGTBAPF-lnnkYji299ITscRi2wPCJHHMxgCBzUCSEmXq1uhh-YA__"
+              src="https://steamuserimages-a.akamaihd.net/ugc/947328611186947151/F4C4A7A560C12FC3E093F9413D30D82680166314/?imw=1200&impolicy=Letterbox"
               alt="user"
             />
             <p className="text-gray-500 text-sm">Admintractor</p>

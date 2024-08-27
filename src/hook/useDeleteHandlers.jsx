@@ -9,6 +9,7 @@ const useDeleteHandlers = () => {
   const handleDelete = async (
     itemToDelete,
     idDelete,
+    data,
     setIdDelete,
     modalDeleteRef,
     endpoint
@@ -27,6 +28,9 @@ const useDeleteHandlers = () => {
             prevId.filter((id) => id !== itemToDelete.id)
           );
         }
+        const newPage = Number(newParams.get("page"));
+        newPage > 0 && data.length === 1 && newParams.set("page", newPage - 1);
+        navigate(`?${newParams.toString()}`);
       } catch (e) {
         console.log(e);
       } finally {
@@ -38,9 +42,7 @@ const useDeleteHandlers = () => {
   const deleteAll = async (
     idDelete,
     data,
-    navigate,
     modalDeleteAllRef,
-    enqueueSnackbar,
     setIdDelete,
     endpoint
   ) => {

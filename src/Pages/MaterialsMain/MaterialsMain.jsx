@@ -3,7 +3,7 @@ import { Button } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import TableMaterials from "@/Pages/MaterialsMain/TableMaterials";
 import SearchMaterial from "./SearchMaterial";
-import Current from "@/components/Current/Current";
+import Current from "@/components/Current";
 
 const MaterialMain = () => {
   const navigate = useNavigate();

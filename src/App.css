@@ -152,3 +152,17 @@
   opacity: 0;
   transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
 }
+
+/* styles.css hoặc tệp CSS của bạn */
+.custom-auto-complete .ant-select-selector {
+  border-radius: 100px !important; /* Bo tròn đầu của selector */
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table-category td {
+  padding: 0px 10px;
+}

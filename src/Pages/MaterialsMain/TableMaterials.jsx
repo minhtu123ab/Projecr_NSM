@@ -1,130 +1,55 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  useEffect,
-  useState,
-  memo,
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-} from "react";
+import { memo, forwardRef } from "react";
 import { Checkbox, Button, Empty } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import Pager from "@/components/paginator/Pager";
+import Pager from "@/components/Pager";
 import env from "@/Env";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack";
 import useDeleteHandlers from "@/hook/useDeleteHandlers";
-import ModalDelete from "@/components/modal/ModalDelete";
-import requestApi from "@/axios/axiosInstance.js";
+import ModalDelete from "@/components/ModalDelete";
 import useQueryParams from "@/hook/useQueryParams.jsx";
+import HeaderTable from "@/components/HeaderTable";
+import useFetchData from "@/hook/useFetchData";
+import useSelectDelete from "@/hook/useSelectDelete";
+import useHandleModalDelete from "../../hook/useHandleModalDelete";
+import LoadingTableMaterial from "./LoadingTableMaterial";
 
 const TableMaterials = forwardRef((props, ref) => {
-  const [state, setState] = useState({
-    loading: true,
-    data: [],
-    total: 0,
-  });
-  const [checkAll, setCheckAll] = useState(false);
-  const [idDelete, setIdDelete] = useState([]);
-  const [itemToDelete, setItemToDelete] = useState(null);
+  const { handleDelete, deleteAll } = useDeleteHandlers();
+  const { state } = useFetchData("/cms/material");
 
-  const { enqueueSnackbar } = useSnackbar();
+  const {
+    checkAll,
+    idDelete,
+    setCheckAll,
+    setIdDelete,
+    onClickDeleteAll,
+    onClickSelectDelete,
+  } = useSelectDelete(state.data, ref);
+
+  const {
+    itemToDelete,
+    handleOpenModalDelete,
+    handleOpenModalDeleteAll,
+    modalDeleteRef,
+    modalDeleteAllRef,
+  } = useHandleModalDelete();
+
   const queryParams = useQueryParams();
   const navigate = useNavigate();
-
-  const { handleDelete, deleteAll } = useDeleteHandlers();
-  const modalDeleteRef = useRef();
-  const modalDeleteAllRef = useRef();
-
   const location = useLocation();
-
-  useImperativeHandle(ref, () => ({
-    resetSelection: () => {
-      setCheckAll(false);
-      setIdDelete([]);
-    },
-  }));
-
-  useEffect(() => {
-    const getData = async () => {
-      setState({ ...state, loading: true });
-      try {
-        const params = {
-          limit: env.countOfPage,
-          offset: env.countOfPage * queryParams.page,
-          name: queryParams.name,
-          category: queryParams.category,
-        };
-        const response = await requestApi("/cms/material", "get", null, params);
-        setState({
-          loading: false,
-          data: response.data.results,
-          total: response.data.count,
-        });
-      } catch (error) {
-        console.error(error);
-        // navigate("/login");
-      }
-    };
-    getData();
-  }, [queryParams, navigate]);
-
-  useEffect(() => {
-    setCheckAll(idDelete.length > 0);
-  }, [idDelete.length]);
-
-  const handleOpenModalDeleteAll = () => {
-    modalDeleteAllRef.current.openModal();
-  };
-
-  const handleOpenModalDelete = (e, item) => {
-    e.stopPropagation();
-    setItemToDelete(item);
-    modalDeleteRef.current.openModal();
-  };
-
-  const onClickDeleteAll = () => {
-    const newCheckAll = !checkAll;
-    setCheckAll(newCheckAll);
-    setIdDelete(newCheckAll ? state.data.map((item) => item.id) : []);
-  };
-
-  const onClickSelectDelete = (item) => {
-    setIdDelete((prevId) => {
-      const newIdDelete = prevId.includes(item.id)
-        ? prevId.filter((id) => id !== item.id)
-        : [...prevId, item.id];
-      return newIdDelete;
-    });
-  };
 
   return (
     <div className="rounded-xl overflow-hidden shadow-md">
-      <div
-        className={
-          idDelete.length
-            ? "w-full bg-[#F5F5F5] pt-1 pb-1 pl-1 flex justify-between pr-5"
-            : "w-full bg-white pt-1 pb-1 pl-1 flex"
-        }
-      >
-        <Checkbox
-          checked={checkAll}
-          onChange={onClickDeleteAll}
-          className="p-2 transform scale-125 ml-3"
-        />
-        {idDelete.length > 0 && (
-          <Button
-            className="mt-1 ml-2"
-            danger
-            type="primary"
-            onClick={handleOpenModalDeleteAll}
-          >
-            Delete {idDelete.length} Materials
-          </Button>
-        )}
-      </div>
+      <HeaderTable
+        idDelete={idDelete}
+        checkAll={checkAll}
+        onClickDeleteAll={onClickDeleteAll}
+        handleOpenModalDeleteAll={handleOpenModalDeleteAll}
+        name="Materials"
+      />
       <div className="overflow-x-auto">
-        <table className="table-category w-full min-w-[1500px]">
+        <table className="table-category w-full min-w-[1700px]">
           <thead>
             <tr>
               <th></th>
@@ -144,52 +69,7 @@ const TableMaterials = forwardRef((props, ref) => {
           <tbody>
             {state.loading ? (
               Array.from({ length: env.countOfPage }).map((_, index) => (
-                <tr key={index} className="animate-pulse  bg-gray-200">
-                  <td>
-                    <Checkbox
-                      className="transform scale-[1.3] ml-[10px]"
-                      disabled
-                    />
-                  </td>
-                  <td>
-                    <div className="w-8 h-4 bg-gray-300 rounded m-5"></div>
-                  </td>
-                  <td className="flex justify-center">
-                    <div className="w-44 h-24 bg-gray-300 rounded-lg mt-2 mb-2"></div>
-                  </td>
-                  <td>
-                    <div className="w-32 h-4 bg-gray-300 rounded"></div>
-                  </td>
-                  <td>
-                    <div className="w-32 h-4 bg-gray-300 rounded"></div>
-                  </td>
-                  <td>
-                    <div className="w-32 h-4 bg-gray-300 rounded"></div>
-                  </td>
-                  <td>
-                    <div className="w-32 h-4 bg-gray-300 rounded"></div>
-                  </td>
-                  <td>
-                    <div className="w-32 h-4 bg-gray-300 rounded"></div>
-                  </td>
-                  <td>
-                    <div className="w-32 h-4 bg-gray-300 rounded"></div>
-                  </td>
-                  <td>
-                    <div className="w-32 h-4 bg-gray-300 rounded"></div>
-                  </td>
-                  <td>
-                    <div className="w-32 h-4 bg-gray-300 rounded"></div>
-                  </td>
-                  <td>
-                    <Button type="text" disabled>
-                      <EditOutlined />
-                    </Button>
-                    <Button type="text" danger disabled>
-                      <DeleteOutlined />
-                    </Button>
-                  </td>
-                </tr>
+                <LoadingTableMaterial key={index} />
               ))
             ) : state.data.length ? (
               state.data.map((item, index) => (
@@ -213,14 +93,40 @@ const TableMaterials = forwardRef((props, ref) => {
                       src={item.image}
                     />
                   </td>
-                  <td>{item.part_number}</td>
-                  <td>{item.name}</td>
-                  <td>{item.type}</td>
-                  <td>{item.large_title}</td>
-                  <td>{item.small_title}</td>
-                  <td>{item.basic_price}</td>
-                  <td>{item.category.name}</td>
-                  <td>{item.supplier.name}</td>
+                  <td>
+                    <span className="bg-indigo-300 px-2 p-1 rounded-full text-indigo-800">
+                      {item.part_number}
+                    </span>
+                  </td>
+                  <td className="max-w-36 truncate">
+                    <span>{item.name}</span>
+                  </td>
+                  <td>
+                    <span className="bg-rose-300 px-2 p-1 rounded-full text-rose-800">
+                      {item.type}
+                    </span>
+                  </td>
+                  <td className="max-w-36 truncate">
+                    <span>{item.large_title}</span>
+                  </td>
+                  <td className="max-w-36 truncate">
+                    <span>{item.small_title}</span>
+                  </td>
+                  <td className="max-w-36 truncate">
+                    <span className="px-2 py-1 bg-lime-300 rounded-full text-lime-800">
+                      {item.basic_price}
+                    </span>
+                  </td>
+                  <td className="max-w-36 truncate">
+                    <span className="bg-orange-300 px-2 py-1 rounded-full text-orange-800">
+                      {item.category.name}
+                    </span>
+                  </td>
+                  <td className="max-w-36 truncate">
+                    <span className="bg-cyan-300 px-2 py-1 rounded-full text-cyan-800">
+                      {item.supplier.name}
+                    </span>
+                  </td>
                   <td>
                     <Button
                       onClick={() =>
@@ -262,6 +168,7 @@ const TableMaterials = forwardRef((props, ref) => {
           handleDelete(
             itemToDelete,
             idDelete,
+            state.data,
             setIdDelete,
             modalDeleteRef,
             "/cms/material"
@@ -275,9 +182,7 @@ const TableMaterials = forwardRef((props, ref) => {
           deleteAll(
             idDelete,
             state.data,
-            navigate,
             modalDeleteAllRef,
-            enqueueSnackbar,
             setIdDelete,
             "/cms/material/bulk"
           )
