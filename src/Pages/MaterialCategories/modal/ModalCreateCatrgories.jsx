@@ -4,9 +4,9 @@ import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ModalCategory from "./ModalCategory";
+import ModalCategory from "@/Pages/MaterialCategories/modal/ModalCategory";
 import requestApi from "@/axios/axiosInstance";
-import schema from "./schemaYup/schemaYupCategory";
+import schema from "@/Pages/MaterialCategories/modal/schemaYup/schemaYupCategory";
 
 const ModalCreateCategories = () => {
   const { enqueueSnackbar } = useSnackbar();

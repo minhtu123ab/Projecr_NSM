@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import schema from "./schemaYup/schemaYupMaterial";
+import schema from "@/Pages/MaterialsMain/modal/schemaYup/schemaYupMaterial";
 import { useSnackbar } from "notistack";
 import requestApi from "@/axios/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import ModalMaterials from "./ModalMaterials";
+import ModalMaterials from "@/Pages/MaterialsMain/modal/ModalMaterials";
 
 const ModalCreateMaterial = () => {
   const { enqueueSnackbar } = useSnackbar();

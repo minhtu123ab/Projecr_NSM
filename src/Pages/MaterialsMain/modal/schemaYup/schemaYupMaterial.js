@@ -1,22 +1,7 @@
 import * as yup from "yup";
 
 const schema = yup.object().shape({
-  image: yup
-    .mixed()
-    .required("Image is required")
-    .test("fileType", "Only image files are allowed", (value) => {
-      const allowedTypes = [
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "image/jpg",
-        "image/bmp",
-      ];
-      return value && allowedTypes.includes(value.type);
-    })
-    .test("fileSize", "File size is too large", (value) => {
-      return value && value.size <= 2 * 1024 * 1024; // 2MB limit
-    }),
+  image: yup.mixed().required("Image is required"),
 
   name: yup.string().max(30, "Category name cannot be more than 30 characters"),
 

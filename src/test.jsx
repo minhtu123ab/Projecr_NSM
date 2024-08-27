@@ -8,9 +8,9 @@ import BodyUpdate from "@/components/BodyUpdate/BodyUpdate";
 import Body from "@/components/Layout/Body";
 import ModalCreateCategories from "@/components/MaterialCategories/modal/ModalCreateCatrgories";
 import ModalUpdateCategories from "@/components/MaterialCategories/modal/ModalUpdateCategories";
-import ModalCreateMaterial from "./components/MaterialsMain/modal/ModalCreateMaterial";
-import ModalUpdateMaterial from "./components/MaterialsMain/modal/ModalUpdateMaterial";
-import MaterialMain from "./components/MaterialsMain/MaterialsMain";
+import ModalCreateMaterial from "@/components/MaterialsMain/modal/ModalCreateMaterial";
+import ModalUpdateMaterial from "@/components/MaterialsMain/modal/ModalUpdateMaterial";
+import MaterialMain from "@/components/MaterialsMain/MaterialsMain";
 
 const App = () => {
   const location = useLocation();

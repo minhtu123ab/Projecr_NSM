@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { Button } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import TableMaterials from "@/Pages/MaterialsMain/TableMaterials";
-import SearchMaterial from "./SearchMaterial";
+import SearchMaterial from "@/Pages/MaterialsMain/SearchMaterial";
 import Current from "@/components/Current";
 
 const MaterialMain = () => {

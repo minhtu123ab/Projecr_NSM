@@ -12,7 +12,7 @@ import HeaderTable from "@/components/HeaderTable";
 import useFetchData from "@/hook/useFetchData";
 import useSelectDelete from "@/hook/useSelectDelete";
 import useHandleModalDelete from "@/hook/useHandleModalDelete";
-import LoadingTableCategory from "./LoadingTableCategory";
+import LoadingTableCategory from "@/Pages/MaterialCategories/LoadingTableCategory";
 
 const TableCategory = forwardRef((props, ref) => {
   const { state } = useFetchData("/cms/material_categories");

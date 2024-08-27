@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import schema from "./schemaYup/schemaYupMaterial";
+import schema from "@/Pages/MaterialsMain/modal/schemaYup/schemaYupMaterial";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import requestApi from "@/axios/axiosInstance";
-import ModalMaterials from "./ModalMaterials";
+import ModalMaterials from "@/Pages/MaterialsMain/modal/ModalMaterials";
 import { useState, useEffect } from "react";
 
 const ModalUpdateMaterial = () => {

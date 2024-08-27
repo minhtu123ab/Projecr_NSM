@@ -3,7 +3,7 @@ import { Button } from "antd";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import TableCategory from "@/Pages/MaterialCategories/TableCategory";
-import SearchCategory from "./SearchCategory";
+import SearchCategory from "@/Pages/MaterialCategories/SearchCategory";
 import Current from "@/components/Current";
 
 const CategoryMain = () => {

@@ -11,8 +11,8 @@ import useQueryParams from "@/hook/useQueryParams.jsx";
 import HeaderTable from "@/components/HeaderTable";
 import useFetchData from "@/hook/useFetchData";
 import useSelectDelete from "@/hook/useSelectDelete";
-import useHandleModalDelete from "../../hook/useHandleModalDelete";
-import LoadingTableMaterial from "./LoadingTableMaterial";
+import useHandleModalDelete from "@/hook/useHandleModalDelete";
+import LoadingTableMaterial from "@/Pages/MaterialsMain/LoadingTableMaterial";
 
 const TableMaterials = forwardRef((props, ref) => {
   const { handleDelete, deleteAll } = useDeleteHandlers();

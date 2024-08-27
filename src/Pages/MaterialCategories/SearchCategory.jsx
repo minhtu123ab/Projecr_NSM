@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import useHandleSearch from "../../hook/useHandleSearch";
+import useHandleSearch from "@/hook/useHandleSearch";
 import { Input } from "antd";
 import { CloseCircleFilled, SearchOutlined } from "@ant-design/icons";
 
