@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import useHandleSearch from "@/hook/useHandleSearch";
-import { Input } from "antd";
+import { Button, Input } from "antd";
 import { CloseCircleFilled, SearchOutlined } from "@ant-design/icons";
 
 const SearchCategory = ({ tableCategoryRef }) => {
@@ -29,6 +29,12 @@ const SearchCategory = ({ tableCategoryRef }) => {
         allowClear={{
           clearIcon: <CloseCircleFilled />,
         }}
+      />
+      <Button
+        icon={<SearchOutlined />}
+        type="primary"
+        className="h-7"
+        htmlType="submit"
       />
     </form>
   );

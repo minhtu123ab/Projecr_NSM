@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 import { Input, Image, Button, Upload, Select, Spin } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { ReloadOutlined, UploadOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Controller } from "react-hook-form";
 import withDataFetching from "@/HOC/withDataFetching";
@@ -16,6 +16,7 @@ const ModalMaterials = ({
   onClickSubmit,
   handleChangeImage,
   state,
+  fetchData,
   onClick,
 }) => {
   const { id } = useParams();
@@ -31,7 +32,14 @@ const ModalMaterials = ({
         <Spin size="large" />
       </div>
     );
-  if (error) return <p>Error: {error.message}</p>;
+  if (error)
+    return (
+      <div className="flex justify-center flex-col items-center h-screen">
+        <Button danger icon={<ReloadOutlined />} onClick={fetchData}>
+          Reload
+        </Button>
+      </div>
+    );
 
   const dataCategory = data["/cms/material_categories"] || [];
   const dataSupplier = data["/cms/supplier"] || [];

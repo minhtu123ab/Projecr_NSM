@@ -11,43 +11,45 @@ const withDataFetching = (WrappedComponent, urls) => {
       error: null,
     });
 
+    const fetchData = async () => {
+      try {
+        setState((prevState) => ({ ...prevState, loading: true }));
+
+        // Fetch the count first with limit=1
+        const countResponses = await Promise.all(
+          urls.map((url) => requestApi(url, "get", null, { limit: 1 }))
+        );
+
+        // Extract count from the first API call
+        const counts = countResponses.map((response) => response.data.count);
+
+        // Now fetch all data with limit=count
+        const fetchedData = await Promise.all(
+          urls.map((url, index) =>
+            requestApi(url, "get", null, { limit: counts[index] })
+          )
+        );
+
+        const dataMap = urls.reduce((acc, url, index) => {
+          acc[url] = fetchedData[index].data.results;
+          return acc;
+        }, {});
+
+        setState({ data: dataMap, loading: false, error: null });
+
+        // if (parseInt(Math.random() * 100) % 5 !== 0) throw new Error();
+      } catch (e) {
+        console.error(e);
+        setState({ data: {}, loading: false, error: e });
+        // navigate("/login");
+      }
+    };
+
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-          setState((prevState) => ({ ...prevState, loading: true }));
-
-          // Fetch the count first with limit=1
-          const countResponses = await Promise.all(
-            urls.map((url) => requestApi(url, "get", null, { limit: 1 }))
-          );
-
-          // Extract count from the first API call
-          const counts = countResponses.map((response) => response.data.count);
-
-          // Now fetch all data with limit=count
-          const fetchedData = await Promise.all(
-            urls.map((url, index) =>
-              requestApi(url, "get", null, { limit: counts[index] })
-            )
-          );
-
-          const dataMap = urls.reduce((acc, url, index) => {
-            acc[url] = fetchedData[index].data.results;
-            return acc;
-          }, {});
-
-          setState({ data: dataMap, loading: false, error: null });
-        } catch (e) {
-          console.error(e);
-          setState({ data: {}, loading: false, error: e });
-          // navigate("/login");
-        }
-      };
-
       fetchData();
     }, [navigate]);
 
-    return <WrappedComponent state={state} {...props} />;
+    return <WrappedComponent state={state} fetchData={fetchData} {...props} />;
   };
 };
 
