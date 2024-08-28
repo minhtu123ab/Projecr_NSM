@@ -59,18 +59,16 @@ const Menu = () => {
         <div key={index}>
           <div
             onClick={() => toggleMenu(index)}
-            className="p-4 flex items-center gap-1 hover:bg-[#babfc3] cursor-pointer"
+            className="p-4 flex items-center justify-between  gap-1 hover:bg-[#E2E8F0] cursor-pointer transition-colors duration-200 rounded-md"
           >
-            {menuItem.icon}
-            <span>{menuItem.name}</span>
-            {menuItem.isOpen ? (
-              <CaretUpOutlined className="ml-9" />
-            ) : (
-              <CaretDownOutlined className="ml-9" />
-            )}
+            <div className="flex items-center gap-2">
+              {menuItem.icon}
+              <span className="font-semibold">{menuItem.name}</span>
+            </div>
+            {menuItem.isOpen ? <CaretUpOutlined /> : <CaretDownOutlined />}
           </div>
           <div
-            className={`flex flex-col px-8 transition-all duration-300 ease-out ${
+            className={`mt-1 flex flex-col px-8 transition-max-height duration-500 ease-in-out ${
               menuItem.isOpen ? "max-h-96 scale-y-100" : "max-h-0 scale-y-0"
             } overflow-hidden`}
           >
@@ -78,10 +76,10 @@ const Menu = () => {
               <NavLink
                 key={subIndex}
                 className={({ isActive }) =>
-                  `block p-2 ${
+                  `block p-2 rounded-md transition-colors duration-200 ${
                     isActive
-                      ? "text-[#0EA5E9]"
-                      : "text-[#758398] hover:bg-[#babfc3] "
+                      ? "text-[#0EA5E9] bg-[#E0F7FF]"
+                      : "text-[#758398] hover:bg-[#E2E8F0] "
                   }`
                 }
                 to={subItem.link}
