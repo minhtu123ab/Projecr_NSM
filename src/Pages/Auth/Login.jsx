@@ -2,7 +2,7 @@ import { Input, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import env from "@/Env";
-import { useSnackbar } from "notistack";
+import { enqueueSnackbar } from "notistack";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -17,7 +17,6 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
-  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 

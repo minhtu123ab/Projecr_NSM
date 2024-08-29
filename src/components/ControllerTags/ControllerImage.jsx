@@ -24,8 +24,8 @@ const ControllerImage = ({ control, handleChangeImage, urlImage, errors }) => {
           ) : (
             <div className="mx-5 my-5 cursor-pointer rounded-2xl flex flex-col items-center gap-2">
               <Image
-                width={200}
-                height={120}
+                width={232}
+                height={131}
                 className="rounded-2xl"
                 style={{ objectFit: "cover" }}
                 src={urlImage ? urlImage : field.value}

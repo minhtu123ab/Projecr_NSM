@@ -18,7 +18,7 @@ const SearchCategory = ({ tableCategoryRef }) => {
   return (
     <form
       onSubmit={(e) => handleSubmit(e, value, tableCategoryRef)}
-      className="flex gap-5"
+      className="flex gap-2"
     >
       <Input
         value={value}

@@ -16,6 +16,7 @@ const useFetchData = (url) => {
           limit: env.countOfPage,
           offset: env.countOfPage * queryParams.page,
           name: queryParams.name,
+          category: queryParams.category,
         };
         const response = await requestApi(url, "get", null, params);
         setState({

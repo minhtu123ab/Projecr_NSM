@@ -1,24 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import schema from "@/Pages/MaterialsMain/modal/schemaYup/schemaYupMaterial";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useSnackbar } from "notistack";
+import { useParams } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import requestApi from "@/axios/axiosInstance";
 import ModalMaterials from "@/Pages/MaterialsMain/modal/ModalMaterials";
 import { useState, useEffect } from "react";
+import useChangImage from "@/hook/useChangImage";
+import useSubmitData from "./hooks/useSubmitData";
 
 const ModalUpdateMaterial = () => {
-  const { enqueueSnackbar } = useSnackbar();
-  const navigate = useNavigate();
   const { id } = useParams();
 
-  const [urlImage, setUrlImage] = useState(null);
   const [onClick, setOnClick] = useState(false);
   const [formData, setFormData] = useState({});
   const [dataEdit, setDataEdit] = useState({});
-
-  const location = useLocation();
 
   useEffect(() => {
     const fetchDataItem = async () => {
@@ -27,11 +23,10 @@ const ModalUpdateMaterial = () => {
         setDataEdit(responst.data);
       } catch (e) {
         console.log(e);
-        navigate("/login");
       }
     };
     fetchDataItem();
-  }, [id, navigate]);
+  }, [id]);
 
   const {
     control,
@@ -42,6 +37,8 @@ const ModalUpdateMaterial = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  const { handleChangeImage, urlImage, setUrlImage } = useChangImage(setValue);
 
   useEffect(() => {
     if (dataEdit) {
@@ -60,49 +57,11 @@ const ModalUpdateMaterial = () => {
     }
   }, [dataEdit, reset]);
 
-  const onSubmit = async (data) => {
-    try {
-      const formData = new FormData();
-      dataEdit.image != data.image && formData.append("image", data.image);
-      formData.append("part_number", data.part_number);
-      data.name && formData.append("name", data.name);
-      data.type && formData.append("type", data.type);
-      formData.append("basic_price", data.basic_price);
-      formData.append("large_title", data.large_title);
-      formData.append("small_title", data.small_title);
-      formData.append("category", data.category);
-      formData.append("supplier", data.supplier);
-      const response = await requestApi(`/cms/material/${id}`, "put", formData);
-      if (response.status === 200 || response.status === 204) {
-        enqueueSnackbar("Update successfully", {
-          variant: "success",
-        });
-        navigate(`/materials/main${location.search}`);
-      } else {
-        enqueueSnackbar("Update failed", { variant: "error" });
-      }
-      console.log("first");
-    } catch (e) {
-      console.error(e);
-      enqueueSnackbar("Update Failed", {
-        variant: "error",
-      });
-    } finally {
-      setOnClick(false);
-    }
-  };
+  const onSubmit = useSubmitData(setOnClick, id, dataEdit);
 
   const onClickSubmit = (data) => {
     setOnClick(true);
     setFormData(data);
-  };
-
-  const handleChangeImage = (info) => {
-    if (info.file && info.file.originFileObj) {
-      const file = info.file.originFileObj;
-      setValue("image", file, { shouldValidate: true });
-      setUrlImage(URL.createObjectURL(file));
-    }
   };
 
   useEffect(() => {

@@ -6,10 +6,9 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo.png";
-import { useSnackbar } from "notistack";
+import { enqueueSnackbar } from "notistack";
 
 const Navbar = () => {
-  const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const onClickLogOut = () => {
     localStorage.removeItem("token");
