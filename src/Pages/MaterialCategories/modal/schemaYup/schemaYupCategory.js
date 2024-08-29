@@ -5,7 +5,7 @@ const schema = yup.object().shape({
   name: yup
     .string()
     .required("Name is required")
-    .max(30, "Category name cannot be more than 30 characters"),
+    .max(255, "Category name cannot be more than 255 characters"),
   price_type: yup.string().required("Price is required"),
 });
 
