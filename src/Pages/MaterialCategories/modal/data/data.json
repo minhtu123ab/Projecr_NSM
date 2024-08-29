@@ -1,0 +1,12 @@
+{
+  "dataPriceType": [
+    {
+      "id": "per_quantity",
+      "name": "Quantity"
+    },
+    {
+      "id": "per_metter",
+      "name": "Metter"
+    }
+  ]
+}

@@ -1,12 +1,18 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { Input, Image, Button, Upload, Select, Spin } from "antd";
-import { ReloadOutlined, UploadOutlined } from "@ant-design/icons";
+import { Button, Spin } from "antd";
+import { ReloadOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Controller } from "react-hook-form";
 import withDataFetching from "@/HOC/withDataFetching";
+import ControllerImage from "@/components/ControllerTags/ControllerImage";
+import ControllerInput from "@/components/ControllerTags/ControllerInput";
+import ControllerSelect from "@/components/ControllerTags/ControllerSelect";
+import data from "@/Pages/MaterialsMain/modal/data/data.json";
 
-const urls = ["/cms/material_categories", "/cms/supplier"];
+const urls = data.urls;
+const dataControllerInputLeft = data.dataControllerInputLeft;
+const dataControllerInputRight = data.dataControllerInputRight;
+const dataControllerSelect = data.dataControllerSelect;
 
 const ModalMaterials = ({
   control,
@@ -40,9 +46,10 @@ const ModalMaterials = ({
         </Button>
       </div>
     );
-
-  const dataCategory = data["/cms/material_categories"] || [];
-  const dataSupplier = data["/cms/supplier"] || [];
+  const dataControllerSelectRender = dataControllerSelect.map(
+    (item, index) => ({ ...item, data: data[urls[index]] || [] })
+  );
+  console.log(dataControllerSelectRender);
 
   return (
     <div className="p-7 bg-[#F1F5F9] h-full min-h-screen">
@@ -53,211 +60,54 @@ const ModalMaterials = ({
           <h1 className="text-center text-4xl pb-10">Create a new Material</h1>
         )}
         <form>
-          <div className="flex w-full gap-10 justify-center">
+          <div className="flex w-full gap-10 justify-center ml-5">
             <div className="pb-20">
-              <div className="bg-white shadow-lg shadow-slate-700 flex items-center rounded-3xl flex-col">
-                <Controller
-                  name="image"
-                  control={control}
-                  render={({ field }) =>
-                    !field.value ? (
-                      <Upload
-                        className="mx-4 my-4 bg-gray-200 cursor-pointer rounded-2xl"
-                        customRequest={({ onSuccess }) => {
-                          onSuccess("ok");
-                        }}
-                        showUploadList={false}
-                        onChange={handleChangeImage}
-                      >
-                        <UploadOutlined className="text-gray-600 text-7xl px-16 py-6" />
-                      </Upload>
-                    ) : (
-                      <div className="mx-4 my-4 cursor-pointer rounded-2xl flex flex-col items-center gap-2">
-                        <Image
-                          width={200}
-                          height={120}
-                          className="rounded-2xl"
-                          style={{ objectFit: "cover" }}
-                          src={urlImage ? urlImage : field.value}
-                          alt="Uploaded"
-                        />
-                        <Upload
-                          className=""
-                          customRequest={({ onSuccess }) => {
-                            onSuccess("ok");
-                          }}
-                          showUploadList={false}
-                          onChange={handleChangeImage}
-                        >
-                          <Button
-                            icon={<UploadOutlined className="text-gray-600" />}
-                          >
-                            Change Image
-                          </Button>
-                        </Upload>
-                      </div>
-                    )
-                  }
-                />
-                {errors.image && (
-                  <p className="text-red-500">{errors.image.message}</p>
-                )}
-              </div>
+              <ControllerImage
+                control={control}
+                handleChangeImage={handleChangeImage}
+                urlImage={urlImage}
+                errors={errors}
+              />
             </div>
             <div className="bg-white shadow-lg shadow-slate-700 flex flex-col justify-around px-10 rounded-3xl w-6/12 p-5 gap-5">
               <div className="flex gap-4">
                 <div className="flex flex-col gap-3 flex-1">
-                  <div>
-                    <label htmlFor="part_number">
-                      Part Number<span className="text-red-600">*</span>
-                    </label>
-                    <Controller
+                  {dataControllerInputLeft.map((item, index) => (
+                    <ControllerInput
+                      key={index}
                       control={control}
-                      name="part_number"
-                      render={({ field }) => (
-                        <Input placeholder="Part Number" {...field} />
-                      )}
+                      errors={errors}
+                      labelName={item.labelName}
+                      name={item.name}
+                      require={item.require}
+                      type={item.type}
                     />
-                    {errors.part_number && (
-                      <p className="text-red-500">
-                        {errors.part_number.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="name">Name</label>
-                    <Controller
-                      control={control}
-                      name="name"
-                      render={({ field }) => (
-                        <Input placeholder="Name" {...field} />
-                      )}
-                    />
-                    {errors.name && (
-                      <p className="text-red-500">{errors.name.message}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="type">Type</label>
-                    <Controller
-                      control={control}
-                      name="type"
-                      render={({ field }) => (
-                        <Input type="number" placeholder="Type" {...field} />
-                      )}
-                    />
-                    {errors.type && (
-                      <p className="text-red-500">{errors.type.message}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="large_title">
-                      Large Title<span className="text-red-600">*</span>
-                    </label>
-                    <Controller
-                      control={control}
-                      name="large_title"
-                      render={({ field }) => (
-                        <Input placeholder="Large Title" {...field} />
-                      )}
-                    />
-                    {errors.large_title && (
-                      <p className="text-red-500">
-                        {errors.large_title.message}
-                      </p>
-                    )}
-                  </div>
+                  ))}
                 </div>
 
                 <div className="flex flex-col gap-3 flex-1">
-                  <div>
-                    <label htmlFor="small_title">
-                      Small Title<span className="text-red-600">*</span>
-                    </label>
-                    <Controller
+                  {dataControllerInputRight.map((item, index) => (
+                    <ControllerInput
+                      key={index}
                       control={control}
-                      name="small_title"
-                      render={({ field }) => (
-                        <Input placeholder="Small Title" {...field} />
-                      )}
+                      errors={errors}
+                      labelName={item.labelName}
+                      name={item.name}
+                      require={item.require}
+                      type={item.type}
                     />
-                    {errors.small_title && (
-                      <p className="text-red-500">
-                        {errors.small_title.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="basic_price">
-                      Basic Price<span className="text-red-600">*</span>
-                    </label>
-                    <Controller
+                  ))}
+                  {dataControllerSelectRender.map((item, index) => (
+                    <ControllerSelect
+                      key={index}
                       control={control}
-                      name="basic_price"
-                      render={({ field }) => (
-                        <Input
-                          type="number"
-                          placeholder="Basic Price"
-                          {...field}
-                        />
-                      )}
+                      data={item.data}
+                      errors={errors}
+                      labelName={item.labelName}
+                      name={item.name}
+                      require={true}
                     />
-                    {errors.basic_price && (
-                      <p className="text-red-500">
-                        {errors.basic_price.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="category">
-                      Category<span className="text-red-600">*</span>
-                    </label>
-                    <Controller
-                      name="category"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          className="w-full"
-                          options={dataCategory.map((item) => ({
-                            value: item.id,
-                            label: item.name,
-                          }))}
-                          {...field}
-                        />
-                      )}
-                    />
-                    {errors.category && (
-                      <p className="text-red-500">{errors.category.message}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label htmlFor="supplier">
-                      Supplier<span className="text-red-600">*</span>
-                    </label>
-                    <Controller
-                      name="supplier"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          className="w-full"
-                          options={dataSupplier.map((item) => ({
-                            value: item.id,
-                            label: item.name,
-                          }))}
-                          {...field}
-                        />
-                      )}
-                    />
-                    {errors.supplier && (
-                      <p className="text-red-500">{errors.supplier.message}</p>
-                    )}
-                  </div>
+                  ))}
                 </div>
               </div>
               <div className="flex justify-end gap-4">

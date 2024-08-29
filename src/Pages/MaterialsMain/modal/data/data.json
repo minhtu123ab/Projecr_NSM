@@ -1,0 +1,55 @@
+{
+  "dataControllerInputLeft": [
+    {
+      "labelName": "part_number",
+      "name": "Part Number",
+      "require": true,
+      "type": "text"
+    },
+    {
+      "labelName": "name",
+      "name": "Name",
+      "require": false,
+      "type": "text"
+    },
+    {
+      "labelName": "type",
+      "name": "Type",
+      "require": false,
+      "type": "number"
+    },
+    {
+      "labelName": "large_title",
+      "name": "Large Title",
+      "require": true,
+      "type": "text"
+    }
+  ],
+  "dataControllerInputRight": [
+    {
+      "labelName": "small_title",
+      "name": "Small Title",
+      "require": true,
+      "type": "text"
+    },
+    {
+      "labelName": "basic_price",
+      "name": "Basic Price",
+      "require": true,
+      "type": "number"
+    }
+  ],
+  "dataControllerSelect": [
+    {
+      "labelName": "category",
+      "name": "Category",
+      "require": true
+    },
+    {
+      "labelName": "supplier",
+      "name": "Supplier",
+      "require": true
+    }
+  ],
+  "urls": ["/cms/material_categories", "/cms/supplier"]
+}
