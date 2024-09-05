@@ -7,7 +7,7 @@ import requestApi from "@/axios/axiosInstance";
 import ModalMaterials from "@/Pages/MaterialsMain/modal/ModalMaterials";
 import { useState, useEffect } from "react";
 import useChangImage from "@/hook/useChangImage";
-import useSubmitData from "./hooks/useSubmitData";
+import useSubmitData from "@/Pages/MaterialsMain/modal/hooks/useSubmitData";
 
 const ModalUpdateMaterial = () => {
   const { id } = useParams();

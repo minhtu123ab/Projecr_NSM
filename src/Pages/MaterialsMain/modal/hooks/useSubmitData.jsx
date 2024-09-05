@@ -41,9 +41,11 @@ const useSubmitData = (setOnClick, id, dataEdit) => {
       }
     } catch (e) {
       console.error(e);
-      enqueueSnackbar(id ? "Update failed" : "Create Failed", {
-        variant: "error",
-      });
+      e.response.data.part_number
+        ? enqueueSnackbar("Cannot duplicate Part Number", { variant: "error" })
+        : enqueueSnackbar(id ? "Update failed" : "Create Failed", {
+            variant: "error",
+          });
     } finally {
       setOnClick(false);
     }

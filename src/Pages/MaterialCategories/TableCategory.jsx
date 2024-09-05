@@ -13,6 +13,7 @@ import useFetchData from "@/hook/useFetchData";
 import useSelectDelete from "@/hook/useSelectDelete";
 import useHandleModalDelete from "@/hook/useHandleModalDelete";
 import LoadingTableCategory from "@/Pages/MaterialCategories/LoadingTableCategory";
+import HeaderTitleTable from "@/components/HeaderTitleTable/HeaderTitleTable";
 
 const TableCategory = forwardRef((props, ref) => {
   const { state } = useFetchData("/cms/material_categories");
@@ -50,14 +51,7 @@ const TableCategory = forwardRef((props, ref) => {
       />
       <table className="table-category">
         <thead>
-          <tr>
-            <th></th>
-            <th>No</th>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Price Type</th>
-            <th></th>
-          </tr>
+          <HeaderTitleTable name={"category"} />
         </thead>
         <tbody>
           {state.loading ? (

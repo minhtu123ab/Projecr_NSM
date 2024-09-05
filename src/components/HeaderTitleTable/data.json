@@ -1,0 +1,17 @@
+{
+  "category": ["", "No", "Image", "Name", "Price Type", ""],
+  "material": [
+    "",
+    "No",
+    "Image",
+    "Part Number",
+    "Name",
+    "Type",
+    "Large Title",
+    "Small Title",
+    "Basic Price",
+    "Category",
+    "Supplier",
+    ""
+  ]
+}

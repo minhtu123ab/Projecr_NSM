@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import useHandleSearch from "@/hook/useHandleSearch";
 import { Button, Input } from "antd";
 import { CloseCircleFilled, SearchOutlined } from "@ant-design/icons";
+import CleanSearch from "@/components/CleanSearch";
 
 const SearchCategory = ({ tableCategoryRef }) => {
   const location = useLocation();
@@ -30,6 +31,7 @@ const SearchCategory = ({ tableCategoryRef }) => {
           clearIcon: <CloseCircleFilled />,
         }}
       />
+      <CleanSearch setValueName={setValue} />
       <Button
         icon={<SearchOutlined />}
         type="primary"

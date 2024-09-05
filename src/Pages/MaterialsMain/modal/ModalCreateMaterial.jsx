@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ModalMaterials from "@/Pages/MaterialsMain/modal/ModalMaterials";
 import useChangImage from "@/hook/useChangImage";
-import useSubmitData from "./hooks/useSubmitData";
+import useSubmitData from "@/Pages/MaterialsMain/modal/hooks/useSubmitData";
 
 const ModalCreateMaterial = () => {
   const [onClick, setOnClick] = useState(false);

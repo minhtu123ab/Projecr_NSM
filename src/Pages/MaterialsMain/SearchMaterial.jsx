@@ -1,9 +1,7 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-refresh/only-export-components */
 import { useLocation } from "react-router-dom";
 import useHandleSearch from "@/hook/useHandleSearch";
-import { Input, AutoComplete, Button, Select } from "antd";
+import { Input, AutoComplete, Button } from "antd";
 import {
   CloseCircleFilled,
   ReloadOutlined,
@@ -11,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import { useState } from "react";
 import withDataFetching from "@/HOC/withDataFetching";
+import CleanSearch from "@/components/CleanSearch";
 
 const url = ["/cms/material_categories"];
 
@@ -96,7 +95,10 @@ const SearchMaterial = ({ tableMaterialRef, state, fetchData }) => {
           clearIcon: <CloseCircleFilled />,
         }}
       />
-
+      <CleanSearch
+        setValueName={setValueMaterial}
+        setValueCategory={setValueCategory}
+      />
       <Button
         icon={<SearchOutlined />}
         type="primary"
@@ -107,4 +109,6 @@ const SearchMaterial = ({ tableMaterialRef, state, fetchData }) => {
   );
 };
 
-export default withDataFetching(SearchMaterial, url);
+const SearchMaterialInput = withDataFetching(SearchMaterial, url);
+
+export default SearchMaterialInput;

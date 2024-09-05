@@ -70,23 +70,13 @@ const ModalCategory = ({
                 >
                   Cancel
                 </Button>
-                {id ? (
-                  <Button
-                    loading={onClick}
-                    type="primary"
-                    onClick={handleSubmit(onClickSubmit)}
-                  >
-                    Update
-                  </Button>
-                ) : (
-                  <Button
-                    loading={onClick}
-                    type="primary"
-                    onClick={handleSubmit(onClickSubmit)}
-                  >
-                    Create
-                  </Button>
-                )}
+                <Button
+                  loading={onClick}
+                  type="primary"
+                  onClick={handleSubmit(onClickSubmit)}
+                >
+                  {id ? "Update" : "Create"}
+                </Button>
               </div>
             </div>
           </div>

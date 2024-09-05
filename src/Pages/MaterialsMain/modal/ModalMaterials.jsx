@@ -49,7 +49,6 @@ const ModalMaterials = ({
   const dataControllerSelectRender = dataControllerSelect.map(
     (item, index) => ({ ...item, data: data[urls[index]] || [] })
   );
-  console.log(dataControllerSelectRender);
 
   return (
     <div className="p-7 bg-[#F1F5F9] h-full min-h-screen">

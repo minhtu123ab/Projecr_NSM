@@ -7,7 +7,7 @@ import ModalCategory from "@/Pages/MaterialCategories/modal/ModalCategory";
 import requestApi from "@/axios/axiosInstance";
 import schema from "@/Pages/MaterialCategories/modal/schemaYup/schemaYupCategory";
 import useChangImage from "@/hook/useChangImage";
-import useSubmitData from "./hooks/useSubmitData";
+import useSubmitData from "@/Pages/MaterialCategories/modal/hooks/useSubmitData";
 
 const ModalUpdateCategories = () => {
   const { id } = useParams();

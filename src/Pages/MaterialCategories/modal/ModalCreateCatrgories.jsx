@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ModalCategory from "@/Pages/MaterialCategories/modal/ModalCategory";
 import schema from "@/Pages/MaterialCategories/modal/schemaYup/schemaYupCategory";
 import useChangImage from "@/hook/useChangImage";
-import useSubmitData from "./hooks/useSubmitData";
+import useSubmitData from "@/Pages/MaterialCategories/modal/hooks/useSubmitData";
 
 const ModalCreateCategories = () => {
   const [onClick, setOnClick] = useState(false);

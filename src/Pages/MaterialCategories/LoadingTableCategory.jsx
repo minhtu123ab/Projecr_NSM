@@ -7,17 +7,17 @@ const LoadingTableCategory = () => {
       <td>
         <Checkbox className="transform scale-[1.3] ml-2" disabled />
       </td>
-      <td className="p-4">
-        <div className="w-8 h-4 bg-gray-300 rounded"></div>
+      <td className="p-4 items">
+        <div className="w-full h-4 bg-gray-300 rounded"></div>
       </td>
       <td className="flex justify-center">
         <div className="w-44 h-24 bg-gray-300 rounded-lg mt-2 mb-2"></div>
       </td>
       <td>
-        <div className="w-32 h-4 bg-gray-300 rounded"></div>
+        <div className="w-full h-4 bg-gray-300 rounded"></div>
       </td>
       <td>
-        <div className="w-24 h-4 bg-gray-300 rounded"></div>
+        <div className="w-full h-4 bg-gray-300 rounded"></div>
       </td>
       <td>
         <Button type="text" disabled>

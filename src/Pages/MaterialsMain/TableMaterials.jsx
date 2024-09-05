@@ -13,6 +13,7 @@ import useFetchData from "@/hook/useFetchData";
 import useSelectDelete from "@/hook/useSelectDelete";
 import useHandleModalDelete from "@/hook/useHandleModalDelete";
 import LoadingTableMaterial from "@/Pages/MaterialsMain/LoadingTableMaterial";
+import HeaderTitleTable from "@/components/HeaderTitleTable/HeaderTitleTable";
 
 const TableMaterials = forwardRef((props, ref) => {
   const { handleDelete, deleteAll } = useDeleteHandlers();
@@ -51,20 +52,7 @@ const TableMaterials = forwardRef((props, ref) => {
       <div className="overflow-x-auto">
         <table className="table-category w-full min-w-[1700px]">
           <thead>
-            <tr>
-              <th></th>
-              <th>No</th>
-              <th>Image</th>
-              <th>Part Number</th>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Large Title</th>
-              <th>Small Title</th>
-              <th>Basic Price</th>
-              <th>Category</th>
-              <th>Supplier</th>
-              <th></th>
-            </tr>
+            <HeaderTitleTable name={"material"} />
           </thead>
           <tbody>
             {state.loading ? (
@@ -102,7 +90,12 @@ const TableMaterials = forwardRef((props, ref) => {
                     <span>{item.name}</span>
                   </td>
                   <td>
-                    <span className="bg-rose-300 px-2 p-1 rounded-full text-rose-800">
+                    <span
+                      className={
+                        item.type &&
+                        "bg-rose-300 px-2 p-1 rounded-full text-rose-800"
+                      }
+                    >
                       {item.type}
                     </span>
                   </td>
