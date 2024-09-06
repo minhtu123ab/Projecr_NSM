@@ -1,43 +1,16 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Select, Spin } from "antd";
 import icon from "@/assets/icon.png";
-import requestApi from "@/axios/axiosInstance.js";
-import useQueryParams from "@/hook/useQueryParams.jsx";
-import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
-const Current = ({ url, name }) => {
-  const navigate = useNavigate();
-
-  const [count, setCount] = useState(0);
+const Current = ({ name, state }) => {
   const [day, setDay] = useState(30);
-  const [loading, setLoading] = useState(false);
-
-  const queryParams = useQueryParams();
 
   const handleChange = (value) => {
     setDay(value);
   };
-
-  useEffect(() => {
-    const getCountData = async () => {
-      setLoading(true);
-      try {
-        const params = {
-          limit: 1,
-        };
-        const response = await requestApi(url, "get", null, params);
-        setCount(response.data.count);
-        setLoading(false);
-      } catch (e) {
-        console.error(e);
-        // navigate("/login");
-      }
-    };
-    getCountData();
-  }, [navigate, queryParams.create, queryParams.delete, url]);
 
   return (
     <div className="w-72 h-36 bg-white shadow-md rounded-lg p-4 flex flex-col gap-2.5">
@@ -56,7 +29,7 @@ const Current = ({ url, name }) => {
       </div>
       <div className="flex items-center gap-3">
         <img src={icon} alt="Icon" />
-        {loading ? (
+        {state?.loading ? (
           <Spin className="ml-2" />
         ) : (
           <p
@@ -65,7 +38,7 @@ const Current = ({ url, name }) => {
               fontFamily: "Arial",
             }}
           >
-            {count}
+            {state?.total}
           </p>
         )}
       </div>

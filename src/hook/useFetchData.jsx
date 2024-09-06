@@ -6,6 +6,7 @@ import useQueryParams from "@/hook/useQueryParams.jsx";
 
 const useFetchData = (url) => {
   const [state, setState] = useState({ loading: true, data: [], total: 0 });
+  const [checkCallApi, setCheckCallApi] = useState(true);
   const queryParams = useQueryParams();
 
   useEffect(() => {
@@ -29,9 +30,9 @@ const useFetchData = (url) => {
       }
     };
     fetchData();
-  }, [queryParams, url]);
+  }, [queryParams, url, checkCallApi]);
 
-  return { state };
+  return { state, setCheckCallApi };
 };
 
 export default useFetchData;

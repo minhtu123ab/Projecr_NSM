@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { memo, forwardRef } from "react";
 import { Checkbox, Button, Empty } from "antd";
@@ -15,9 +16,13 @@ import useHandleModalDelete from "@/hook/useHandleModalDelete";
 import LoadingTableCategory from "@/Pages/MaterialCategories/LoadingTableCategory";
 import HeaderTitleTable from "@/components/HeaderTitleTable/HeaderTitleTable";
 
-const TableCategory = forwardRef((props, ref) => {
-  const { state } = useFetchData("/cms/material_categories");
-  const { handleDelete, deleteAll } = useDeleteHandlers();
+const TableCategory = forwardRef(({ setState }, ref) => {
+  const { state, setCheckCallApi } = useFetchData("/cms/material_categories");
+  const { handleDelete, deleteAll } = useDeleteHandlers(
+    "/cms/material_categories",
+    setCheckCallApi
+  );
+  setState(state);
 
   const {
     checkAll,
@@ -136,8 +141,7 @@ const TableCategory = forwardRef((props, ref) => {
             idDelete,
             state.data,
             setIdDelete,
-            modalDeleteRef,
-            "/cms/material_categories"
+            modalDeleteRef
           )
         }
       />
@@ -145,13 +149,7 @@ const TableCategory = forwardRef((props, ref) => {
         ref={modalDeleteAllRef}
         idDelete={idDelete}
         onDelete={() =>
-          deleteAll(
-            idDelete,
-            state.data,
-            modalDeleteAllRef,
-            setIdDelete,
-            "/cms/material_categories/bulk"
-          )
+          deleteAll(idDelete, state.data, modalDeleteAllRef, setIdDelete)
         }
       />
     </div>

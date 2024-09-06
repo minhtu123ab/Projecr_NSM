@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { memo, forwardRef } from "react";
 import { Checkbox, Button, Empty } from "antd";
@@ -15,9 +16,13 @@ import useHandleModalDelete from "@/hook/useHandleModalDelete";
 import LoadingTableMaterial from "@/Pages/MaterialsMain/LoadingTableMaterial";
 import HeaderTitleTable from "@/components/HeaderTitleTable/HeaderTitleTable";
 
-const TableMaterials = forwardRef((props, ref) => {
-  const { handleDelete, deleteAll } = useDeleteHandlers();
-  const { state } = useFetchData("/cms/material");
+const TableMaterials = forwardRef(({ setState }, ref) => {
+  const { state, setCheckCallApi } = useFetchData("/cms/material");
+  const { handleDelete, deleteAll } = useDeleteHandlers(
+    "/cms/material",
+    setCheckCallApi
+  );
+  setState(state);
 
   const {
     checkAll,
@@ -163,8 +168,7 @@ const TableMaterials = forwardRef((props, ref) => {
             idDelete,
             state.data,
             setIdDelete,
-            modalDeleteRef,
-            "/cms/material"
+            modalDeleteRef
           )
         }
       />
@@ -172,13 +176,7 @@ const TableMaterials = forwardRef((props, ref) => {
         ref={modalDeleteAllRef}
         idDelete={idDelete}
         onDelete={() =>
-          deleteAll(
-            idDelete,
-            state.data,
-            modalDeleteAllRef,
-            setIdDelete,
-            "/cms/material/bulk"
-          )
+          deleteAll(idDelete, state.data, modalDeleteAllRef, setIdDelete)
         }
       />
     </div>

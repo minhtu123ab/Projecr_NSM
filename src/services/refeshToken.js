@@ -1,7 +1,7 @@
 import axios from "axios";
 import env from "@/Env";
 
-const useRefeshToken = async () => {
+const refeshToken = async () => {
   const token = JSON.parse(localStorage.getItem("token"));
   const TokenRefresh = {
     refresh: token.refresh,
@@ -21,4 +21,4 @@ const useRefeshToken = async () => {
   }
 };
 
-export default useRefeshToken;
+export default refeshToken;
