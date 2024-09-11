@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { memo, forwardRef } from "react";
+import { memo, forwardRef, useEffect } from "react";
 import { Checkbox, Button, Empty } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import env from "@/Env";
@@ -22,7 +22,10 @@ const TableCategory = forwardRef(({ setState }, ref) => {
     "/cms/material_categories",
     setCheckCallApi
   );
-  setState(state);
+
+  useEffect(() => {
+    setState(state);
+  }, [state]);
 
   const {
     checkAll,

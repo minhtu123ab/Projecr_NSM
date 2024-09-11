@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { memo, forwardRef } from "react";
+import { memo, forwardRef, useEffect } from "react";
 import { Checkbox, Button, Empty } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Pager from "@/components/Pager";
@@ -22,7 +22,9 @@ const TableMaterials = forwardRef(({ setState }, ref) => {
     "/cms/material",
     setCheckCallApi
   );
-  setState(state);
+  useEffect(() => {
+    setState(state);
+  }, [state]);
 
   const {
     checkAll,
